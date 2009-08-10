@@ -1,0 +1,21 @@
+all:
+  sf_easy_auth:
+    login_attempt_threshold:  3           # number of log in attempts before being locked out
+    lockout_duration:         300         # number of seconds to lock an account 
+                                          # after %APP_SF_EASY_AUTH_LOGIN_ATTEMPT_THRESHOLD%
+                                          # attempts
+                                                     
+    plugin_routes_register:   true        # whether to register default routes
+                                                     
+    remember_cookie_name:     remember    # the name of the remember me cookie
+    remember_me_duration:     2592000     # number of seconds to keep the remember me cookie for
+    remember_salt:      23ij662NhyGDUW    # salt used to create remember me cookies - 
+                                          # set to a random string
+
+    use_i18n:                 false       # set this to true to allow translations on the following
+                                          # messages
+    invalid_credentials:      Invalid user name or password          # message shown when username 
+                                                                     # or password is wrong
+    insufficient_privileges:  | 
+      Sorry, you don't have sufficient privileges     # shown if a user tries to elevate 
+                                                      # privileges, but they are insufficient

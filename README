@@ -1,0 +1,299 @@
+sfEasyAuth plugin
+=================
+
+The `sfEasyAuthPlugin` is a symfony plugin that provides simple authentication
+and authorisation. Built for high-performance environments, it only creates two 
+database tables, and supports multiple types of users through inheritance. This 
+significantly reduces the database overhead compared to sfGuardPlugin by allowing 
+default credentials to be assigned, e.g. 
+  
+  an `admin` type user will automatically acquire the `admin` credential upon logging in.
+   
+On a site with thousands of users this could represent a big efficiency, both in terms
+of execution speed and database storage savings.
+
+This plugin supports users having multiple credentials, brute force protection (with
+configurable attempt and lock-out thresholds), and a remember me feature. 
+
+Installation
+------------
+
+  * Install the plugin
+
+        $ symfony plugin:install sfEasyAuthPlugin
+
+  * Rebuild your model
+
+        $ symfony propel:build-model
+        $ symfony propel:build-sql
+        $ symfony propel:build-forms
+        $ symfony propel:build-filters
+
+  * Update your database tables by starting from scratch (it will delete all
+    the existing tables, then re-create them):
+
+        $ symfony propel:insert-sql
+
+    or you can just create the new tables by using the generated SQL
+    statements in `data/sql/plugins.sfEasyAuth.lib.model.schema.sql`
+
+  * Enable one or more modules in your `settings.yml` (optional)
+    * For your backend application:  sfEasyAuth, sfEasyAuthUser
+    * For your frontend application: sfEasyAuth
+
+            [php]
+            all:
+              .settings:
+                enabled_modules:      [default, sfEasyAuth]
+
+  * Clear you cache
+
+        $ symfony cc
+
+  * Optionally create a default user (the user type is case sensitive):
+
+        $ symfony easyAuth:create-user al $ecret basicUser
+
+  * Optionally create a default admin user:
+
+        $ symfony easyAuth:create-user ally $ecret admin
+
+Secure your application
+-----------------------
+
+To secure a symfony application:
+
+  * Enable the module `sfEasyAuth` in `settings.yml`
+
+        [yml]
+        all:
+          .settings:
+            enabled_modules: [..., sfEasyAuth, sfEasyAuthUser]
+
+  * Change the default login and secure modules in `settings.yml`
+
+        [yml]
+        login_module:           sfEasyAuth
+        login_action:           login
+
+        secure_module:          sfEasyAuth
+        secure_action:          secure
+
+  * Change the parent class in `myUser.class.php`
+
+        [php]
+        class myUser extends sfEasyAuthSecurityUser
+        {
+        }
+
+  * Optionally add the following routing rules to `routing.yml`
+
+        [yml]
+        sf_easy_auth_login:
+          url:   /login
+          param: { module: sfEasyAuth, action: login }
+
+        sf_easy_auth_logout:
+          url:   /logout
+          param: { module: sfEasyAuth, action: logout }
+
+#        sf_guard_password:
+#          url:   /request_password
+#          param: { module: sfEasyAuth, action: password }
+
+  You can customize the `url` parameter of each route.
+  N.B.: You must have a `@homepage` routing rule (used when a user sign out)
+
+  These routes are automatically registered by the plugin if the module `sfEasyAuth`
+  is enabled unless you defined `sf_easy_auth_plugin_routes_register` to false
+  in the `app.yml` configuration file:
+
+        [yml]
+        all:
+          sf_easy_auth_plugin:
+            routes_register: false
+
+  * Secure some modules or your entire application in `security.yml`
+
+        [yml]
+        default:
+          is_secure: on
+
+  * You're done. Now, if you try to access a secure page, you will be redirected
+    to the login page.
+    
+  * Once you're logged in, if you try to access a page that requires further credentials
+    you'll be prompted to enter another user name and password. 
+    
+Manage your users
+-----------------
+
+To be able to manage your users, `sfEasyAuthPlugin` comes
+with a module that can be integrated in your backend application.
+This module is auto-generated thanks to the symfony admin generator.
+
+  * Follow the instructions in the 'Secure your application' section, but edit files
+    in your back-end application.
+    
+  * Edit your `security.yml` file as follows:
+  
+        [yml]
+        default:
+          is_secure: on
+          credentials: admin
+
+  * Access the module with the default route:
+
+        http://www.example.com/backend.php/sfEasyAuthUser
+
+Customize sfEasyAuth module templates
+--------------------------------------
+
+By default, `sfEasyAuth` module comes with 2 very simple templates:
+
+  * `loginSuccess.php`
+  * `secureSuccess.php`
+
+If you want to customize one of these templates:
+
+  * Create a `sfEasyAuth` module in your application (don't use the
+    `init-module` task, just create a `sfEasyAuth` directory)
+
+  * Create a template with the name of the template you want to customize in
+    the `sfEasyAuth/templates` directory
+
+  * symfony now renders your template instead of the default one
+
+Customize `sfEasyAuth` module actions
+--------------------------------------
+
+If you want to customize or add methods to the sfEasyAuth:
+
+  * Create an `sfEasyAuth` module in your application
+
+  * Create an `actions.class.php` file in your `actions` directory that inherit
+    from `BasesfEasyAuthActions` (don't forget to include the `BasesfEasyAuthActions`
+    as it can't be autoloaded by symfony)
+
+        [php]
+        <?php
+
+        require_once(sfConfig::get('sf_plugins_dir').'/sfEasyAuthPlugin/modules/sfEasyAuth/lib/BasesfEasyAuthActions.class.php');
+
+        class sfEasyAuthActions extends BasesfEasyAuthActions
+        {
+          public function executeNewAction()
+          {
+            return $this->renderText('This is a new sfEasyAuth action.');
+          }
+        }
+
+`sfEasyAuthSecurityUser` class
+---------------------------
+
+This class inherits from the `sfBasicSecurityUser` class from symfony and is
+used for the `user` object in your symfony application.
+(because you changed the `myUser` base class earlier)
+
+So, to access it, you can use the standard `$this->getUser()` in your actions
+or `$sf_user` in your templates.
+
+`sfEasyAuthSecurityUser` adds some methods:
+
+  * `logIn()` and `logOut()` methods
+  * `getAuthUser()` that returns the `sfEasyAuthUser` object
+
+For example, to get the current username:
+
+    [php]
+    $this->getUser()->getEasyAuthUser()->getUsername()
+
+    // or via the proxy method
+    $this->getUser()->getUsername()
+
+Check the user password with an external method
+-----------------------------------------------
+
+If you don't want to store the password in the database because you already
+have a LDAP server, a .htaccess file or if you store your passwords in another
+table, you can provide your own `authenticate` callable (static method or
+function) in `app.yml`:
+
+    [yml]
+    all:
+      sf_easy_auth:
+        authenticate_callable: [MyLDAPClass, checkPassword]
+
+Symfony will call your method or function to check that the supplied details
+are valid. Your function must take 2 parameters, the first
+one is the username and the second one is the password. It must return true
+or false. Here is a template for such a function:
+
+    [php]
+    function checkLDAPPassword($username, $password)
+    {
+      $user = LDAP::getUser($username);
+      if ($user->checkPassword($password))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+Adding more user types
+----------------------
+To add more user types, simply edit the schema.yml file, adding more entries under 
+`types`. E.g to add an `editor` user type, simply add an entry as below:
+
+    [yml]
+    type:
+      type: varchar(10)
+      index: true
+      inheritance:
+        admin: sfEasyAuthAdmin
+        user: sfEasyAuthBasicUser
+        editor: sfEasyAuthEditor
+        
+Any users that are created as editors will automatically acquire the `editor` credential
+when they log in.
+        
+All users inherit from a common superclass, but a hierarchy can easily be created by 
+changing which model classes inherit from which others. Any class inheriting from any
+other sfEasyAuthUser class will automatically acquire the credentials of its parent classes,
+e.g.:
+
+    [plain]
+    super class: sfEasyAuthUser
+    class sfEasyAuthAdmin extends sfEasyAuthUser              # has credential `admin`
+    class sfEasyAuthBasicUser extends sfEasyAuthUser          # has credential `basicUser`
+    class sfEasyAuthTrustedUser extends sfEasyAuthBasicUser   # has credentials `trustedUser`
+                                                              # and `basicUser`
+                                                              
+This approach allows you to define the action associated with a credential in the model
+instead of with groups and permissions in the database. For example `basicUsers` may be 
+able to post blog comments, and `trustedUsers` may be able to edit them. Simply setting
+the credentials required in your `security.yml` file on the appropriate actions would then
+apply the restrictions, saving potentially costly database queries.
+
+I18n
+----
+All error messages in templates can use the i18n framework. To enable translation of 
+error messages in actions, make sure you enable the I18n module in your `settings.yml` file.
+Then change the value of sf_easy_auth_use_i18n to true in your `app.yml` file.
+
+Acknowledgements
+----------------
+Writing this plugin was made significantly easier thanks to sfGuardPlugin. Large parts of 
+this documentation come directly from the documentation for that plugin, and some code was
+based on code in that plugin too. Thanks to the developers of that plugin.
+
+TODO
+----
+
+  * Add a password reminder
+  * Think of an easy way for admins to manage extra credentials
+  * Add a user profile
+  * Clean up allowing users to configure destinations after logging in.

@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+
+body
+{
+  background-color: #eaeaea; 
+}
+
+#loginForm
+{
+  margin: 50px auto;
+  background-color: #fff;
+  color: #464646;
+  border: 1px solid #a0a0a0;
+  -moz-border-radius: 15px;
+  width: 300px;
+  padding: 30px;
+  font-size: 18px;
+  font-family: Arial
+}
+
+#loginForm input
+{
+  font-size: 21px;
+  max-width: 300px;
+  margin-bottom: 20px; 
+  padding: 3px;
+}
+
+#loginForm input[type=checkbox]
+{
+  border: 10px solid #0f0;
+} 
+
+#loginForm input[type=submit]
+{
+  margin: 0 auto;
+  display: block;
+} 
+
+#loginForm label
+{
+  margin-right: 20px;
+}
+
+#loginForm div 
+{
+  position: relative;
+}
+
+#loginForm .error
+{
+  color: #f00;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#loginForm .notice
+{
+  color: #f00;
+  font-size: 18px;
+  margin-bottom: 10px;
+}

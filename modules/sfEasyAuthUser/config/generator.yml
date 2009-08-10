@@ -1,0 +1,29 @@
+generator:
+  class: sfPropelGenerator
+  param:
+    model_class:           sfEasyAuthUser
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          sf_easy_auth_user
+    with_propel_route:     1
+
+    config:
+      fields: 
+        password:                   { label: New password }
+        account_temporarily_locked: { label: Temporarily locked, type: boolean }
+      list:
+        sort: [ username, asc ]
+        title:   User list
+        display: [=username, enabled, type, created_at, last_login, account_temporarily_locked ]
+      filter:  
+        display: [ username, enabled, type ]
+      form: ~
+      edit:
+        title: Editing User "%%username%%"
+
+      new:
+        title: New User
+        display: [ username, password, enabled, type ]

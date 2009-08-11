@@ -3,8 +3,8 @@
 class sfEasyAuthWidgetFormSchemaFormatterDiv extends sfWidgetFormSchemaFormatter 
 {
   protected
-    $rowFormat = '%label%%error%%field%<br />%help%<br />',
-    $helpFormat = '<span class="help">%help%</span>',
+    $rowFormat = '%label%%error%%field%<br />%help%',
+    $helpFormat = '<span class="help">%help%</span><br />',
     $errorRowFormat = '<div>%errors%</div>',
     $errorListFormatInARow = '%errors%',
     $errorRowFormatInARow = '<div class="formError">%error%</div>',

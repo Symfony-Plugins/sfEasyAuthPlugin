@@ -5,7 +5,7 @@ body
   background-color: #eaeaea; 
 }
 
-#loginForm
+#loginFormContainer
 {
   margin: 50px auto;
   background-color: #fff;
@@ -18,7 +18,7 @@ body
   font-family: Arial
 }
 
-#loginForm input
+#loginFormContainer input
 {
   font-size: 21px;
   max-width: 300px;
@@ -26,28 +26,28 @@ body
   padding: 3px;
 }
 
-#loginForm input[type=checkbox]
+#loginFormContainer input[type=checkbox]
 {
   border: 10px solid #0f0;
 } 
 
-#loginForm input[type=submit]
+#loginFormContainer input[type=submit]
 {
   margin: 0 auto;
   display: block;
 } 
 
-#loginForm label
+#loginFormContainer label
 {
   margin-right: 20px;
 }
 
-#loginForm div 
+#loginFormContainer div 
 {
   position: relative;
 }
 
-#loginForm .error, .formError
+#loginFormContainer .error, .formError
 {
   color: #f00;
   position: absolute;
@@ -55,9 +55,29 @@ body
   top: 0;
 }
 
-#loginForm .notice
+#loginFormContainer .notice
 {
   color: #f00;
   font-size: 18px;
   margin-bottom: 10px;
+}
+
+#loginFormContainer .subtle
+{
+  color: #00759F;
+  font-size: 14px;
+  text-align: right;
+  display: block;
+  position: relative;
+  top: 16px;
+}
+
+#loginFormContainer .hidden
+{
+  display: none;
+}
+
+#pwResetForm 
+{
+  margin-top: 16px;
 }

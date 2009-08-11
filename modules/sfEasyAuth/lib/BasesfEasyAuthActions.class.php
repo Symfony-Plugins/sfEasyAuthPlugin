@@ -37,7 +37,7 @@ class BasesfEasyAuthActions extends sfActions
   }
   
   /**
-   * Handles both ordinary log ins and when a user requires more credentials
+   * Handles both ordinary log-ins and when a user requires more credentials
    *  
    * @param sfWebRequest $request
    * @return boolean True if the a user's details matched details in the database
@@ -165,5 +165,15 @@ class BasesfEasyAuthActions extends sfActions
     $url = ($url) ? $url : '@homepage';
     
     $this->redirect($url);
+  }
+  
+  /**
+   * Executes the passwordReset action
+   * 
+   * @param sfRequest $request A request object
+   */
+  public function executePasswordReset(sfWebRequest $request)
+  {
+    echo __FILE__ . ' line 177: this needs doing';exit;
   }
 }

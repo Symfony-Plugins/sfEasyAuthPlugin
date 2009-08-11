@@ -81,6 +81,16 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
   }
   
   /**
+   * Returns whether this user has a profile
+   * 
+   * @return boolean
+   */
+  public function hasProfile()
+  {
+    return (bool)$this->getProfile();
+  }
+  
+  /**
    * Returns the name of the profile class associated with a user class 
    * 
    * @param string $type The name of a user type to compute a profile class name for

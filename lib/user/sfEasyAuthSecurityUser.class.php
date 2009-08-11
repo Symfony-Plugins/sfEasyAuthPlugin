@@ -222,4 +222,24 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     $this->clearCredentials();
     $this->user = null;
   }
+  
+  /**
+   * Returns the profile for the current user if it exists
+   * 
+   * @return mixed
+   */
+  public function getProfile()
+  {
+    return $this->getAuthUser()->getProfile();
+  }
+  
+  /**
+   * Returns whether the user has a profile
+   * 
+   * @return boolean
+   */
+  public function hasProfile()
+  {
+    return $this->getAuthUser()->hasProfile();
+  }
 }

@@ -73,6 +73,15 @@ abstract class BasesfEasyAuthUserPeer {
 	const PROFILE_ID = 'sf_easy_auth_user.PROFILE_ID';
 
 	/** A key representing a particular subclass */
+	const CLASSKEY_ADMIN = 'admin';
+
+	/** A key representing a particular subclass */
+	const CLASSKEY_SFEASYAUTHADMIN = 'admin';
+
+	/** A class that can be returned by this peer. */
+	const CLASSNAME_ADMIN = 'plugins.sfEasyAuthPlugin.lib.model.sfEasyAuthAdmin';
+
+	/** A key representing a particular subclass */
 	const CLASSKEY_BASICUSER = 'basicUser';
 
 	/** A key representing a particular subclass */
@@ -521,6 +530,10 @@ abstract class BasesfEasyAuthUserPeer {
 			$classKey = $row[$colnum + 14];
 
 			switch($classKey) {
+
+				case self::CLASSKEY_ADMIN:
+					$omClass = self::CLASSNAME_ADMIN;
+					break;
 
 				case self::CLASSKEY_BASICUSER:
 					$omClass = self::CLASSNAME_BASICUSER;

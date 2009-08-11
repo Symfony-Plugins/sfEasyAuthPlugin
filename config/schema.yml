@@ -21,10 +21,6 @@ propel:
       type: varchar(10)
       index: true
       inheritance:
-#      <?php foreach(sfConfig::get('app_sf_easy_auth_schema_inheritance') as $data)
-#      {
-#        echo $data;
-#      } ?>
         admin: sfEasyAuthAdmin
         basicUser: sfEasyAuthBasicUser 
     profile_id:  { type: integer, default: 0 }

@@ -1,5 +1,10 @@
 all:
   sf_easy_auth:
+    schema_inheritance:                   # Credential inheritance definition for the plugin. 
+      - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
+      - basicUser: sfEasyAuthBasicUser    # Keys are credential names, values are authentication 
+                                          # classes.
+  
     login_attempt_threshold:  3           # number of log in attempts before being locked out
     lockout_duration:         300         # number of seconds to lock an account 
                                           # after %APP_SF_EASY_AUTH_LOGIN_ATTEMPT_THRESHOLD%

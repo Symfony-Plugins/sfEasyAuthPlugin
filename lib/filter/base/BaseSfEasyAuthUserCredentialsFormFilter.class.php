@@ -17,11 +17,13 @@ class BaseSfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
     $this->setWidgets(array(
       'user_id'    => new sfWidgetFormPropelChoice(array('model' => 'sfEasyAuthUser', 'add_empty' => true)),
       'credential' => new sfWidgetFormFilterInput(),
+      'profile_id' => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
       'user_id'    => new sfValidatorPropelChoice(array('required' => false, 'model' => 'sfEasyAuthUser', 'column' => 'id')),
       'credential' => new sfValidatorPass(array('required' => false)),
+      'profile_id' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('sf_easy_auth_user_credentials_filters[%s]');
@@ -42,6 +44,7 @@ class BaseSfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
       'id'         => 'Number',
       'user_id'    => 'ForeignKey',
       'credential' => 'Text',
+      'profile_id' => 'Number',
     );
   }
 }

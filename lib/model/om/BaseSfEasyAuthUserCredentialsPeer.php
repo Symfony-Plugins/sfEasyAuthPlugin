@@ -19,7 +19,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	const CLASS_DEFAULT = 'plugins.sfEasyAuthPlugin.lib.model.SfEasyAuthUserCredentials';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -32,6 +32,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 	/** the column name for the CREDENTIAL field */
 	const CREDENTIAL = 'sf_easy_auth_user_credentials.CREDENTIAL';
+
+	/** the column name for the PROFILE_ID field */
+	const PROFILE_ID = 'sf_easy_auth_user_credentials.PROFILE_ID';
 
 	/**
 	 * An identiy map to hold any loaded instances of SfEasyAuthUserCredentials objects.
@@ -54,11 +57,11 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'Credential', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'credential', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::CREDENTIAL, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'credential', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'Credential', 'ProfileId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'credential', 'profileId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::CREDENTIAL, self::PROFILE_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'credential', 'profile_id', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -68,11 +71,11 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'Credential' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'credential' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::CREDENTIAL => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'credential' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'Credential' => 2, 'ProfileId' => 3, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'credential' => 2, 'profileId' => 3, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::CREDENTIAL => 2, self::PROFILE_ID => 3, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'credential' => 2, 'profile_id' => 3, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -159,6 +162,8 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::USER_ID);
 
 		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::CREDENTIAL);
+
+		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::PROFILE_ID);
 
 	}
 

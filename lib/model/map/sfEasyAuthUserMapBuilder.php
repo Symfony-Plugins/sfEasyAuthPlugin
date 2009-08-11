@@ -68,6 +68,8 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('PASSWORD', 'Password', 'VARCHAR', true, 32);
 
+		$tMap->addColumn('EMAIL', 'Email', 'VARCHAR', true, 255);
+
 		$tMap->addColumn('SALT', 'Salt', 'VARCHAR', true, 32);
 
 		$tMap->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null);
@@ -89,6 +91,8 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 		$tMap->addColumn('HAS_EXTRA_CREDENTIALS', 'HasExtraCredentials', 'BOOLEAN', false, null);
 
 		$tMap->addColumn('TYPE', 'Type', 'VARCHAR', false, 10);
+
+		$tMap->addColumn('PROFILE_ID', 'ProfileId', 'INTEGER', false, null);
 
 	} // doBuild()
 

@@ -39,6 +39,13 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	protected $credential;
 
 	/**
+	 * The value for the profile_id field.
+	 * Note: this column has a database default value of: 0
+	 * @var        int
+	 */
+	protected $profile_id;
+
+	/**
 	 * @var        sfEasyAuthUser
 	 */
 	protected $asfEasyAuthUser;
@@ -75,6 +82,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function applyDefaultValues()
 	{
+		$this->profile_id = 0;
 	}
 
 	/**
@@ -105,6 +113,16 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function getCredential()
 	{
 		return $this->credential;
+	}
+
+	/**
+	 * Get the [profile_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getProfileId()
+	{
+		return $this->profile_id;
 	}
 
 	/**
@@ -172,6 +190,26 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	} // setCredential()
 
 	/**
+	 * Set the value of [profile_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 */
+	public function setProfileId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->profile_id !== $v || $v === 0) {
+			$this->profile_id = $v;
+			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::PROFILE_ID;
+		}
+
+		return $this;
+	} // setProfileId()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -182,7 +220,11 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
+			if (array_diff($this->modifiedColumns, array(SfEasyAuthUserCredentialsPeer::PROFILE_ID))) {
+				return false;
+			}
+
+			if ($this->profile_id !== 0) {
 				return false;
 			}
 
@@ -211,6 +253,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->user_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->credential = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->profile_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -220,7 +263,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 3; // 3 = SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 4; // 4 = SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating SfEasyAuthUserCredentials object", $e);
@@ -563,6 +606,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			case 2:
 				return $this->getCredential();
 				break;
+			case 3:
+				return $this->getProfileId();
+				break;
 			default:
 				return null;
 				break;
@@ -587,6 +633,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getUserId(),
 			$keys[2] => $this->getCredential(),
+			$keys[3] => $this->getProfileId(),
 		);
 		return $result;
 	}
@@ -627,6 +674,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			case 2:
 				$this->setCredential($value);
 				break;
+			case 3:
+				$this->setProfileId($value);
+				break;
 		} // switch()
 	}
 
@@ -654,6 +704,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setCredential($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setProfileId($arr[$keys[3]]);
 	}
 
 	/**
@@ -668,6 +719,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::ID, $this->id);
 		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::USER_ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::USER_ID, $this->user_id);
 		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::CREDENTIAL)) $criteria->add(SfEasyAuthUserCredentialsPeer::CREDENTIAL, $this->credential);
+		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::PROFILE_ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::PROFILE_ID, $this->profile_id);
 
 		return $criteria;
 	}
@@ -725,6 +777,8 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		$copyObj->setUserId($this->user_id);
 
 		$copyObj->setCredential($this->credential);
+
+		$copyObj->setProfileId($this->profile_id);
 
 
 		$copyObj->setNew(true);

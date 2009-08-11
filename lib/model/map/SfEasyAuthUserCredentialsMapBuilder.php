@@ -68,6 +68,8 @@ class SfEasyAuthUserCredentialsMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('CREDENTIAL', 'Credential', 'VARCHAR', true, 60);
 
+		$tMap->addColumn('PROFILE_ID', 'ProfileId', 'INTEGER', false, null);
+
 	} // doBuild()
 
 } // SfEasyAuthUserCredentialsMapBuilder

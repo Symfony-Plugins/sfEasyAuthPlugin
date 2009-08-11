@@ -16,6 +16,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'id'                    => new sfWidgetFormInputHidden(),
       'username'              => new sfWidgetFormInput(),
       'password'              => new sfWidgetFormInput(),
+      'email'                 => new sfWidgetFormInput(),
       'salt'                  => new sfWidgetFormInput(),
       'created_at'            => new sfWidgetFormDateTime(),
       'updated_at'            => new sfWidgetFormDateTime(),
@@ -27,12 +28,14 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'remember_key_lifetime' => new sfWidgetFormDateTime(),
       'has_extra_credentials' => new sfWidgetFormInputCheckbox(),
       'type'                  => new sfWidgetFormInput(),
+      'profile_id'            => new sfWidgetFormInput(),
     ));
 
     $this->setValidators(array(
       'id'                    => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUser', 'column' => 'id', 'required' => false)),
       'username'              => new sfValidatorString(array('max_length' => 50)),
       'password'              => new sfValidatorString(array('max_length' => 32)),
+      'email'                 => new sfValidatorString(array('max_length' => 255)),
       'salt'                  => new sfValidatorString(array('max_length' => 32)),
       'created_at'            => new sfValidatorDateTime(array('required' => false)),
       'updated_at'            => new sfValidatorDateTime(array('required' => false)),
@@ -44,6 +47,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'remember_key_lifetime' => new sfValidatorDateTime(array('required' => false)),
       'has_extra_credentials' => new sfValidatorBoolean(array('required' => false)),
       'type'                  => new sfValidatorString(array('max_length' => 10, 'required' => false)),
+      'profile_id'            => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(

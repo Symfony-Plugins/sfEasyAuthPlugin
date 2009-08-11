@@ -16,12 +16,14 @@ class BaseSfEasyAuthUserCredentialsForm extends BaseFormPropel
       'id'         => new sfWidgetFormInputHidden(),
       'user_id'    => new sfWidgetFormPropelChoice(array('model' => 'sfEasyAuthUser', 'add_empty' => false)),
       'credential' => new sfWidgetFormInput(),
+      'profile_id' => new sfWidgetFormInput(),
     ));
 
     $this->setValidators(array(
       'id'         => new sfValidatorPropelChoice(array('model' => 'SfEasyAuthUserCredentials', 'column' => 'id', 'required' => false)),
       'user_id'    => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUser', 'column' => 'id')),
       'credential' => new sfValidatorString(array('max_length' => 60)),
+      'profile_id' => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('sf_easy_auth_user_credentials[%s]');

@@ -52,11 +52,11 @@ Installation
 
   * Optionally create a default user (the user type is case sensitive):
 
-        $ symfony easyAuth:create-user al $ecret basicUser
+        $ symfony easyAuth:create-user al 5ecret al@example.com basicUser
 
   * Optionally create a default admin user:
 
-        $ symfony easyAuth:create-user ally $ecret admin
+        $ symfony easyAuth:create-user ally 5ecret ally@example.com admin
 
 Secure your application
 -----------------------
@@ -293,7 +293,7 @@ based on code in that plugin too. Thanks to the developers of that plugin.
 TODO
 ----
 
-  * Add a password reminder
+  * Add a password reminder - in progress
   * Think of an easy way for admins to manage extra credentials
   * Add a user profile
   * Clean up allowing users to configure destinations after logging in.

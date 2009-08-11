@@ -39,6 +39,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $password;
 
 	/**
+	 * The value for the email field.
+	 * @var        string
+	 */
+	protected $email;
+
+	/**
 	 * The value for the salt field.
 	 * @var        string
 	 */
@@ -108,6 +114,13 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $type;
 
 	/**
+	 * The value for the profile_id field.
+	 * Note: this column has a database default value of: 0
+	 * @var        int
+	 */
+	protected $profile_id;
+
+	/**
 	 * @var        array SfEasyAuthUserCredentials[] Collection to store aggregation of SfEasyAuthUserCredentials objects.
 	 */
 	protected $collSfEasyAuthUserCredentialss;
@@ -152,6 +165,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		$this->failed_logins = 0;
 		$this->enabled = true;
 		$this->has_extra_credentials = false;
+		$this->profile_id = 0;
 	}
 
 	/**
@@ -182,6 +196,16 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function getPassword()
 	{
 		return $this->password;
+	}
+
+	/**
+	 * Get the [email] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getEmail()
+	{
+		return $this->email;
 	}
 
 	/**
@@ -435,6 +459,16 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Get the [profile_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getProfileId()
+	{
+		return $this->profile_id;
+	}
+
+	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
@@ -493,6 +527,26 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setPassword()
+
+	/**
+	 * Set the value of [email] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 */
+	public function setEmail($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->email !== $v) {
+			$this->email = $v;
+			$this->modifiedColumns[] = sfEasyAuthUserPeer::EMAIL;
+		}
+
+		return $this;
+	} // setEmail()
 
 	/**
 	 * Set the value of [salt] column.
@@ -860,6 +914,26 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	} // setType()
 
 	/**
+	 * Set the value of [profile_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 */
+	public function setProfileId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->profile_id !== $v || $v === 0) {
+			$this->profile_id = $v;
+			$this->modifiedColumns[] = sfEasyAuthUserPeer::PROFILE_ID;
+		}
+
+		return $this;
+	} // setProfileId()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -870,7 +944,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserPeer::FAILED_LOGINS,sfEasyAuthUserPeer::ENABLED,sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS))) {
+			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserPeer::FAILED_LOGINS,sfEasyAuthUserPeer::ENABLED,sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS,sfEasyAuthUserPeer::PROFILE_ID))) {
 				return false;
 			}
 
@@ -883,6 +957,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			}
 
 			if ($this->has_extra_credentials !== false) {
+				return false;
+			}
+
+			if ($this->profile_id !== 0) {
 				return false;
 			}
 
@@ -911,17 +989,19 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->username = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->password = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->salt = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->last_login = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->last_login_attempt = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->failed_logins = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-			$this->enabled = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
-			$this->remember_key = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-			$this->remember_key_lifetime = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->has_extra_credentials = ($row[$startcol + 12] !== null) ? (boolean) $row[$startcol + 12] : null;
-			$this->type = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+			$this->email = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->salt = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->last_login = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->last_login_attempt = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->failed_logins = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->enabled = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
+			$this->remember_key = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->remember_key_lifetime = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->has_extra_credentials = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
+			$this->type = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+			$this->profile_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -931,7 +1011,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 14; // 14 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 16; // 16 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfEasyAuthUser object", $e);
@@ -1276,37 +1356,43 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				return $this->getPassword();
 				break;
 			case 3:
-				return $this->getSalt();
+				return $this->getEmail();
 				break;
 			case 4:
-				return $this->getCreatedAt();
+				return $this->getSalt();
 				break;
 			case 5:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 6:
-				return $this->getLastLogin();
+				return $this->getUpdatedAt();
 				break;
 			case 7:
-				return $this->getLastLoginAttempt();
+				return $this->getLastLogin();
 				break;
 			case 8:
-				return $this->getFailedLogins();
+				return $this->getLastLoginAttempt();
 				break;
 			case 9:
-				return $this->getEnabled();
+				return $this->getFailedLogins();
 				break;
 			case 10:
-				return $this->getRememberKey();
+				return $this->getEnabled();
 				break;
 			case 11:
-				return $this->getRememberKeyLifetime();
+				return $this->getRememberKey();
 				break;
 			case 12:
-				return $this->getHasExtraCredentials();
+				return $this->getRememberKeyLifetime();
 				break;
 			case 13:
+				return $this->getHasExtraCredentials();
+				break;
+			case 14:
 				return $this->getType();
+				break;
+			case 15:
+				return $this->getProfileId();
 				break;
 			default:
 				return null;
@@ -1332,17 +1418,19 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getUsername(),
 			$keys[2] => $this->getPassword(),
-			$keys[3] => $this->getSalt(),
-			$keys[4] => $this->getCreatedAt(),
-			$keys[5] => $this->getUpdatedAt(),
-			$keys[6] => $this->getLastLogin(),
-			$keys[7] => $this->getLastLoginAttempt(),
-			$keys[8] => $this->getFailedLogins(),
-			$keys[9] => $this->getEnabled(),
-			$keys[10] => $this->getRememberKey(),
-			$keys[11] => $this->getRememberKeyLifetime(),
-			$keys[12] => $this->getHasExtraCredentials(),
-			$keys[13] => $this->getType(),
+			$keys[3] => $this->getEmail(),
+			$keys[4] => $this->getSalt(),
+			$keys[5] => $this->getCreatedAt(),
+			$keys[6] => $this->getUpdatedAt(),
+			$keys[7] => $this->getLastLogin(),
+			$keys[8] => $this->getLastLoginAttempt(),
+			$keys[9] => $this->getFailedLogins(),
+			$keys[10] => $this->getEnabled(),
+			$keys[11] => $this->getRememberKey(),
+			$keys[12] => $this->getRememberKeyLifetime(),
+			$keys[13] => $this->getHasExtraCredentials(),
+			$keys[14] => $this->getType(),
+			$keys[15] => $this->getProfileId(),
 		);
 		return $result;
 	}
@@ -1384,37 +1472,43 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				$this->setPassword($value);
 				break;
 			case 3:
-				$this->setSalt($value);
+				$this->setEmail($value);
 				break;
 			case 4:
-				$this->setCreatedAt($value);
+				$this->setSalt($value);
 				break;
 			case 5:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 6:
-				$this->setLastLogin($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 7:
-				$this->setLastLoginAttempt($value);
+				$this->setLastLogin($value);
 				break;
 			case 8:
-				$this->setFailedLogins($value);
+				$this->setLastLoginAttempt($value);
 				break;
 			case 9:
-				$this->setEnabled($value);
+				$this->setFailedLogins($value);
 				break;
 			case 10:
-				$this->setRememberKey($value);
+				$this->setEnabled($value);
 				break;
 			case 11:
-				$this->setRememberKeyLifetime($value);
+				$this->setRememberKey($value);
 				break;
 			case 12:
-				$this->setHasExtraCredentials($value);
+				$this->setRememberKeyLifetime($value);
 				break;
 			case 13:
+				$this->setHasExtraCredentials($value);
+				break;
+			case 14:
 				$this->setType($value);
+				break;
+			case 15:
+				$this->setProfileId($value);
 				break;
 		} // switch()
 	}
@@ -1443,17 +1537,19 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setUsername($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setPassword($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setSalt($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setLastLogin($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setLastLoginAttempt($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setFailedLogins($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setEnabled($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setRememberKey($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setRememberKeyLifetime($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setHasExtraCredentials($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setType($arr[$keys[13]]);
+		if (array_key_exists($keys[3], $arr)) $this->setEmail($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setSalt($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setLastLogin($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setLastLoginAttempt($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setFailedLogins($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setEnabled($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setRememberKey($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setRememberKeyLifetime($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setHasExtraCredentials($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setType($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setProfileId($arr[$keys[15]]);
 	}
 
 	/**
@@ -1468,6 +1564,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(sfEasyAuthUserPeer::ID)) $criteria->add(sfEasyAuthUserPeer::ID, $this->id);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::USERNAME)) $criteria->add(sfEasyAuthUserPeer::USERNAME, $this->username);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD)) $criteria->add(sfEasyAuthUserPeer::PASSWORD, $this->password);
+		if ($this->isColumnModified(sfEasyAuthUserPeer::EMAIL)) $criteria->add(sfEasyAuthUserPeer::EMAIL, $this->email);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::SALT)) $criteria->add(sfEasyAuthUserPeer::SALT, $this->salt);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::CREATED_AT)) $criteria->add(sfEasyAuthUserPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::UPDATED_AT)) $criteria->add(sfEasyAuthUserPeer::UPDATED_AT, $this->updated_at);
@@ -1479,6 +1576,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS)) $criteria->add(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS, $this->has_extra_credentials);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::TYPE)) $criteria->add(sfEasyAuthUserPeer::TYPE, $this->type);
+		if ($this->isColumnModified(sfEasyAuthUserPeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserPeer::PROFILE_ID, $this->profile_id);
 
 		return $criteria;
 	}
@@ -1537,6 +1635,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		$copyObj->setPassword($this->password);
 
+		$copyObj->setEmail($this->email);
+
 		$copyObj->setSalt($this->salt);
 
 		$copyObj->setCreatedAt($this->created_at);
@@ -1558,6 +1658,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		$copyObj->setHasExtraCredentials($this->has_extra_credentials);
 
 		$copyObj->setType($this->type);
+
+		$copyObj->setProfileId($this->profile_id);
 
 
 		if ($deepCopy) {

@@ -47,7 +47,7 @@ body
   position: relative;
 }
 
-#loginForm .error
+#loginForm .error, .formError
 {
   color: #f00;
   position: absolute;

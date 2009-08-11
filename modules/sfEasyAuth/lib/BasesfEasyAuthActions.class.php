@@ -18,10 +18,11 @@ class BasesfEasyAuthActions extends sfActions
   public function executeLogin(sfWebRequest $request)
   {
     $user = $this->getUser();
-    
+
+    // user is already authenticated, so send them to the success url
     if ($user->isAuthenticated())
     {
-      return $this->redirect('@homepage');
+      return $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
     }
     
     if ($this->handleLogIn($request))

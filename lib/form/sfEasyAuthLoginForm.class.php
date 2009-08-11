@@ -19,21 +19,27 @@ class sfEasyAuthLoginForm extends sfForm
     ));
 
     // use a better formatter than the default on provided by symfony
-    $oDecorator = new sfWidgetFormSchemaFormatterDiv($this->getWidgetSchema());
+    $oDecorator = new sfEasyAuthWidgetFormSchemaFormatterDiv($this->getWidgetSchema());
     $this->getWidgetSchema()->addFormFormatter('div', $oDecorator);
     $this->getWidgetSchema()->setFormFormatterName('div');
     
     $this->widgetSchema->setLabels(array(
       'username' => 'User name',
+      'password' => 'Password',
       'remember' => 'Remember me'
     ));
 
     $this->widgetSchema->setNameFormat('login[%s]');
 
     $this->setValidators(array(
-      'username' => new sfValidatorString(array('required' => true)),
-      'password' => new sfValidatorString(array('required' => true)),
+      'username' => new sfValidatorString(
+        array('required' => true), 
+        array('required' => sfConfig::get('app_sf_easy_auth_username_required_message'))),
+      'password' => new sfValidatorString(
+        array('required' => true),
+        array('required' => sfConfig::get('app_sf_easy_auth_password_required_message'))),
       'remember' => new sfValidatorBoolean()
       ));
+
   }
 }

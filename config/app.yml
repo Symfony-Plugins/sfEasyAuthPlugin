@@ -19,3 +19,5 @@ all:
     insufficient_privileges:  | 
       Sorry, you don't have sufficient privileges     # shown if a user tries to elevate 
                                                       # privileges, but they are insufficient
+    username_required_message: Please enter your user name      # displayed if users don't
+    password_required_message: Please enter your password       #  enter required fields

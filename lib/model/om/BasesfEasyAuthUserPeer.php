@@ -90,6 +90,15 @@ abstract class BasesfEasyAuthUserPeer {
 	/** A class that can be returned by this peer. */
 	const CLASSNAME_BASICUSER = 'plugins.sfEasyAuthPlugin.lib.model.sfEasyAuthBasicUser';
 
+	/** A key representing a particular subclass */
+	const CLASSKEY_STUDENT = 'student';
+
+	/** A key representing a particular subclass */
+	const CLASSKEY_SFEASYAUTHSTUDENT = 'student';
+
+	/** A class that can be returned by this peer. */
+	const CLASSNAME_STUDENT = 'plugins.sfEasyAuthPlugin.lib.model.sfEasyAuthStudent';
+
 	/**
 	 * An identiy map to hold any loaded instances of sfEasyAuthUser objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -537,6 +546,10 @@ abstract class BasesfEasyAuthUserPeer {
 
 				case self::CLASSKEY_BASICUSER:
 					$omClass = self::CLASSNAME_BASICUSER;
+					break;
+
+				case self::CLASSKEY_STUDENT:
+					$omClass = self::CLASSNAME_STUDENT;
 					break;
 
 				default:

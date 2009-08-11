@@ -19,6 +19,19 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function getAuthUser()
   {
+    if (!$this->user && $id = $this->getAttribute('user_id', null, 'sfEasyAuthSecurityUser'))
+    {
+      $this->user = sfEasyAuthUserPeer::retrieveByPk($id);
+
+      if (!$this->user)
+      {
+        // the user does not exist anymore in the database
+        $this->logOut();
+
+        throw new sfException('The user does not exist in the database.');
+      }  
+    }
+    
     return $this->user;
   }
   
@@ -139,6 +152,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     $user->save();
     $this->user = $user;
     
+    $this->setAttribute('user_id', $user->getId(), 'sfEasyAuthSecurityUser');
     $this->setAuthenticated(true);
     $this->clearCredentials();
     

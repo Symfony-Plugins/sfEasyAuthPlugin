@@ -5,6 +5,11 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
   const PASSWORD_MASK = '**PASSWORD MASKED**';
   
   /**
+   * @var object $profile The profile associated with this user
+   */
+  protected $profile;
+  
+  /**
    * Returns default credentials for this user by examining the inheritance
    * hierarchy
    * 
@@ -54,6 +59,36 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
     }
     
     return $extraCredentials;
+  }
+  
+  /**
+   * Returns the default profile associated with the current class
+   * 
+   * @return mixed Returns the current class' default profile if one exists
+   */
+  public function getProfile()
+  {
+    if ($this->getProfileId())
+    {
+      if ($profileClass = $this->computeProfileClassName($this->getType()))
+      {
+        $peerClass = $profileClass . 'Peer';
+        $this->profile = call_user_func(array($peerClass, 'retrieveByPk'), $this->getProfileId()); 
+      }      
+    }
+    
+    return $this->profile;
+  }
+  
+  /**
+   * Returns the name of the profile class associated with a user class 
+   * 
+   * @param string $type The name of a user type to compute a profile class name for
+   * @return string
+   */
+  protected function computeProfileClassName($type)
+  {
+    return ($type) ? sfConfig::get('app_sf_easy_auth_profile_prefix') . ucfirst($type) : '';
   }
   
   /**

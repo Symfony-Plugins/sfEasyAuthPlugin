@@ -3,7 +3,12 @@ all:
     schema_inheritance:                   # Credential inheritance definition for the plugin. 
       - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
       - basicUser: sfEasyAuthBasicUser    # Keys are credential names, values are authentication 
-                                          # classes.
+      - student: sfEasyAuthStudent        # classes.
+   
+    profile_prefix: Sb                    # Prefix for profile classes. Tables used for profile
+                                          # data will be formed by prepending this prefix to 
+                                          # schema_inheritance keys, with the first character
+                                          # converted to uppercase, e.g. SbBasicUser
   
     login_attempt_threshold:  3           # number of log in attempts before being locked out
     lockout_duration:         300         # number of seconds to lock an account 
@@ -21,8 +26,8 @@ all:
                                           # messages
     invalid_credentials:      Invalid user name or password          # message shown when username 
                                                                      # or password is wrong
-    insufficient_privileges:  | 
-      Sorry, you don't have sufficient privileges     # shown if a user tries to elevate 
+    insufficient_privileges:  Sorry, you don't have sufficient privileges 
+                                                      # shown if a user tries to elevate 
                                                       # privileges, but they are insufficient
     username_required_message: Please enter your user name      # displayed if users don't
     password_required_message: Please enter your password       #  enter required fields

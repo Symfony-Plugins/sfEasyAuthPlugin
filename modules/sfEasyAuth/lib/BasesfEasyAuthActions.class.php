@@ -54,7 +54,7 @@ class BasesfEasyAuthActions extends sfActions
       // try to retrieve the user
       if ($user->validateRememberMe($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'))))
       {
-        return $user->logIn();;
+        return $user->logIn();
       }
     }
     

@@ -21,8 +21,13 @@ propel:
       type: varchar(10)
       index: true
       inheritance:
-        admin: sfEasyAuthAdmin
-        basicUser: sfEasyAuthBasicUser 
+        <?php 
+          $data = sfConfig::get('app_sf_easy_auth_schema_inheritance');
+          for($i=0; $i<count($data); $i++)
+          {
+            echo $data[$i];
+            echo ($i+1 < count($data)) ? "\n        " : "\n";
+          } ?>
     profile_id:  { type: integer, default: 0 }
         
   sf_easy_auth_user_credentials:

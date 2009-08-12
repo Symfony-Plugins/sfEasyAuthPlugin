@@ -508,7 +508,7 @@ abstract class BasesfEasyAuthUserPeer {
 
   static public function getUniqueColumnNames()
   {
-    return array(array('username'), array('remember_key'));
+    return array(array('username'), array('email'), array('remember_key'));
   }
 	/**
 	 * Returns the TableMap related to this peer.

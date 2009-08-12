@@ -13,7 +13,7 @@ On a site with thousands of users this could represent a big efficiency, both in
 of execution speed and database storage savings.
 
 This plugin supports users having multiple credentials, brute force protection (with
-configurable attempt and lock-out thresholds), and a remember me feature. 
+configurable attempt and lock-out thresholds), user profiles and a remember me feature. 
 
 Installation
 ------------
@@ -334,5 +334,6 @@ TODO
 
   * Add a password reminder - in progress
   * Think of an easy way for admins to manage extra credentials
-  * Add a user profile
+  * Support user profiles for users with extra credentials that are related to those
+    extra credentials
   * Clean up allowing users to configure destinations after logging in.

@@ -53,6 +53,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
         new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('username'))),
+        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('email'))),
         new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('remember_key'))),
       ))
     );

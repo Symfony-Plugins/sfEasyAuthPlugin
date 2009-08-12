@@ -19,7 +19,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function getAuthUser()
   {
-    if (!$this->user && $id = $this->getAttribute('user_id', null, 'sfEasyAuthSecurityUser'))
+    if (!$this->user && $id = $this->getAttribute('security_user_id', null))
     {
       $this->user = sfEasyAuthUserPeer::retrieveByPk($id);
 
@@ -152,7 +152,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     $user->save();
     $this->user = $user;
     
-    $this->setAttribute('user_id', $user->getId(), 'sfEasyAuthSecurityUser');
+    $this->setAttribute('security_user_id', $user->getId());
     $this->setAuthenticated(true);
     $this->clearCredentials();
     

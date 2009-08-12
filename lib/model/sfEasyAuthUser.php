@@ -128,6 +128,25 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
   }
   
   /**
+   * Saves the ID of this user object into the profile's user_id field if a profile
+   * exists
+   * 
+   * @param PropelPDO $con
+   */
+  public function save(PropelPDO $con = null)
+  {
+    $return = parent::save();
+    
+    if (is_object($this->profile) && $this->profile->getUserId() !== $this->getId())
+    {
+      $this->profile->setUserId($this->getId());
+      $this->profile->save();
+    } 
+    
+    return $return;
+  }
+  
+  /**
    * Makes sure the user name isn't already taken
    * 
    * @param string $username
@@ -176,6 +195,23 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
     $this->setSalt($salt);
     
     return $salt;
+  }
+  
+  /**
+   * Sets the profile related to this object
+   * 
+   * @param Persistent $profile The Persistent profile object to associate with this record
+   */
+  public function setProfile(Persistent $profile)
+  {
+    // save the profile if it hasn't been saved already
+    if (!$profile->getId())
+    {
+      $profile->save();
+    }
+    
+    $this->setProfileId($profile->getId());
+    $this->profile = $profile;
   }
   
   /**

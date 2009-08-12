@@ -186,7 +186,10 @@ class BasesfEasyAuthActions extends sfActions
       // try to retrieve the user with this email address
       if (sfEasyAuthUserPeer::retrieveByEmail($email))
       {
-        // send the user an email with an auto log in link
+        // send the user an email with an auto log in link with a parameter directing
+        // them to a page to pick a new password
+        
+        // create a filter to process this too.
       }
     }
   }

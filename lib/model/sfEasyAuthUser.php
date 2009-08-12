@@ -133,6 +133,7 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    * 
    * @param PropelPDO $con
    */
+  /*
   public function save(PropelPDO $con = null)
   {
     $return = parent::save();
@@ -145,6 +146,7 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
     
     return $return;
   }
+  */
   
   /**
    * Makes sure the user name isn't already taken

@@ -98,7 +98,7 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    */
   protected function computeProfileClassName($type)
   {
-    return ($type) ? sfConfig::get('app_sf_easy_auth_profile_prefix') . ucfirst($type) : '';
+    return ($type) ? sfConfig::get('app_sf_easy_auth_profile_prefix') . ucfirst($type) . 'Profile' : '';
   }
   
   /**

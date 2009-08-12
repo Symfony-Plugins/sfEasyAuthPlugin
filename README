@@ -288,17 +288,18 @@ the following:
     compute the name of the profile class.
     
   * Edit your main schema.yml file, creating an object with the same name as a user
-    type. e.g. if we declare an `editor` type as above and have a profile_prefix of 'my', 
-    add something similar to below to your main `schema.yml` file:
+    type with 'Profile' at the end. 
+      e.g. if we declare an `editor` type as above and have a profile_prefix of 'my', 
+      add something similar to below to your main `schema.yml` file:
     
     [plain]
-    my_editor:
+    my_editor_profile:
       id: ~
       name: { type: varchar(200), required: true }
       articles_edited: { type: int, default: 0 }
       
-    When you rebuild your model, you'll have a MyEditor class and peer class in your main
-    model directory. You can retrieve the profile as follows:
+    When you rebuild your model, you'll have a MyEditorProfile class and peer class in 
+    your main model directory. You can retrieve the profile as follows:
     
     [php]
     echo $sf_user->getAuthUser()->getProfile()->getName() . ' has edited ' . 

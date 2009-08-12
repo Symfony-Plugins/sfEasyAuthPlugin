@@ -46,7 +46,8 @@ class BasesfEasyAuthActions extends sfActions
   {
     $user = $this->getUser();
 
-    $this->form = new sfEasyAuthLoginForm();
+    $this->loginForm = new sfEasyAuthLoginForm();
+    $this->resetForm = new sfEasyAuthPasswordResetForm();
 
     // see if the user has a 'remember me' cookie set
     if ($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name')))
@@ -60,14 +61,14 @@ class BasesfEasyAuthActions extends sfActions
     
     if ($request->isMethod('post'))
     {
-      $this->form->bind($request->getParameter($this->form->getName()));
+      $this->loginForm->bind($request->getParameter($this->loginForm->getName()));
       
-      if ($this->form->isValid())
+      if ($this->loginForm->isValid())
       {
         $authenticateMethod = sfConfig::get('app_sf_easy_auth_authenticate_callable', '');
         
-        $username = $this->form->getValue('username');
-        $password = $this->form->getValue('password');
+        $username = $this->loginForm->getValue('username');
+        $password = $this->loginForm->getValue('password');
 
         if (is_array($authenticateMethod) && count($authenticateMethod) == 2)
         {
@@ -81,7 +82,7 @@ class BasesfEasyAuthActions extends sfActions
         if ($result === true)
         {
           // set the remember me cookie if they want it
-          if ($this->form->getValue('remember'))
+          if ($this->loginForm->getValue('remember'))
           {
             $user->setRememberCookie();
           }
@@ -174,6 +175,19 @@ class BasesfEasyAuthActions extends sfActions
    */
   public function executePasswordReset(sfWebRequest $request)
   {
-    echo __FILE__ . ' line 177: this needs doing';exit;
+    if ($request->isMethod('post'))
+    {
+      $this->form = new sfEasyAuthPasswordResetForm();
+      
+      $this->form->bind($request->getParameter($this->form->getName()));
+      
+      $email = $this->form->getValue('email');
+      
+      // try to retrieve the user with this email address
+      if (sfEasyAuthUserPeer::retrieveByEmail($email))
+      {
+        // send the user an email with an auto log in link
+      }
+    }
   }
 }

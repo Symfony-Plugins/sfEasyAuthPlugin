@@ -88,6 +88,8 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('REMEMBER_KEY_LIFETIME', 'RememberKeyLifetime', 'TIMESTAMP', false, null);
 
+		$tMap->addColumn('AUTO_LOGIN_HASH', 'AutoLoginHash', 'VARCHAR', false, 32);
+
 		$tMap->addColumn('HAS_EXTRA_CREDENTIALS', 'HasExtraCredentials', 'BOOLEAN', false, null);
 
 		$tMap->addColumn('TYPE', 'Type', 'VARCHAR', false, 10);

@@ -9,7 +9,7 @@
   <?php endif ?>
 
   <form action="<?php echo url_for('@sf_easy_auth_login') ?>" method="post">
-    <?php echo $form ?>
+    <?php echo $loginForm ?>
 
     <input type="submit" value="Log in" />
   </form>
@@ -17,9 +17,10 @@
   <a href="#pwResetForm" class="subtle" id="pwResetLink">Reset your password</a>
   
   <form action="<?php echo url_for('@sf_easy_auth_password_reset') ?>" 
-    method="post" class="hidden" id="pwResetForm">
-    <label for="email">Please enter your email address</label>
-    <input type="text" id="pw_reset_email" name="pw_reset[email]" />
+    method="post" class="hidden" id="pwResetForm" name="pw_reset">
+    <?php echo $resetForm ?>
+    
+    <!-- input type="text" id="pw_reset_email" name="pw_reset[email]" /-->
     <input type="submit" value="Reset password" />
   </form>
 </div>

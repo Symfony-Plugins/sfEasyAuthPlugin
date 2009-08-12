@@ -1,21 +1,19 @@
 <?php
 
 /**
- * sfEasyAuth log-in form.
+ * sfEasyAuth password reset form.
  *
  * @package    .
  * @subpackage form
  * @author     Your name here
  * @version    SVN: $Id: sfPropelFormTemplate.php 10377 2008-07-21 07:10:32Z dwhittle $
  */
-class sfEasyAuthLoginForm extends sfForm
+class sfEasyAuthPasswordResetForm extends sfForm
 {
   public function configure()
   {
     $this->setWidgets(array(
-      'username'  => new sfWidgetFormInput(),
-      'password' => new sfWidgetFormInputPassword(),
-      'remember' => new sfWidgetFormInputCheckbox(),
+      'email'  => new sfWidgetFormInput(),
     ));
 
     // use a better formatter than the default on provided by symfony
@@ -24,22 +22,15 @@ class sfEasyAuthLoginForm extends sfForm
     $this->getWidgetSchema()->setFormFormatterName('div');
     
     $this->widgetSchema->setLabels(array(
-      'username' => 'User name',
-      'password' => 'Password',
-      'remember' => 'Remember me'
+      'email' => 'Please enter your email address'
     ));
 
-    $this->widgetSchema->setNameFormat('login[%s]');
+    $this->widgetSchema->setNameFormat('pw_reset[%s]');
 
     $this->setValidators(array(
-      'username' => new sfValidatorString(
+      'email' => new sfValidatorEmail(
         array('required' => true), 
         array('required' => sfConfig::get('app_sf_easy_auth_username_required_message'))),
-      'password' => new sfValidatorString(
-        array('required' => true),
-        array('required' => sfConfig::get('app_sf_easy_auth_password_required_message'))),
-      'remember' => new sfValidatorBoolean()
       ));
-
   }
 }

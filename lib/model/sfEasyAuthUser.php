@@ -271,4 +271,29 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
     $this->setFailedLogins(0);
     $this->save();
   }
+  
+  /**
+   * Overrides the parent method to generate a hash if this is a new object 
+   * 
+   * @param PropelPDO $con
+   */
+  public function save(PropelPDO $con = null)
+  {
+    if ($this->isNew())
+    {
+      $this->setAutoLoginHash($this->generateAutoLoginHash());
+    }
+    
+    return parent::save($con);
+  }
+  
+  /**
+   * Generates a hash
+   * 
+   * @return string A hash
+   */
+  protected function generateAutoLoginHash()
+  {
+    return md5(sfEasyAuthUtils::randomString(20));
+  }
 }

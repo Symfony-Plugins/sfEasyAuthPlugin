@@ -101,6 +101,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $remember_key_lifetime;
 
 	/**
+	 * The value for the auto_login_hash field.
+	 * @var        string
+	 */
+	protected $auto_login_hash;
+
+	/**
 	 * The value for the has_extra_credentials field.
 	 * Note: this column has a database default value of: false
 	 * @var        boolean
@@ -436,6 +442,16 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		} else {
 			return $dt->format($format);
 		}
+	}
+
+	/**
+	 * Get the [auto_login_hash] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getAutoLoginHash()
+	{
+		return $this->auto_login_hash;
 	}
 
 	/**
@@ -874,6 +890,26 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	} // setRememberKeyLifetime()
 
 	/**
+	 * Set the value of [auto_login_hash] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 */
+	public function setAutoLoginHash($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->auto_login_hash !== $v) {
+			$this->auto_login_hash = $v;
+			$this->modifiedColumns[] = sfEasyAuthUserPeer::AUTO_LOGIN_HASH;
+		}
+
+		return $this;
+	} // setAutoLoginHash()
+
+	/**
 	 * Set the value of [has_extra_credentials] column.
 	 * 
 	 * @param      boolean $v new value
@@ -999,9 +1035,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->enabled = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
 			$this->remember_key = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
 			$this->remember_key_lifetime = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-			$this->has_extra_credentials = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
-			$this->type = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-			$this->profile_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+			$this->auto_login_hash = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+			$this->has_extra_credentials = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
+			$this->type = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->profile_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1011,7 +1048,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 16; // 16 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 17; // 17 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfEasyAuthUser object", $e);
@@ -1386,12 +1423,15 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				return $this->getRememberKeyLifetime();
 				break;
 			case 13:
-				return $this->getHasExtraCredentials();
+				return $this->getAutoLoginHash();
 				break;
 			case 14:
-				return $this->getType();
+				return $this->getHasExtraCredentials();
 				break;
 			case 15:
+				return $this->getType();
+				break;
+			case 16:
 				return $this->getProfileId();
 				break;
 			default:
@@ -1428,9 +1468,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$keys[10] => $this->getEnabled(),
 			$keys[11] => $this->getRememberKey(),
 			$keys[12] => $this->getRememberKeyLifetime(),
-			$keys[13] => $this->getHasExtraCredentials(),
-			$keys[14] => $this->getType(),
-			$keys[15] => $this->getProfileId(),
+			$keys[13] => $this->getAutoLoginHash(),
+			$keys[14] => $this->getHasExtraCredentials(),
+			$keys[15] => $this->getType(),
+			$keys[16] => $this->getProfileId(),
 		);
 		return $result;
 	}
@@ -1502,12 +1543,15 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				$this->setRememberKeyLifetime($value);
 				break;
 			case 13:
-				$this->setHasExtraCredentials($value);
+				$this->setAutoLoginHash($value);
 				break;
 			case 14:
-				$this->setType($value);
+				$this->setHasExtraCredentials($value);
 				break;
 			case 15:
+				$this->setType($value);
+				break;
+			case 16:
 				$this->setProfileId($value);
 				break;
 		} // switch()
@@ -1547,9 +1591,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[10], $arr)) $this->setEnabled($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setRememberKey($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setRememberKeyLifetime($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setHasExtraCredentials($arr[$keys[13]]);
-		if (array_key_exists($keys[14], $arr)) $this->setType($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setProfileId($arr[$keys[15]]);
+		if (array_key_exists($keys[13], $arr)) $this->setAutoLoginHash($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setHasExtraCredentials($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setType($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setProfileId($arr[$keys[16]]);
 	}
 
 	/**
@@ -1574,6 +1619,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(sfEasyAuthUserPeer::ENABLED)) $criteria->add(sfEasyAuthUserPeer::ENABLED, $this->enabled);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY, $this->remember_key);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
+		if ($this->isColumnModified(sfEasyAuthUserPeer::AUTO_LOGIN_HASH)) $criteria->add(sfEasyAuthUserPeer::AUTO_LOGIN_HASH, $this->auto_login_hash);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS)) $criteria->add(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS, $this->has_extra_credentials);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::TYPE)) $criteria->add(sfEasyAuthUserPeer::TYPE, $this->type);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserPeer::PROFILE_ID, $this->profile_id);
@@ -1654,6 +1700,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		$copyObj->setRememberKey($this->remember_key);
 
 		$copyObj->setRememberKeyLifetime($this->remember_key_lifetime);
+
+		$copyObj->setAutoLoginHash($this->auto_login_hash);
 
 		$copyObj->setHasExtraCredentials($this->has_extra_credentials);
 

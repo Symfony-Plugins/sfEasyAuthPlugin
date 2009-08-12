@@ -16,6 +16,7 @@ propel:
     enabled:        { type: boolean, default: 1 }
     remember_key:   { type: varchar(42), index: unique }
     remember_key_lifetime:  { type: timestamp }
+    auto_login_hash: { type: varchar(32) }
     has_extra_credentials:   { type: boolean, default: 0 }
     type:
       type: varchar(10)

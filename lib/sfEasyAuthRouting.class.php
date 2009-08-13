@@ -23,10 +23,46 @@ class sfEasyAuthRouting
     $r = $event->getSubject();
 
     // preprend our routes
-    $r->prependRoute('sf_easy_auth_login', new sfRoute('/login', array('module' => 'sfEasyAuth', 'action' => 'login')));
-    $r->prependRoute('sf_easy_auth_logout', new sfRoute('/logout', array('module' => 'sfEasyAuth', 'action' => 'logout')));
-    $r->prependRoute('sf_easy_auth_secure', new sfRoute('/secure', array('module' => 'sfEasyAuth', 'action' => 'secure')));
-    $r->prependRoute('sf_easy_auth_password_reset', new sfRoute('/pw_reset', array('module' => 'sfEasyAuth', 'action' => 'passwordReset')));
+    $r->prependRoute('sf_easy_auth_login', 
+      new sfRoute('/login', 
+        array(
+          'module' => 'sfEasyAuth', 
+          'action' => 'login'
+        )
+      )
+    );
+    $r->prependRoute('sf_easy_auth_logout', 
+      new sfRoute('/logout', 
+        array(
+          'module' => 'sfEasyAuth', 
+          'action' => 'logout'
+        )
+      )
+    );
+    $r->prependRoute('sf_easy_auth_secure', 
+      new sfRoute('/secure', 
+        array(
+          'module' => 'sfEasyAuth', 
+          'action' => 'secure'
+        )
+      )
+    );
+    $r->prependRoute('sf_easy_auth_password_reset_send_email', 
+      new sfRoute('/pw-reset', 
+        array(
+          'module' => 'sfEasyAuth', 
+          'action' => 'passwordResetSendEmail'
+        )
+      )
+    );
+    $r->prependRoute('sf_easy_auth_password_reset_set_password', 
+      new sfRoute('/pw-reset-set-password', 
+        array(
+          'module' => 'sfEasyAuth', 
+          'action' => 'passwordResetSetPassword'
+        )
+      )
+    );
   }
 
   static public function addRouteForAdminUser(sfEvent $event)

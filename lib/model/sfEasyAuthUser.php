@@ -296,4 +296,17 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
   {
     return md5(sfEasyAuthUtils::randomString(20));
   }
+  
+  /**
+   * Generates and saves a token that can be checked to make sure password reset 
+   * urls aren't being replayed. A timestamp is also saved to the database for this
+   * purpose
+   */
+  public function generatePasswordResetToken()
+  {
+    $this->setPasswordResetToken(sfEasyAuthUtils::randomString(12));
+    $this->setPasswordResetTokenCreatedAt(time());
+    
+    $this->save();
+  }
 }

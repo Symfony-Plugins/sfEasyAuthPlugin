@@ -18,7 +18,7 @@
   <?php echo (strpos($_SERVER['REQUEST_URI'], sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token') . '=true') === false) ? 
     '' : 'hidden' ?>" id="pwResetLink">Reset your password</a>
   
-  <form action="<?php echo url_for('@sf_easy_auth_password_reset') ?>" 
+  <form action="<?php echo url_for('@sf_easy_auth_password_reset_send_email') ?>" 
     method="post" class="
     <?php echo (strpos($_SERVER['REQUEST_URI'], sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token') . '=true') === false) ? 
       'hidden' : '' ?>" 

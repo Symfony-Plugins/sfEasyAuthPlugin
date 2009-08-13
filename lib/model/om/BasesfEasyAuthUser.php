@@ -113,6 +113,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $password_reset_token;
 
 	/**
+	 * The value for the password_reset_token_created_at field.
+	 * @var        string
+	 */
+	protected $password_reset_token_created_at;
+
+	/**
 	 * The value for the has_extra_credentials field.
 	 * Note: this column has a database default value of: false
 	 * @var        boolean
@@ -468,6 +474,44 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function getPasswordResetToken()
 	{
 		return $this->password_reset_token;
+	}
+
+	/**
+	 * Get the [optionally formatted] temporal [password_reset_token_created_at] column value.
+	 * 
+	 *
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the raw DateTime object will be returned.
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @throws     PropelException - if unable to parse/validate the date/time value.
+	 */
+	public function getPasswordResetTokenCreatedAt($format = 'Y-m-d H:i:s')
+	{
+		if ($this->password_reset_token_created_at === null) {
+			return null;
+		}
+
+
+		if ($this->password_reset_token_created_at === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->password_reset_token_created_at);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->password_reset_token_created_at, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
 	}
 
 	/**
@@ -946,6 +990,55 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	} // setPasswordResetToken()
 
 	/**
+	 * Sets the value of [password_reset_token_created_at] column to a normalized version of the date/time value specified.
+	 * 
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
+	 *						be treated as NULL for temporal objects.
+	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 */
+	public function setPasswordResetTokenCreatedAt($v)
+	{
+		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->password_reset_token_created_at !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->password_reset_token_created_at !== null && $tmpDt = new DateTime($this->password_reset_token_created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->password_reset_token_created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT;
+			}
+		} // if either are not null
+
+		return $this;
+	} // setPasswordResetTokenCreatedAt()
+
+	/**
 	 * Set the value of [has_extra_credentials] column.
 	 * 
 	 * @param      boolean $v new value
@@ -1073,9 +1166,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->remember_key_lifetime = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->auto_login_hash = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->password_reset_token = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-			$this->has_extra_credentials = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
-			$this->type = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-			$this->profile_id = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+			$this->password_reset_token_created_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->has_extra_credentials = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+			$this->type = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+			$this->profile_id = ($row[$startcol + 18] !== null) ? (int) $row[$startcol + 18] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1085,7 +1179,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 18; // 18 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 19; // 19 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfEasyAuthUser object", $e);
@@ -1466,12 +1560,15 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				return $this->getPasswordResetToken();
 				break;
 			case 15:
-				return $this->getHasExtraCredentials();
+				return $this->getPasswordResetTokenCreatedAt();
 				break;
 			case 16:
-				return $this->getType();
+				return $this->getHasExtraCredentials();
 				break;
 			case 17:
+				return $this->getType();
+				break;
+			case 18:
 				return $this->getProfileId();
 				break;
 			default:
@@ -1510,9 +1607,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$keys[12] => $this->getRememberKeyLifetime(),
 			$keys[13] => $this->getAutoLoginHash(),
 			$keys[14] => $this->getPasswordResetToken(),
-			$keys[15] => $this->getHasExtraCredentials(),
-			$keys[16] => $this->getType(),
-			$keys[17] => $this->getProfileId(),
+			$keys[15] => $this->getPasswordResetTokenCreatedAt(),
+			$keys[16] => $this->getHasExtraCredentials(),
+			$keys[17] => $this->getType(),
+			$keys[18] => $this->getProfileId(),
 		);
 		return $result;
 	}
@@ -1590,12 +1688,15 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				$this->setPasswordResetToken($value);
 				break;
 			case 15:
-				$this->setHasExtraCredentials($value);
+				$this->setPasswordResetTokenCreatedAt($value);
 				break;
 			case 16:
-				$this->setType($value);
+				$this->setHasExtraCredentials($value);
 				break;
 			case 17:
+				$this->setType($value);
+				break;
+			case 18:
 				$this->setProfileId($value);
 				break;
 		} // switch()
@@ -1637,9 +1738,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setRememberKeyLifetime($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setAutoLoginHash($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setPasswordResetToken($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setHasExtraCredentials($arr[$keys[15]]);
-		if (array_key_exists($keys[16], $arr)) $this->setType($arr[$keys[16]]);
-		if (array_key_exists($keys[17], $arr)) $this->setProfileId($arr[$keys[17]]);
+		if (array_key_exists($keys[15], $arr)) $this->setPasswordResetTokenCreatedAt($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setHasExtraCredentials($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setType($arr[$keys[17]]);
+		if (array_key_exists($keys[18], $arr)) $this->setProfileId($arr[$keys[18]]);
 	}
 
 	/**
@@ -1666,6 +1768,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::AUTO_LOGIN_HASH)) $criteria->add(sfEasyAuthUserPeer::AUTO_LOGIN_HASH, $this->auto_login_hash);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN)) $criteria->add(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN, $this->password_reset_token);
+		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT)) $criteria->add(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT, $this->password_reset_token_created_at);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS)) $criteria->add(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS, $this->has_extra_credentials);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::TYPE)) $criteria->add(sfEasyAuthUserPeer::TYPE, $this->type);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserPeer::PROFILE_ID, $this->profile_id);
@@ -1750,6 +1853,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		$copyObj->setAutoLoginHash($this->auto_login_hash);
 
 		$copyObj->setPasswordResetToken($this->password_reset_token);
+
+		$copyObj->setPasswordResetTokenCreatedAt($this->password_reset_token_created_at);
 
 		$copyObj->setHasExtraCredentials($this->has_extra_credentials);
 

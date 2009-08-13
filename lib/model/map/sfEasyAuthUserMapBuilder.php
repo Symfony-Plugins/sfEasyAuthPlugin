@@ -90,7 +90,9 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('AUTO_LOGIN_HASH', 'AutoLoginHash', 'VARCHAR', false, 32);
 
-		$tMap->addColumn('PASSWORD_RESET_TOKEN', 'PasswordResetToken', 'VARCHAR', false, 8);
+		$tMap->addColumn('PASSWORD_RESET_TOKEN', 'PasswordResetToken', 'VARCHAR', false, 12);
+
+		$tMap->addColumn('PASSWORD_RESET_TOKEN_CREATED_AT', 'PasswordResetTokenCreatedAt', 'TIMESTAMP', false, null);
 
 		$tMap->addColumn('HAS_EXTRA_CREDENTIALS', 'HasExtraCredentials', 'BOOLEAN', false, null);
 

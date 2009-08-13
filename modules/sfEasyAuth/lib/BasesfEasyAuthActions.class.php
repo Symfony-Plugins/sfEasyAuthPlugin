@@ -153,7 +153,7 @@ class BasesfEasyAuthActions extends sfActions
    * 
    * @param sfRequest $request A request object
    */
-  public function executePasswordReset(sfWebRequest $request)
+  public function executePasswordResetSendEmail(sfWebRequest $request)
   {
     if ($request->isMethod('post'))
     {
@@ -168,6 +168,9 @@ class BasesfEasyAuthActions extends sfActions
         // try to retrieve the user with this email address
         if ($user = sfEasyAuthUserPeer::retrieveByEmail($email))
         {
+          // generate a password reset hash
+          $user->generatePasswordResetToken();
+          
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
           $bodyText = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));

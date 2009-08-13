@@ -10,6 +10,9 @@ all:
                                           # schema_inheritance keys, with the first character
                                           # converted to uppercase, e.g. SbBasicUser
   
+    base_url:  http://www.example.com     # base url for authentication stuff. This will be 
+                                          # used as part of the password reset link
+  
     login_attempt_threshold:  3           # number of log in attempts before being locked out
     lockout_duration:         300         # number of seconds to lock an account 
                                           # after %APP_SF_EASY_AUTH_LOGIN_ATTEMPT_THRESHOLD%
@@ -38,4 +41,7 @@ all:
                                           # identifies that we couldn't locate a user by their
                                           # email address. Modify this value to better conceal
                                           # your use of this plugin.
+    reset_token_lifetime: 25200           # The length of time (in seconds) after requesting 
+                                          # to reset the password reset link set to users 
+                                          # remains valid for 
     reset_from_name:    The team

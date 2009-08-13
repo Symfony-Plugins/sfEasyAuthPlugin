@@ -149,7 +149,7 @@ class BasesfEasyAuthActions extends sfActions
   }
   
   /**
-   * Executes the passwordReset action
+   * Action that sends users an email to let them reset their password
    * 
    * @param sfRequest $request A request object
    */
@@ -187,6 +187,16 @@ class BasesfEasyAuthActions extends sfActions
           sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token')));
       }
     }
+  }
+  
+  /**
+   * Action that lets users set a new password
+   * 
+   * @param sfRequest $request A request object
+   */
+  public function executePasswordResetSetPassword(sfWebRequest $request)
+  {
+    
   }
   
   /**

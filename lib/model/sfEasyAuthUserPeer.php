@@ -73,4 +73,19 @@ class sfEasyAuthUserPeer extends BasesfEasyAuthUserPeer
 
     return $types;
   }
+  
+  /**
+   * Retrieves a user by ID and auto-log-in hash
+   * @param int $id
+   * @param string $hash
+   * @return mixed
+   */
+  public static function retrieveByIdAndAutoLoginHash($id, $hash)
+  {
+    $c = new Criteria();
+    $c->add(self::ID, $id);
+    $c->add(self::AUTO_LOGIN_HASH, $hash);
+    
+    return self::doSelectOne($c);
+  }
 }

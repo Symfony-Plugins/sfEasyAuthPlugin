@@ -46,6 +46,30 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   }
   
   /**
+   * Logs in a user whose ID and hash match a user in the database
+   * 
+   * @param int $id
+   * @param string $hash The user's auto login hash
+   * @return boolean
+   */
+  public function authenticateAutoLogin($id, $hash)
+  {
+    if ($user = sfEasyAuthUserPeer::retrieveByIdAndAutoLoginHash($id, $hash))
+    {
+      // make sure their account is enabled. This allows them to log in via an
+      // auto log-in link even if their account has been suspended due to too many
+      // incorrect log-in attempts
+      if ($user->getEnabled())
+      {
+        $this->user = $user;
+        return $this->logIn();
+      }
+    }
+    
+    return false;
+  }
+  
+  /**
    * Attempt to authenticate a user with the supplied credentials
    * 
    * @param string $username

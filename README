@@ -46,6 +46,13 @@ Installation
               .settings:
                 enabled_modules:      [default, sfEasyAuth]
 
+  * Add the following to your `config/filters.yml` file between `security` and `cache`
+  
+            [yml]
+            sf_easy_auth_auto_login:
+              class: sfEasyAuthAutoLogin
+            
+
   * Clear your cache
 
         $ symfony cc

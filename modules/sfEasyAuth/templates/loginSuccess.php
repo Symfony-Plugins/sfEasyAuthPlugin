@@ -15,12 +15,12 @@
   </form>
 
   <a href="#pwResetForm" class="subtle 
-  <?php echo (strpos($_SERVER['REQUEST_URI'], 'invalidEmail=true') === false) ? 
+  <?php echo (strpos($_SERVER['REQUEST_URI'], sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token') . '=true') === false) ? 
     '' : 'hidden' ?>" id="pwResetLink">Reset your password</a>
   
   <form action="<?php echo url_for('@sf_easy_auth_password_reset') ?>" 
     method="post" class="
-    <?php echo (strpos($_SERVER['REQUEST_URI'], 'invalidEmail=true') === false) ? 
+    <?php echo (strpos($_SERVER['REQUEST_URI'], sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token') . '=true') === false) ? 
       'hidden' : '' ?>" 
     id="pwResetForm" name="pw_reset">
     <?php echo $resetForm ?>

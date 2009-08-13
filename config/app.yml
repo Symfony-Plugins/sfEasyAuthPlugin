@@ -31,3 +31,11 @@ all:
                                                       # privileges, but they are insufficient
     username_required_message: Please enter your user name      # displayed if users don't
     password_required_message: Please enter your password       #  enter required fields
+    reset_user_not_found: We couldn't find a user with that email address  # displayed when we
+                                          # can't locate a user by their email address to reset
+                                          # their password
+    reset_user_not_found_url_token: invalidEmail      # name of a token passed in url that
+                                          # identifies that we couldn't locate a user by their
+                                          # email address. Modify this value to better conceal
+                                          # your use of this plugin.
+    reset_from_name:    The team

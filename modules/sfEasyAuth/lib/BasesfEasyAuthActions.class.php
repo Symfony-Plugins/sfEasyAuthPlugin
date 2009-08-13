@@ -166,18 +166,22 @@ class BasesfEasyAuthActions extends sfActions
         $email = $this->form->getValue('email');
 
         // try to retrieve the user with this email address
-        if (sfEasyAuthUserPeer::retrieveByEmail($email))
+        if ($user = sfEasyAuthUserPeer::retrieveByEmail($email))
         {
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
-
+          $bodyText = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
+          
+          echo 'body is:<br/>' . $bodyText;exit;
+          
           // create a filter to process this too.
         }
       }
       else
       {
-        $this->setFlash("We couldn't find a user with that email address");
-        $this->redirect($this->generateUrl('sf_easy_auth_login') . '?invalidEmail=true');
+        $this->setFlash(sfConfig::get('app_sf_easy_auth_reset_user_not_found'));
+        $this->redirect(sprintf('%s?%s=true', $this->generateUrl('sf_easy_auth_login'), 
+          sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token')));
       }
     }
   }

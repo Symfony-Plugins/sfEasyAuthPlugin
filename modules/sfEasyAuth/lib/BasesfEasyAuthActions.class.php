@@ -196,7 +196,13 @@ class BasesfEasyAuthActions extends sfActions
    */
   public function executePasswordResetSetPassword(sfWebRequest $request)
   {
+    $user = $this->getUser();
     
+    if (!$user->isAuthenticated())
+    {
+      // redirect them if they aren't already authenticated
+      $this->redirect('@sf_easy_auth_login');
+    }
   }
   
   /**

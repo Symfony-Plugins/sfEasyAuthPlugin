@@ -1,5 +1,6 @@
 <?php use_stylesheet('/sfEasyAuthPlugin/css/auth.css') ?>
+<?php use_helper('I18N') ?>
 
 <div id="authContainer">
-  <p>We've sent you an email with details of how to reset your password.</p>
+  <p><?php echo __("We've sent you an email with details of how to reset your password.") ?></p>
 </div>

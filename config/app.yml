@@ -11,7 +11,9 @@ all:
                                           # converted to uppercase, e.g. SbBasicUser
   
     base_url:  http://www.example.com     # base url for authentication stuff. This will be 
-                                          # used as part of the password reset link
+                                          # used as part of the password reset link. You should
+                                          # probably override this in another app.yml file
+                                          # if you use the plugin in multiple applications
   
     login_attempt_threshold:  3           # number of log in attempts before being locked out
     lockout_duration:         300         # number of seconds to lock an account 

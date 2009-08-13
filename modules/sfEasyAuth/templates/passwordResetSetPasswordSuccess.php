@@ -1,5 +1,6 @@
 <?php use_stylesheet('/sfEasyAuthPlugin/css/auth.css') ?>
+<?php use_helper('I18N') ?>
 
 <div id="authContainer">
-  <p>Please set a new password</p>
+  <p><?php echo __("Please set a new log in password") ?></p>
 </div>

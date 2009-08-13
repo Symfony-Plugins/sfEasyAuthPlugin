@@ -92,17 +92,7 @@ class BasesfEasyAuthActions extends sfActions
         else
         {
           // log in failed.
-          if (!$user->hasFlash('message'))
-          {
-            if (sfConfig::get('app_sf_easy_auth_use_i18n'))
-            {
-              $user->setFlash('message', $this->getContext()->getI18n()->__(sfConfig::get('app_sf_easy_auth_invalid_credentials')));
-            }
-            else
-            {
-              $user->setFlash('message', sfConfig::get('app_sf_easy_auth_invalid_credentials'));
-            }
-          }
+          $this->setFlash(sfConfig::get('app_sf_easy_auth_invalid_credentials'));
         }
       }
       else
@@ -134,17 +124,7 @@ class BasesfEasyAuthActions extends sfActions
     }
     else if ($loginResult !== false && $user->hasAttribute('sf.easy.auth.not.first.secure.attempt'))
     {
-      if (!$user->hasFlash('message'))
-      {
-        if (sfConfig::get('app_sf_easy_auth_use_i18n'))
-        {
-          $user->setFlash('message', $this->getContext()->getI18n()->__(sfConfig::get('app_sf_easy_auth_insufficient_privileges')));
-        }
-        else
-        {
-          $user->setFlash('message', sfConfig::get('app_sf_easy_auth_insufficient_privileges'));
-        }
-      }
+      $this->setFlash(sfConfig::get('app_sf_easy_auth_insufficient_privileges'));
     }
     else
     {
@@ -181,15 +161,48 @@ class BasesfEasyAuthActions extends sfActions
       
       $this->form->bind($request->getParameter($this->form->getName()));
       
-      $email = $this->form->getValue('email');
-      
-      // try to retrieve the user with this email address
-      if (sfEasyAuthUserPeer::retrieveByEmail($email))
+      if ($this->form->isValid())
       {
-        // send the user an email with an auto log in link with a parameter directing
-        // them to a page to pick a new password
-        
-        // create a filter to process this too.
+        $email = $this->form->getValue('email');
+
+        // try to retrieve the user with this email address
+        if (sfEasyAuthUserPeer::retrieveByEmail($email))
+        {
+          // send the user an email with an auto log in link with a parameter directing
+          // them to a page to pick a new password
+
+          // create a filter to process this too.
+        }
+      }
+      else
+      {
+        $this->setFlash("We couldn't find a user with that email address");
+        $this->redirect($this->generateUrl('sf_easy_auth_login') . '?invalidEmail=true');
+      }
+    }
+  }
+  
+  /**
+   * Sets a flash for a user depending on whether we should i18n strings
+   * 
+   * @param string $message The message to set as a flash
+   */
+  private function setFlash($message)
+  {
+    if (!$user = $this->getUser())
+    {
+      return false;
+    }
+    
+    if (!$user->hasFlash('message'))
+    {
+      if (sfConfig::get('app_sf_easy_auth_use_i18n'))
+      {
+        $user->setFlash('message', $this->getContext()->getI18n()->__($message));
+      }
+      else
+      {
+        $user->setFlash('message', $message);
       }
     }
   }

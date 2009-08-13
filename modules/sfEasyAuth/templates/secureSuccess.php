@@ -5,7 +5,7 @@
 <p><?php echo __("The resource you are trying to access requires additional privileges. Please
      enter your details below to acquire them.") ?></p>
      
-<div id="loginFormContainer">
+<div id="authContainer">
   <?php if ($sf_user->hasFlash('message')): ?>
   <div class="notice">
     <?php echo $sf_user->getFlash('message'); ?>

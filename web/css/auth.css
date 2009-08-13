@@ -5,7 +5,7 @@ body
   background-color: #eaeaea; 
 }
 
-#loginFormContainer
+#authContainer
 {
   margin: 50px auto;
   background-color: #fff;
@@ -18,7 +18,7 @@ body
   font-family: Arial
 }
 
-#loginFormContainer input
+#authContainer input
 {
   font-size: 21px;
   max-width: 300px;
@@ -26,28 +26,28 @@ body
   padding: 3px;
 }
 
-#loginFormContainer input[type=checkbox]
+#authContainer input[type=checkbox]
 {
   border: 10px solid #0f0;
 } 
 
-#loginFormContainer input[type=submit]
+#authContainer input[type=submit]
 {
   margin: 0 auto;
   display: block;
 } 
 
-#loginFormContainer label
+#authContainer label
 {
   margin-right: 20px;
 }
 
-#loginFormContainer div 
+#authContainer div 
 {
   position: relative;
 }
 
-#loginFormContainer .error, .formError
+#authContainer .error, .formError
 {
   color: #f00;
   position: absolute;
@@ -55,14 +55,14 @@ body
   top: 0;
 }
 
-#loginFormContainer .notice
+#authContainer .notice
 {
   color: #f00;
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-#loginFormContainer .subtle
+#authContainer .subtle
 {
   color: #00759F;
   font-size: 14px;
@@ -72,7 +72,7 @@ body
   top: 16px;
 }
 
-#loginFormContainer .hidden
+#authContainer .hidden
 {
   display: none;
 }

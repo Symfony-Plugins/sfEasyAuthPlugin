@@ -170,10 +170,7 @@ class BasesfEasyAuthActions extends sfActions
         {
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
-          $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
-          $user->sendPasswordResetMessage($message);
-          
-          echo 'message is:<br/>' . $message;exit;
+          $this->sendPasswordResetMessage($user);
         }
       }
       else
@@ -220,6 +217,9 @@ class BasesfEasyAuthActions extends sfActions
           // set and save the new password
           $user->updatePassword($this->form->getValue('password'));
           
+          // clear the password reset token so the link can't be used again
+          $user->invalidatePasswordResetToken();
+          
           // send them a success message
           $this->setTemplate('passwordResetPasswordUpdated');
         }
@@ -228,7 +228,7 @@ class BasesfEasyAuthActions extends sfActions
     else if (!$user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
     {
       // send them a new link
-// send reset email
+      $this->sendPasswordResetMessage($user->getAuthUser());
       
       // tell them that link has expired, but to check their email because we've sent
       // them a new link.
@@ -259,5 +259,16 @@ class BasesfEasyAuthActions extends sfActions
         $user->setFlash('message', $message);
       }
     }
+  }
+  
+  /**
+   * Sends a password reset message
+   * 
+   * @param sfEasyAuthUser $user The user to send a message to
+   */
+  protected function sendPasswordResetMessage(sfEasyAuthUser $user)
+  {
+    $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
+    return $user->sendPasswordResetMessage($message);
   }
 }

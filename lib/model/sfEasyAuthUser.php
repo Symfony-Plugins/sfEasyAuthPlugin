@@ -311,15 +311,24 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
   }
   
   /**
+   * Generates a new reset token, saves it to the user record, and returns it ready
+   * for use
+   * 
+   * @return string
+   */
+  public function getNewPasswordResetToken()
+  {
+    $this->generatePasswordResetToken();
+    return $this->getPasswordResetToken();
+  }
+  
+  /**
    * Sends a user an email with a link to reset their password
    * 
    * @param string $message The message to send to this user
    */
   public function sendPasswordResetMessage($message)
   {
-    // generate a password reset hash
-    $this->generatePasswordResetToken();
-    
     return call_user_func(sfConfig::get('app_sf_easy_auth_mailer_callable'), $this, $message);
   }
 }

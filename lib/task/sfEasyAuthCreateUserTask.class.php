@@ -55,6 +55,7 @@ EOF;
     $user->setUsername($arguments['username']);
     $user->setPassword($arguments['password']);
     $user->setEmail($arguments['email']);
+    $user->setEmailConfirmed(true);
     $user->save();
 
     $this->logSection('easyAuth', sprintf('Create %s user "%s" with email "%s"', 

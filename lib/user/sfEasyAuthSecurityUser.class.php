@@ -295,4 +295,10 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     $this->getAuthUser()->setPassword($password);
     return $this->getAuthUser()->save();
   }
+  
+  public function invalidatePasswordResetToken()
+  {
+    $this->getAuthUser()->setPasswordResetToken('');
+    return $this->getAuthUser()->save();
+  }
 }

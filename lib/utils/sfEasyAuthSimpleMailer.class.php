@@ -15,12 +15,6 @@ class sfEasyAuthSimpleMailer
    */
   public static function sendPasswordReset(sfEasyAuthUser $user, $message)
   {
-    // only send emails to users who have confirmed their addresses
-    if (!$user->getEmailConfirmed())
-    {
-      return false;
-    }
-
     $subject = 'Reset your password on ' . $_SERVER['HTTP_HOST'];
 
     // i18n if necessary
@@ -28,7 +22,7 @@ class sfEasyAuthSimpleMailer
     {
       $subject = sfContext::getInstance()->getI18n()->__($subject);
     }
-    
+
     // send the email
     return mail($user->getEmail(), $subject, $message);
   }

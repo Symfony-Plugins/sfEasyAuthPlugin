@@ -70,6 +70,8 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('EMAIL', 'Email', 'VARCHAR', true, 255);
 
+		$tMap->addColumn('EMAIL_CONFIRMED', 'EmailConfirmed', 'BOOLEAN', false, null);
+
 		$tMap->addColumn('SALT', 'Salt', 'VARCHAR', true, 32);
 
 		$tMap->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null);

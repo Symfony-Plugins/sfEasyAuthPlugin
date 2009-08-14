@@ -7,6 +7,7 @@ propel:
     username:       { type: varchar(50), required: true, index: unique }
     password:       { type: varchar(32), required: true }
     email:          { type: varchar(255), required: true, index: unique }
+    email_confirmed: { type: boolean, default: 0 }
     salt:           { type: varchar(32), required: true }
     created_at:     ~
     updated_at:     ~

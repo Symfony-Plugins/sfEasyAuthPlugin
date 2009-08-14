@@ -176,8 +176,6 @@ class BasesfEasyAuthActions extends sfActions
           $bodyText = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
           
           echo 'body is:<br/>' . $bodyText;exit;
-          
-          // create a filter to process this too.
         }
       }
       else
@@ -198,10 +196,26 @@ class BasesfEasyAuthActions extends sfActions
   {
     $user = $this->getUser();
     
-    if (!$user->isAuthenticated())
+    // if the user clicked on an auto-log-in link for example, and the link
+    // failed to log them in, get them to log in.
+    if (!$user->isAuthenticated() || !$user->getAuthUser())
     {
       // redirect them if they aren't already authenticated
       $this->redirect('@sf_easy_auth_login');
+    }
+    
+    $this->form = new sfEasyAuthPasswordResetSetPasswordForm(array(), array('token' => $request->getParameter('token')));
+    
+    if ($request->isMethod('post'))
+    {
+      $this->form->bind($request->getParameter($this->form->getName()));
+      
+      if ($this->form->isValid())
+      {
+        // make sure the url 'token' parameter matches the one stored in the 
+        // user table and is valid
+        $user->validatePasswordResetToken($request->getPostParameter('token'));
+      }
     }
   }
   

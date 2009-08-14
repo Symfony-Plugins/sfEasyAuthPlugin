@@ -101,7 +101,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       }
       else
       {
-        // user name matched, but password failed. Record the attempt to prevent brute forcing
+        // user name matched, but password failed. Record the attempt to prevent 
+        // brute forcing
 
         // if the users last log in attempt is outside the lockout duration, reset their
         // failed login counter

@@ -47,6 +47,9 @@ class sfEasyAuthPasswordResetForm extends sfFormPropel
     );
   }
   
+  /**
+   * Returns the name of the model associated with this form.
+   */
   public function getModelName()
   {
     return 'sfEasyAuthUser';

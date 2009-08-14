@@ -4,7 +4,8 @@
  * 
  * This filter examines all requested urls for GET parameters that indicate that we
  * should auto-log the user in. If these are present, it will attempt to 
- * authenticate a user and log them in without displaying a log in form.
+ * authenticate a user and log them in without displaying a log in form. If successful,
+ * users will be redirected to the page they were attempting to access.
  * 
  * @author al
  * @see sfEasyAuthAutoLoginFilter::execute
@@ -30,7 +31,7 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
         {
           if ($user->isAuthenticated())
           {
-            $filterChain->execute();
+            return $filterChain->execute();
           }
 
           $request = $this->getContext()->getRequest();
@@ -41,9 +42,26 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
             // if it worked, redirect the user to the current page so they are seemlessly 
             // logged in
             
-            // remember where they wanted to go
-            // $request->getUri()
-            return $this->getContext()->getController()->redirect('@sf_easy_auth_password_reset_set_password');
+            // strip out the id and hash, and redirect them to the same url - we need
+            // to do this otherwise users won't end up where they wanted to go, and
+            // browsers will be confused if a resource redirects to itself, GET params
+            // and all
+            $query = array();
+            
+            parse_str($_SERVER['QUERY_STRING'], $query);
+
+            // remove the unneeded parameters
+            unset($query['uid']);
+            unset($query['alh']);
+            
+            $queryString = http_build_query($query);
+            
+            // rebuild the url
+            $url = preg_replace("/\??{$_SERVER['QUERY_STRING']}/", '', $request->getUri());
+
+            $url = ($queryString) ? $url . '?' . $queryString : $url;
+            
+            return $this->getContext()->getController()->redirect($url);
           }
         }
       }

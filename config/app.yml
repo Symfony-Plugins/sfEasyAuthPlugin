@@ -10,6 +10,12 @@ all:
                                           # schema_inheritance keys, with the first character
                                           # converted to uppercase, e.g. SbBasicUser
   
+    mailer_callable: [sfEasyAuthSimpleMailer, sendPasswordReset]    # callable to send password 
+                                          # reset emails. It must be a static method. 
+                                          # It will be invoked with 2 parameters: 
+                                          #  * the (sfEasyAuthUser) user object of the recipient 
+                                          #  * and the (string) message to send
+  
     base_url:  http://www.example.com     # base url for authentication stuff. This will be 
                                           # used as part of the password reset link. You should
                                           # probably override this in another app.yml file

@@ -302,11 +302,24 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    * urls aren't being replayed. A timestamp is also saved to the database for this
    * purpose
    */
-  public function generatePasswordResetToken()
+  protected function generatePasswordResetToken()
   {
     $this->setPasswordResetToken(sfEasyAuthUtils::randomString(12));
     $this->setPasswordResetTokenCreatedAt(time());
     
     $this->save();
+  }
+  
+  /**
+   * Sends a user an email with a link to reset their password
+   * 
+   * @param string $message The message to send to this user
+   */
+  public function sendPasswordResetMessage($message)
+  {
+    // generate a password reset hash
+    $this->generatePasswordResetToken();
+    
+    return call_user_func(sfConfig::get('app_sf_easy_auth_mailer_callable'), $this, $message);
   }
 }

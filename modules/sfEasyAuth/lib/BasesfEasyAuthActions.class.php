@@ -168,14 +168,12 @@ class BasesfEasyAuthActions extends sfActions
         // try to retrieve the user with this email address
         if ($user = sfEasyAuthUserPeer::retrieveByEmail($email))
         {
-          // generate a password reset hash
-          $user->generatePasswordResetToken();
-          
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
-          $bodyText = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
+          $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
+          $user->sendPasswordResetMessage($message);
           
-          echo 'body is:<br/>' . $bodyText;exit;
+          echo 'message is:<br/>' . $message;exit;
         }
       }
       else
@@ -209,7 +207,7 @@ class BasesfEasyAuthActions extends sfActions
       array('token' => $request->getParameter('pw_reset[token]'))
     );
     
-    if ($request->isMethod('post'))
+    if ($request->isMethod('post') && $user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
     {
       $this->form->bind($request->getParameter($this->form->getName()));
       
@@ -225,14 +223,16 @@ class BasesfEasyAuthActions extends sfActions
           // send them a success message
           $this->setTemplate('passwordResetPasswordUpdated');
         }
-        else
-        {
-echo 'failed;';exit;
-          // tell them that link has expired, but to check their email because we've sent
-          // them a new link.
-// will this work if they are already logged in though? i don't think so, but perhaps...
-        }
       }
+    }
+    else if (!$user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
+    {
+      // send them a new link
+// send reset email
+      
+      // tell them that link has expired, but to check their email because we've sent
+      // them a new link.
+      $this->setTemplate('passwordResetExpiredToken');
     }
   }
   

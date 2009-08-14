@@ -10,7 +10,7 @@ and reset your password:
         array(
           'uid' => $user->getId(), 
           'alh' => $user->getAutoLoginHash(),
-          'token' => $user->getPasswordResetToken()
+          'pw_reset[token]' => $user->getPasswordResetToken()
         )
       ); ?>
     

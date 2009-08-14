@@ -203,8 +203,11 @@ class BasesfEasyAuthActions extends sfActions
       // redirect them if they aren't already authenticated
       $this->redirect('@sf_easy_auth_login');
     }
-    
-    $this->form = new sfEasyAuthPasswordResetSetPasswordForm(array(), array('token' => $request->getParameter('token')));
+
+    $this->form = new sfEasyAuthPasswordResetSetPasswordForm(
+      array(), 
+      array('token' => $request->getParameter('pw_reset[token]'))
+    );
     
     if ($request->isMethod('post'))
     {
@@ -214,7 +217,21 @@ class BasesfEasyAuthActions extends sfActions
       {
         // make sure the url 'token' parameter matches the one stored in the 
         // user table and is valid
-        $user->validatePasswordResetToken($request->getPostParameter('token'));
+        if ($user->validatePasswordResetToken($this->form->getValue('token')))
+        {
+          // set and save the new password
+          $user->updatePassword($this->form->getValue('password'));
+          
+          // send them a success message
+          $this->setTemplate('passwordResetPasswordUpdated');
+        }
+        else
+        {
+echo 'failed;';exit;
+          // tell them that link has expired, but to check their email because we've sent
+          // them a new link.
+// will this work if they are already logged in though? i don't think so, but perhaps...
+        }
       }
     }
   }

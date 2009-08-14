@@ -237,6 +237,23 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   }
   
   /**
+   * Validates that the given password reset token is set for the current user
+   * 
+   * @param string $token The password reset token
+   * @return boolean
+   */
+  public function validatePasswordResetToken($token)
+  {
+    // make sure the token set for the user is still valid
+    if ($this->getAuthUser()->getPasswordResetTokenCreatedAt('U') + sfConfig::get('app_sf_easy_auth_reset_token_lifetime') > time())
+    {
+      return (strcmp($this->getAuthUser()->getPasswordResetToken(), $token) === 0);
+    }
+    
+    return false;
+  }
+  
+  /**
    * Logs a user out of the site
    */
   public function logOut()
@@ -266,5 +283,16 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   public function hasProfile()
   {
     return $this->getAuthUser()->hasProfile();
+  }
+  
+  /**
+   * Sets and saves a user's password
+   * 
+   * @param string $password
+   */
+  public function updatePassword($password)
+  {
+    $this->getAuthUser()->setPassword($password);
+    return $this->getAuthUser()->save();
   }
 }

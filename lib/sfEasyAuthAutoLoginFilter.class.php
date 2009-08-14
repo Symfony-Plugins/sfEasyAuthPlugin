@@ -26,9 +26,9 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
       // check whether the GET parameters 'uid' and 'alh' are present. 
       if (in_array('uid', array_keys($_GET)) && in_array('alh', array_keys($_GET)))
       {
-        // continue down the filter chain if the user is already logged in
         if ($user = $this->getContext()->getUser())
         {
+          // if the user is already logged in, just send them down the chain
           if ($user->isAuthenticated())
           {
             return $filterChain->execute();

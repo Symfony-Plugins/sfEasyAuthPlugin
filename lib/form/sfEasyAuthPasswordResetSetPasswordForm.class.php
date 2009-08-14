@@ -2,6 +2,10 @@
 
 /**
  * sfEasyAuth password reset form allows users to set a new password.
+ * 
+ * This form must be instantiated passing the following options:
+ * 
+ *   * token - the value of a password reset token
  *
  * @package    .
  * @subpackage form

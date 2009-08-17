@@ -10,7 +10,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   /**
    * @var The sfEasyAuthUser
    */
-  protected $user;
+  protected $eaUser;
   
   /**
    * Returns the sfEasyAuthUser currently set in the class
@@ -19,11 +19,11 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function getAuthUser()
   {
-    if (!$this->user && $id = $this->getAttribute('security_user_id', null))
+    if (!$this->eaUser && $id = $this->getAttribute('security_user_id', null))
     {
-      $this->user = sfEasyAuthUserPeer::retrieveByPk($id);
+      $this->eaUser = sfEasyAuthUserPeer::retrieveByPk($id);
 
-      if (!$this->user)
+      if (!$this->eaUser)
       {
         // the user does not exist anymore in the database
         $this->logOut();
@@ -32,7 +32,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       }  
     }
     
-    return $this->user;
+    return $this->eaUser;
   }
   
   /**
@@ -42,7 +42,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function getUsername()
   {
-    return (is_object($this->user)) ? $this->user->getUsername() : null;
+    return (is_object($this->eaUser)) ? $this->eaUser->getUsername() : null;
   }
   
   /**
@@ -54,27 +54,27 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function authenticateAutoLogin($id, $hash)
   {
-    if ($user = sfEasyAuthUserPeer::retrieveByIdAndAutoLoginHash($id, $hash))
+    if ($eaUser = sfEasyAuthUserPeer::retrieveByIdAndAutoLoginHash($id, $hash))
     {
       // make sure their account is enabled. This allows them to log in via an
       // auto log-in link even if their account has been suspended due to too many
       // incorrect log-in attempts
-      if (!$user->accountLockedByAdmins())
+      if (!$eaUser->accountLockedByAdmins())
       {
-        $this->user = $user;
+        $this->eaUser = $eaUser;
         
-        if (!$this->user->getEmailConfirmed())
+        if (!$this->eaUser->getEmailConfirmed())
         {
           // confirm the user's email address
-          $this->user->setEmailConfirmed(true);
-          $this->user->save();
+          $this->eaUser->setEmailConfirmed(true);
+          $this->eaUser->save();
           
           // call an event indicating that a user has confirmed their email address
           $this->getContext()->getEventDispatcher()->notify(new sfEvent(
             $this,
             'sf_easy_auth.email_confirmed',
             array(
-              'user' => $this->user
+              'eaUser' => $this->eaUser
             )
           ));
         }
@@ -116,12 +116,12 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function authenticate($username, $password, $remember=0)
   {
-    if ($user = sfEasyAuthUserPeer::retrieveByUsername($username))
+    if ($eaUser = sfEasyAuthUserPeer::retrieveByUsername($username))
     {
-      if ($user->checkPassword($password))
+      if ($eaUser->checkPassword($password))
       {
         // check whether admins have locked the account
-        if ($user->accountLockedByAdmins() == 1)
+        if ($eaUser->accountLockedByAdmins() == 1)
         {
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_locked_by_admins'));
           return false;
@@ -131,7 +131,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         // user has confirmed their email address
         if (sfConfig::get('app_sf_easy_auth_require_email_confirmation'))
         {
-          if (!$user->getEmailConfirmed())
+          if (!$eaUser->getEmailConfirmed())
           {
             $this->setMessage(sfConfig::get('app_sf_easy_auth_must_confirm_email'));
             return false;
@@ -139,13 +139,13 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         }
 
         // make sure the threshold for login attempts hasn't been exceeded
-        if ($user->accountTemporarilyLocked())
+        if ($eaUser->accountTemporarilyLocked())
         {
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
           return false;
         }
 
-        $this->user = $user;
+        $this->eaUser = $eaUser;
         return true;
       }
       else
@@ -155,19 +155,19 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
 
         // if the users last log in attempt is outside the lockout duration, reset their
         // failed login counter
-        if (($user->getLastLoginAttempt('U') +
+        if (($eaUser->getLastLoginAttempt('U') +
         sfConfig::get('app_sf_easy_auth_lockout_duration')) < time())
         {
-          $user->setFailedLogins(0);
+          $eaUser->setFailedLogins(0);
         }
 
-        $currentlyTemporarilyLocked = $user->accountTemporarilyLocked();
+        $currentlyTemporarilyLocked = $eaUser->accountTemporarilyLocked();
         
-        $user->setFailedLogins($user->getFailedLogins()+1);
-        $user->setLastLoginAttempt(time());
-        $user->save();
+        $eaUser->setFailedLogins($eaUser->getFailedLogins()+1);
+        $eaUser->setLastLoginAttempt(time());
+        $eaUser->save();
 
-        if ($user->accountTemporarilyLocked())
+        if ($eaUser->accountTemporarilyLocked())
         {
           // if the user's account has just been locked, notify the system
           if (!$currentlyTemporarilyLocked)
@@ -177,7 +177,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
               $this,
               'sf_easy_auth.account_temporarily_locked',
               array(
-                'user' => $user
+                'eaUser' => $eaUser
               )
             ));
           }
@@ -200,7 +200,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function setRememberCookie()
   {
-    if (!is_object($this->user))
+    if (!is_object($this->eaUser))
     {
       throw new RuntimeException("Can't set a remember cookie for a non-existent user");
     }
@@ -208,14 +208,14 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     // get a unique key
     do
     {
-      $rememberKey = $this->generateRememberKey($this->user);
+      $rememberKey = $this->generateRememberKey($this->eaUser);
     } while (sfEasyAuthUserPeer::retrieveByRememberKey($rememberKey));
 
     $duration = time()+sfConfig::get('app_sf_easy_auth_remember_me_duration', 30*24*60*60);
     
-    $this->user->setRememberKey($rememberKey);
-    $this->user->setRememberKeyLifetime($duration);
-    $this->user->save();
+    $this->eaUser->setRememberKey($rememberKey);
+    $this->eaUser->setRememberKeyLifetime($duration);
+    $this->eaUser->save();
     
     sfContext::getInstance()->getResponse()->setCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'), $rememberKey, $duration);
   }
@@ -223,29 +223,29 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   /**
    * Actually logs the user in, giving them their credentials
    * 
-   * @param sfEasyAuthUser $user The user to log in. If not set, 
-   * the value of $this->user will be used if it is an object
+   * @param sfEasyAuthUser $eaUser The user to log in. If not set, 
+   * the value of $this->eaUser will be used if it is an object
    * @return boolean
    */
-  public function logIn(sfEasyAuthUser $user=null)
+  public function logIn(sfEasyAuthUser $eaUser=null)
   {
-    $user = (is_object($user)) ? $user : $this->user;
+    $eaUser = (is_object($eaUser)) ? $eaUser : $this->eaUser;
      
-    if (!$user instanceof sfEasyAuthUser)
+    if (!$eaUser instanceof sfEasyAuthUser)
     {
       throw new RuntimeException("Error, user is not an instanceof sfEasyAuthUser");
     }
     
-    $user->unblockAccount();
-    $user->setLastLogin(time());
-    $user->save();
-    $this->user = $user;
+    $eaUser->unblockAccount();
+    $eaUser->setLastLogin(time());
+    $eaUser->save();
+    $this->eaUser = $eaUser;
     
-    $this->setAttribute('security_user_id', $user->getId());
+    $this->setAttribute('security_user_id', $eaUser->getId());
     $this->setAuthenticated(true);
     $this->clearCredentials();
     
-    foreach ($user->getCredentials() as $credential)
+    foreach ($eaUser->getCredentials() as $credential)
     {
       $this->addCredential($credential);
     }
@@ -256,14 +256,14 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   /**
    * Generates a key to be used for a remember me cookie value
    * 
-   * @param sfUser $user The user to generate it for
+   * @param sfUser $eaUser The user to generate it for
    * @return string
    */
-  protected function generateRememberKey(sfEasyAuthUser $user)
+  protected function generateRememberKey(sfEasyAuthUser $eaUser)
   {
     // the key is in two parts, first is a random string, the second is a string generated
     // from the user's id and a salt
-    $userString = substr(md5(sfConfig::get('app_sf_easy_auth_remember_salt') . $user->getId()), 0, 9);
+    $userString = substr(md5(sfConfig::get('app_sf_easy_auth_remember_salt') . $eaUser->getId()), 0, 9);
     return md5(sfEasyAuthUtils::randomString(20)) . '_' . $userString;
   }
   
@@ -282,17 +282,17 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     }
     
     // try to retrieve the user
-    if ($user = sfEasyAuthUserPeer::retrieveByRememberKey($remember))
+    if ($eaUser = sfEasyAuthUserPeer::retrieveByRememberKey($remember))
     {
       // make sure it's in date
-      if (time() > $user->getRememberKeyLifetime())
+      if (time() > $eaUser->getRememberKeyLifetime())
       {
         return false;
       }
       
-      if (!$user->accountTemporarilyLocked())
+      if (!$eaUser->accountTemporarilyLocked())
       {
-        $this->user = $user;
+        $this->eaUser = $eaUser;
         return true;
       }
     }
@@ -326,7 +326,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     
     $this->setAuthenticated(false);
     $this->clearCredentials();
-    $this->user = null;
+    $this->eaUser = null;
   }
   
   /**

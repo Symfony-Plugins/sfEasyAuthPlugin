@@ -8,13 +8,13 @@
 class sfEasyAuthSimpleMailer
 {
   /**
-   * Sends an email containing $message to $user
+   * Sends an email containing $message to $eaUser
    * 
-   * @param sfEasyAuthUser $user The recipient user
+   * @param sfEasyAuthUser $eaUser The recipient user
    * @param string $subject The message subject
    * @param string $message The message to send
    */
-  public static function mail(sfEasyAuthUser $user, $subject, $message)
+  public static function mail(sfEasyAuthUser $eaUser, $subject, $message)
   {
     // i18n if necessary
     if (sfConfig::get('app_sf_easy_auth_use_i18n'))
@@ -23,6 +23,6 @@ class sfEasyAuthSimpleMailer
     }
 
     // send the email
-    return mail($user->getEmail(), $subject, $message);
+    return mail($eaUser->getEmail(), $subject, $message);
   }
 }

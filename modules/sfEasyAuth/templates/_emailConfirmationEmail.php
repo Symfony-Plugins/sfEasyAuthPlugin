@@ -8,8 +8,8 @@ on the link below:
     echo sfConfig::get('app_sf_easy_auth_base_url') . url_for('@sf_easy_auth_email_confirmation_confirm') . '?' . 
       http_build_query(
         array(
-          'uid' => $user->getId(), 
-          'alh' => $user->getAutoLoginHash()
+          'uid' => $eaUser->getId(), 
+          'alh' => $eaUser->getAutoLoginHash()
         )
       ); ?>
 

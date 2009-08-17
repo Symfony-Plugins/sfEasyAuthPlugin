@@ -17,10 +17,10 @@ class BasesfEasyAuthActions extends sfActions
   */
   public function executeLogin(sfWebRequest $request)
   {
-    $user = $this->getUser();
+    $sfUser = $this->getUser();
 
     // user is already authenticated, so send them to the success url
-    if ($user->isAuthenticated())
+    if ($sfUser->isAuthenticated())
     {
       return $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
     }
@@ -37,7 +37,7 @@ class BasesfEasyAuthActions extends sfActions
         $this,
         'sf_easy_auth.filter_login_redirect_url',
         array(
-          'user' => $this->getUser(),
+          'sfUser' => $sfUser,
         )
       ), $url)->getReturnValue();
       
@@ -53,7 +53,7 @@ class BasesfEasyAuthActions extends sfActions
    */
   protected function handleLogIn(sfWebRequest $request)
   {
-    $user = $this->getUser();
+    $sfUser = $this->getUser();
 
     $this->loginForm = new sfEasyAuthLoginForm();
     $this->resetForm = new sfEasyAuthPasswordResetForm();
@@ -62,9 +62,9 @@ class BasesfEasyAuthActions extends sfActions
     if ($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name')))
     {
       // try to retrieve the user
-      if ($user->validateRememberMe($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'))))
+      if ($sfUser->validateRememberMe($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'))))
       {
-        return $user->logIn();
+        return $sfUser->logIn();
       }
     }
     
@@ -95,7 +95,7 @@ class BasesfEasyAuthActions extends sfActions
         }
         else
         {
-          $result = $user->authenticate($username, $password);
+          $result = $sfUser->authenticate($username, $password);
         }
         
         // call an event after authentication, but before processing the result
@@ -112,10 +112,10 @@ class BasesfEasyAuthActions extends sfActions
           // set the remember me cookie if they want it
           if ($this->loginForm->getValue('remember'))
           {
-            $user->setRememberCookie();
+            $sfUser->setRememberCookie();
           }
           
-          return $user->logIn();
+          return $sfUser->logIn();
         }
         else
         {
@@ -137,7 +137,7 @@ class BasesfEasyAuthActions extends sfActions
    */
   public function executeSecure(sfWebRequest $request)
   {
-    $user = $this->getUser();
+    $sfUser = $this->getUser();
     
     $loginResult = $this->handleLogIn($request);
     
@@ -150,13 +150,13 @@ class BasesfEasyAuthActions extends sfActions
 
       return $this->redirect($url);
     }
-    else if ($loginResult !== false && $user->hasAttribute('sf.easy.auth.not.first.secure.attempt'))
+    else if ($loginResult !== false && $sfUser->hasAttribute('sf.easy.auth.not.first.secure.attempt'))
     {
       $this->setFlash(sfConfig::get('app_sf_easy_auth_insufficient_privileges'));
     }
     else
     {
-      $user->setAttribute('sf.easy.auth.not.first.secure.attempt', 1);
+      $sfUser->setAttribute('sf.easy.auth.not.first.secure.attempt', 1);
     }
   }
   
@@ -171,7 +171,7 @@ class BasesfEasyAuthActions extends sfActions
     $this->getContext()->getEventDispatcher()->notify(new sfEvent(
       $this,
       'sf_easy_auth.pre_logout',
-      array('user' => $this->getUser())
+      array('sfUser' => $this->getUser())
     ));
     
     $this->getUser()->logOut();
@@ -185,7 +185,7 @@ class BasesfEasyAuthActions extends sfActions
       $this,
       'sf_easy_auth.filter_logout_redirect_url',
       array(
-        'user' => $this->getUser(),
+        'sfUser' => $this->getUser(),
       )
     ), $url)->getReturnValue();
     
@@ -210,18 +210,18 @@ class BasesfEasyAuthActions extends sfActions
         $email = $this->form->getValue('email');
 
         // try to retrieve the user with this email address
-        if ($user = sfEasyAuthUserPeer::retrieveByEmail($email))
+        if ($eaUser = sfEasyAuthUserPeer::retrieveByEmail($email))
         {
           // call an event before sending the reset message
           $this->getContext()->getEventDispatcher()->notify(new sfEvent(
             $this,
             'sf_easy_auth.pre_password_reset_message',
-            array('user' => $user)
+            array('eaUser' => $eaUser)
           ));
           
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
-          $this->sendPasswordResetMessage($user);
+          $this->sendPasswordResetMessage($eaUser);
         }
       }
       else
@@ -240,11 +240,11 @@ class BasesfEasyAuthActions extends sfActions
    */
   public function executePasswordResetSetPassword(sfWebRequest $request)
   {
-    $user = $this->getUser();
+    $sfUser = $this->getUser();
     
     // if the user clicked on an auto-log-in link for example, and the link
     // failed to log them in, get them to log in.
-    if (!$user->isAuthenticated() || !$user->getAuthUser())
+    if (!$sfUser->isAuthenticated() || !$sfUser->getAuthUser())
     {
       // redirect them if they aren't already authenticated
       $this->redirect('@sf_easy_auth_login');
@@ -255,7 +255,7 @@ class BasesfEasyAuthActions extends sfActions
       array('token' => $request->getParameter('pw_reset[token]'))
     );
     
-    if ($request->isMethod('post') && $user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
+    if ($request->isMethod('post') && $sfUser->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
     {
       $this->form->bind($request->getParameter($this->form->getName()));
       
@@ -263,39 +263,39 @@ class BasesfEasyAuthActions extends sfActions
       {
         // make sure the url 'token' parameter matches the one stored in the 
         // user table and is valid
-        if ($user->validatePasswordResetToken($this->form->getValue('token')))
+        if ($sfUser->validatePasswordResetToken($this->form->getValue('token')))
         {
           // set and save the new password
-          $user->updatePassword($this->form->getValue('password'));
+          $sfUser->updatePassword($this->form->getValue('password'));
                     
           // call an event before updating the user's password
           $this->getContext()->getEventDispatcher()->notify(new sfEvent(
             $this,
             'sf_easy_auth.post_password_reset',
             array(
-              'user' => $user,
+              'sfUser' => $sfUser,
               'password' => $this->form->getValue('password'))
           ));
           
           // clear the password reset token so the link can't be used again
-          $user->invalidatePasswordResetToken();
+          $sfUser->invalidatePasswordResetToken();
           
           // send them a success message
           $this->setTemplate('passwordResetPasswordUpdated');
         }
       }
     }
-    else if (!$user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
+    else if (!$sfUser->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
     {
       // call an event before sending the reset message
       $this->getContext()->getEventDispatcher()->notify(new sfEvent(
         $this,
         'sf_easy_auth.pre_password_reset_resend_message',
-        array('user' => $user)
+        array('sfUser' => $sfUser)
       ));
       
       // send them a new link
-      $this->sendPasswordResetMessage($user->getAuthUser());
+      $this->sendPasswordResetMessage($sfUser->getAuthUser());
       
       // tell them that link has expired, but to check their email because we've sent
       // them a new link.
@@ -310,20 +310,20 @@ class BasesfEasyAuthActions extends sfActions
    */
   protected function setFlash($message)
   {
-    if (!$user = $this->getUser())
+    if (!$sfUser = $this->getUser())
     {
       return false;
     }
     
-    if (!$user->hasFlash('message'))
+    if (!$sfUser->hasFlash('message'))
     {
       if (sfConfig::get('app_sf_easy_auth_use_i18n'))
       {
-        return $user->setFlash('message', $this->getContext()->getI18n()->__($message));
+        return $sfUser->setFlash('message', $this->getContext()->getI18n()->__($message));
       }
       else
       {
-        return $user->setFlash('message', $message);
+        return $sfUser->setFlash('message', $message);
       }
     }
   }
@@ -331,11 +331,11 @@ class BasesfEasyAuthActions extends sfActions
   /**
    * Sends a password reset message
    * 
-   * @param sfEasyAuthUser $user The user to send a message to
+   * @param sfEasyAuthUser $eaUser The user to send a message to
    */
-  protected function sendPasswordResetMessage(sfEasyAuthUser $user)
+  protected function sendPasswordResetMessage(sfEasyAuthUser $eaUser)
   {
-    $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('user' => $user));
-    return $user->sendPasswordResetMessage($message);
+    $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('eaUser' => $eaUser));
+    return $eaUser->sendPasswordResetMessage($message);
   }
 }

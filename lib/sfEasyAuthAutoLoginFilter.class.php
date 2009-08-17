@@ -26,10 +26,10 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
       // check whether the GET parameters 'uid' and 'alh' are present. 
       if (in_array('uid', array_keys($_GET)) && in_array('alh', array_keys($_GET)))
       {
-        if ($user = $this->getContext()->getUser())
+        if ($sfUser = $this->getContext()->getUser())
         {
           // if the user is already logged in, just send them down the chain
-          if ($user->isAuthenticated())
+          if ($sfUser->isAuthenticated())
           {
             return $filterChain->execute();
           }
@@ -37,7 +37,7 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
           $request = $this->getContext()->getRequest();
 
           // if we're here, we've got an auto-login link, so try to log the user in.
-          if ($user->authenticateAutoLogin($request->getGetParameter('uid'), $request->getGetParameter('alh')))
+          if ($sfUser->authenticateAutoLogin($request->getGetParameter('uid'), $request->getGetParameter('alh')))
           {
             // if it worked, redirect the user to the current page so they are seemlessly 
             // logged in
@@ -46,20 +46,10 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
             // to do this otherwise users won't end up where they wanted to go, and
             // browsers will be confused if a resource redirects to itself, GET params
             // and all
-            $query = array();
-            
-            parse_str($_SERVER['QUERY_STRING'], $query);
-
-            // remove the unneeded parameters
-            unset($query['uid']);
-            unset($query['alh']);
-            
-            $queryString = http_build_query($query);
-            
-            // rebuild the url
-            $url = preg_replace("/\??{$_SERVER['QUERY_STRING']}/", '', $request->getUri());
-
-            $url = ($queryString) ? $url . '?' . $queryString : $url;
+            $url = sfEasyAuthUtils::removeGetParametersFromUrl(
+              $request->getUri(), 
+              array('uid', 'alh')
+            ); 
             
             return $this->getContext()->getController()->redirect($url);
           }

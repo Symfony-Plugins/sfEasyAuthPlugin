@@ -156,9 +156,9 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    */
   public function setUserName($username)
   {
-    if ($user = sfEasyAuthUserPeer::retrieveByUsername($username))
+    if ($eaUser = sfEasyAuthUserPeer::retrieveByUsername($username))
     {
-      if ($user->getId() !== $this->getId())
+      if ($eaUser->getId() !== $this->getId())
       {
         throw new RuntimeException("Username already taken");
       }

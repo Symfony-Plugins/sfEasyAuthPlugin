@@ -57,8 +57,8 @@ abstract class BasesfEasyAuthUserPeer {
 	/** the column name for the FAILED_LOGINS field */
 	const FAILED_LOGINS = 'sf_easy_auth_user.FAILED_LOGINS';
 
-	/** the column name for the ENABLED field */
-	const ENABLED = 'sf_easy_auth_user.ENABLED';
+	/** the column name for the LOCKED_BY_ADMINS field */
+	const LOCKED_BY_ADMINS = 'sf_easy_auth_user.LOCKED_BY_ADMINS';
 
 	/** the column name for the REMEMBER_KEY field */
 	const REMEMBER_KEY = 'sf_easy_auth_user.REMEMBER_KEY';
@@ -132,10 +132,10 @@ abstract class BasesfEasyAuthUserPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Username', 'Password', 'Email', 'EmailConfirmed', 'Salt', 'CreatedAt', 'UpdatedAt', 'LastLogin', 'LastLoginAttempt', 'FailedLogins', 'Enabled', 'RememberKey', 'RememberKeyLifetime', 'AutoLoginHash', 'PasswordResetToken', 'PasswordResetTokenCreatedAt', 'HasExtraCredentials', 'Type', 'ProfileId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'username', 'password', 'email', 'emailConfirmed', 'salt', 'createdAt', 'updatedAt', 'lastLogin', 'lastLoginAttempt', 'failedLogins', 'enabled', 'rememberKey', 'rememberKeyLifetime', 'autoLoginHash', 'passwordResetToken', 'passwordResetTokenCreatedAt', 'hasExtraCredentials', 'type', 'profileId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::USERNAME, self::PASSWORD, self::EMAIL, self::EMAIL_CONFIRMED, self::SALT, self::CREATED_AT, self::UPDATED_AT, self::LAST_LOGIN, self::LAST_LOGIN_ATTEMPT, self::FAILED_LOGINS, self::ENABLED, self::REMEMBER_KEY, self::REMEMBER_KEY_LIFETIME, self::AUTO_LOGIN_HASH, self::PASSWORD_RESET_TOKEN, self::PASSWORD_RESET_TOKEN_CREATED_AT, self::HAS_EXTRA_CREDENTIALS, self::TYPE, self::PROFILE_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'username', 'password', 'email', 'email_confirmed', 'salt', 'created_at', 'updated_at', 'last_login', 'last_login_attempt', 'failed_logins', 'enabled', 'remember_key', 'remember_key_lifetime', 'auto_login_hash', 'password_reset_token', 'password_reset_token_created_at', 'has_extra_credentials', 'type', 'profile_id', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Username', 'Password', 'Email', 'EmailConfirmed', 'Salt', 'CreatedAt', 'UpdatedAt', 'LastLogin', 'LastLoginAttempt', 'FailedLogins', 'LockedByAdmins', 'RememberKey', 'RememberKeyLifetime', 'AutoLoginHash', 'PasswordResetToken', 'PasswordResetTokenCreatedAt', 'HasExtraCredentials', 'Type', 'ProfileId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'username', 'password', 'email', 'emailConfirmed', 'salt', 'createdAt', 'updatedAt', 'lastLogin', 'lastLoginAttempt', 'failedLogins', 'lockedByAdmins', 'rememberKey', 'rememberKeyLifetime', 'autoLoginHash', 'passwordResetToken', 'passwordResetTokenCreatedAt', 'hasExtraCredentials', 'type', 'profileId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::USERNAME, self::PASSWORD, self::EMAIL, self::EMAIL_CONFIRMED, self::SALT, self::CREATED_AT, self::UPDATED_AT, self::LAST_LOGIN, self::LAST_LOGIN_ATTEMPT, self::FAILED_LOGINS, self::LOCKED_BY_ADMINS, self::REMEMBER_KEY, self::REMEMBER_KEY_LIFETIME, self::AUTO_LOGIN_HASH, self::PASSWORD_RESET_TOKEN, self::PASSWORD_RESET_TOKEN_CREATED_AT, self::HAS_EXTRA_CREDENTIALS, self::TYPE, self::PROFILE_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'username', 'password', 'email', 'email_confirmed', 'salt', 'created_at', 'updated_at', 'last_login', 'last_login_attempt', 'failed_logins', 'locked_by_admins', 'remember_key', 'remember_key_lifetime', 'auto_login_hash', 'password_reset_token', 'password_reset_token_created_at', 'has_extra_credentials', 'type', 'profile_id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
 	);
 
@@ -146,10 +146,10 @@ abstract class BasesfEasyAuthUserPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Username' => 1, 'Password' => 2, 'Email' => 3, 'EmailConfirmed' => 4, 'Salt' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'LastLogin' => 8, 'LastLoginAttempt' => 9, 'FailedLogins' => 10, 'Enabled' => 11, 'RememberKey' => 12, 'RememberKeyLifetime' => 13, 'AutoLoginHash' => 14, 'PasswordResetToken' => 15, 'PasswordResetTokenCreatedAt' => 16, 'HasExtraCredentials' => 17, 'Type' => 18, 'ProfileId' => 19, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'username' => 1, 'password' => 2, 'email' => 3, 'emailConfirmed' => 4, 'salt' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'lastLogin' => 8, 'lastLoginAttempt' => 9, 'failedLogins' => 10, 'enabled' => 11, 'rememberKey' => 12, 'rememberKeyLifetime' => 13, 'autoLoginHash' => 14, 'passwordResetToken' => 15, 'passwordResetTokenCreatedAt' => 16, 'hasExtraCredentials' => 17, 'type' => 18, 'profileId' => 19, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USERNAME => 1, self::PASSWORD => 2, self::EMAIL => 3, self::EMAIL_CONFIRMED => 4, self::SALT => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, self::LAST_LOGIN => 8, self::LAST_LOGIN_ATTEMPT => 9, self::FAILED_LOGINS => 10, self::ENABLED => 11, self::REMEMBER_KEY => 12, self::REMEMBER_KEY_LIFETIME => 13, self::AUTO_LOGIN_HASH => 14, self::PASSWORD_RESET_TOKEN => 15, self::PASSWORD_RESET_TOKEN_CREATED_AT => 16, self::HAS_EXTRA_CREDENTIALS => 17, self::TYPE => 18, self::PROFILE_ID => 19, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'username' => 1, 'password' => 2, 'email' => 3, 'email_confirmed' => 4, 'salt' => 5, 'created_at' => 6, 'updated_at' => 7, 'last_login' => 8, 'last_login_attempt' => 9, 'failed_logins' => 10, 'enabled' => 11, 'remember_key' => 12, 'remember_key_lifetime' => 13, 'auto_login_hash' => 14, 'password_reset_token' => 15, 'password_reset_token_created_at' => 16, 'has_extra_credentials' => 17, 'type' => 18, 'profile_id' => 19, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Username' => 1, 'Password' => 2, 'Email' => 3, 'EmailConfirmed' => 4, 'Salt' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'LastLogin' => 8, 'LastLoginAttempt' => 9, 'FailedLogins' => 10, 'LockedByAdmins' => 11, 'RememberKey' => 12, 'RememberKeyLifetime' => 13, 'AutoLoginHash' => 14, 'PasswordResetToken' => 15, 'PasswordResetTokenCreatedAt' => 16, 'HasExtraCredentials' => 17, 'Type' => 18, 'ProfileId' => 19, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'username' => 1, 'password' => 2, 'email' => 3, 'emailConfirmed' => 4, 'salt' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'lastLogin' => 8, 'lastLoginAttempt' => 9, 'failedLogins' => 10, 'lockedByAdmins' => 11, 'rememberKey' => 12, 'rememberKeyLifetime' => 13, 'autoLoginHash' => 14, 'passwordResetToken' => 15, 'passwordResetTokenCreatedAt' => 16, 'hasExtraCredentials' => 17, 'type' => 18, 'profileId' => 19, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USERNAME => 1, self::PASSWORD => 2, self::EMAIL => 3, self::EMAIL_CONFIRMED => 4, self::SALT => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, self::LAST_LOGIN => 8, self::LAST_LOGIN_ATTEMPT => 9, self::FAILED_LOGINS => 10, self::LOCKED_BY_ADMINS => 11, self::REMEMBER_KEY => 12, self::REMEMBER_KEY_LIFETIME => 13, self::AUTO_LOGIN_HASH => 14, self::PASSWORD_RESET_TOKEN => 15, self::PASSWORD_RESET_TOKEN_CREATED_AT => 16, self::HAS_EXTRA_CREDENTIALS => 17, self::TYPE => 18, self::PROFILE_ID => 19, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'username' => 1, 'password' => 2, 'email' => 3, 'email_confirmed' => 4, 'salt' => 5, 'created_at' => 6, 'updated_at' => 7, 'last_login' => 8, 'last_login_attempt' => 9, 'failed_logins' => 10, 'locked_by_admins' => 11, 'remember_key' => 12, 'remember_key_lifetime' => 13, 'auto_login_hash' => 14, 'password_reset_token' => 15, 'password_reset_token_created_at' => 16, 'has_extra_credentials' => 17, 'type' => 18, 'profile_id' => 19, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
 	);
 
@@ -254,7 +254,7 @@ abstract class BasesfEasyAuthUserPeer {
 
 		$criteria->addSelectColumn(sfEasyAuthUserPeer::FAILED_LOGINS);
 
-		$criteria->addSelectColumn(sfEasyAuthUserPeer::ENABLED);
+		$criteria->addSelectColumn(sfEasyAuthUserPeer::LOCKED_BY_ADMINS);
 
 		$criteria->addSelectColumn(sfEasyAuthUserPeer::REMEMBER_KEY);
 

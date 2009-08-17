@@ -89,11 +89,11 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $failed_logins;
 
 	/**
-	 * The value for the enabled field.
-	 * Note: this column has a database default value of: true
+	 * The value for the locked_by_admins field.
+	 * Note: this column has a database default value of: false
 	 * @var        boolean
 	 */
-	protected $enabled;
+	protected $locked_by_admins;
 
 	/**
 	 * The value for the remember_key field.
@@ -189,7 +189,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	{
 		$this->email_confirmed = false;
 		$this->failed_logins = 0;
-		$this->enabled = true;
+		$this->locked_by_admins = false;
 		$this->has_extra_credentials = false;
 		$this->profile_id = 0;
 	}
@@ -417,13 +417,13 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [enabled] column value.
+	 * Get the [locked_by_admins] column value.
 	 * 
 	 * @return     boolean
 	 */
-	public function getEnabled()
+	public function getLockedByAdmins()
 	{
-		return $this->enabled;
+		return $this->locked_by_admins;
 	}
 
 	/**
@@ -899,24 +899,24 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	} // setFailedLogins()
 
 	/**
-	 * Set the value of [enabled] column.
+	 * Set the value of [locked_by_admins] column.
 	 * 
 	 * @param      boolean $v new value
 	 * @return     sfEasyAuthUser The current object (for fluent API support)
 	 */
-	public function setEnabled($v)
+	public function setLockedByAdmins($v)
 	{
 		if ($v !== null) {
 			$v = (boolean) $v;
 		}
 
-		if ($this->enabled !== $v || $v === true) {
-			$this->enabled = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::ENABLED;
+		if ($this->locked_by_admins !== $v || $v === false) {
+			$this->locked_by_admins = $v;
+			$this->modifiedColumns[] = sfEasyAuthUserPeer::LOCKED_BY_ADMINS;
 		}
 
 		return $this;
-	} // setEnabled()
+	} // setLockedByAdmins()
 
 	/**
 	 * Set the value of [remember_key] column.
@@ -1147,7 +1147,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserPeer::EMAIL_CONFIRMED,sfEasyAuthUserPeer::FAILED_LOGINS,sfEasyAuthUserPeer::ENABLED,sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS,sfEasyAuthUserPeer::PROFILE_ID))) {
+			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserPeer::EMAIL_CONFIRMED,sfEasyAuthUserPeer::FAILED_LOGINS,sfEasyAuthUserPeer::LOCKED_BY_ADMINS,sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS,sfEasyAuthUserPeer::PROFILE_ID))) {
 				return false;
 			}
 
@@ -1159,7 +1159,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				return false;
 			}
 
-			if ($this->enabled !== true) {
+			if ($this->locked_by_admins !== false) {
 				return false;
 			}
 
@@ -1204,7 +1204,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->last_login = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->last_login_attempt = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->failed_logins = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-			$this->enabled = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+			$this->locked_by_admins = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
 			$this->remember_key = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->remember_key_lifetime = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->auto_login_hash = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
@@ -1591,7 +1591,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				return $this->getFailedLogins();
 				break;
 			case 11:
-				return $this->getEnabled();
+				return $this->getLockedByAdmins();
 				break;
 			case 12:
 				return $this->getRememberKey();
@@ -1649,7 +1649,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$keys[8] => $this->getLastLogin(),
 			$keys[9] => $this->getLastLoginAttempt(),
 			$keys[10] => $this->getFailedLogins(),
-			$keys[11] => $this->getEnabled(),
+			$keys[11] => $this->getLockedByAdmins(),
 			$keys[12] => $this->getRememberKey(),
 			$keys[13] => $this->getRememberKeyLifetime(),
 			$keys[14] => $this->getAutoLoginHash(),
@@ -1723,7 +1723,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				$this->setFailedLogins($value);
 				break;
 			case 11:
-				$this->setEnabled($value);
+				$this->setLockedByAdmins($value);
 				break;
 			case 12:
 				$this->setRememberKey($value);
@@ -1784,7 +1784,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[8], $arr)) $this->setLastLogin($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setLastLoginAttempt($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setFailedLogins($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setEnabled($arr[$keys[11]]);
+		if (array_key_exists($keys[11], $arr)) $this->setLockedByAdmins($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setRememberKey($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setRememberKeyLifetime($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setAutoLoginHash($arr[$keys[14]]);
@@ -1815,7 +1815,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(sfEasyAuthUserPeer::LAST_LOGIN)) $criteria->add(sfEasyAuthUserPeer::LAST_LOGIN, $this->last_login);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::LAST_LOGIN_ATTEMPT)) $criteria->add(sfEasyAuthUserPeer::LAST_LOGIN_ATTEMPT, $this->last_login_attempt);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::FAILED_LOGINS)) $criteria->add(sfEasyAuthUserPeer::FAILED_LOGINS, $this->failed_logins);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::ENABLED)) $criteria->add(sfEasyAuthUserPeer::ENABLED, $this->enabled);
+		if ($this->isColumnModified(sfEasyAuthUserPeer::LOCKED_BY_ADMINS)) $criteria->add(sfEasyAuthUserPeer::LOCKED_BY_ADMINS, $this->locked_by_admins);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY, $this->remember_key);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
 		if ($this->isColumnModified(sfEasyAuthUserPeer::AUTO_LOGIN_HASH)) $criteria->add(sfEasyAuthUserPeer::AUTO_LOGIN_HASH, $this->auto_login_hash);
@@ -1898,7 +1898,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		$copyObj->setFailedLogins($this->failed_logins);
 
-		$copyObj->setEnabled($this->enabled);
+		$copyObj->setLockedByAdmins($this->locked_by_admins);
 
 		$copyObj->setRememberKey($this->remember_key);
 

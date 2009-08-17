@@ -215,22 +215,16 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
     $this->setProfileId($profile->getId());
     $this->profile = $profile;
   }
-  
+
   /**
-   * Returns a boolean for whether this account may be used. It makes sure it
-   * is enabled (so hasn't been blocked by an admin), and that it hasn't been
-   * locked as a result of too many incorrect log in attempts
+   * Accessor for the locked_by_admins field. This reflects whether admins have locked
+   * an account, in which case the user will not be able to log in at all.
    * 
-   * @return boolean
+   * @return int
    */
-  public function accountIsActive()
+  public function accountLockedByAdmins()
   {
-    if ($this->getEnabled() == 1)
-    {
-      return !$this->accountTemporarilyLocked();
-    }
-    
-    return false;
+    return $this->getLockedByAdmins();
   }
   
   /**

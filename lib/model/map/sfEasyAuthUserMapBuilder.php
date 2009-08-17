@@ -84,7 +84,7 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('FAILED_LOGINS', 'FailedLogins', 'INTEGER', false, null);
 
-		$tMap->addColumn('ENABLED', 'Enabled', 'BOOLEAN', false, null);
+		$tMap->addColumn('LOCKED_BY_ADMINS', 'LockedByAdmins', 'BOOLEAN', false, null);
 
 		$tMap->addColumn('REMEMBER_KEY', 'RememberKey', 'VARCHAR', false, 42);
 

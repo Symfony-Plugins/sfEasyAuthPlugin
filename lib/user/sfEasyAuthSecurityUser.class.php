@@ -59,7 +59,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       // make sure their account is enabled. This allows them to log in via an
       // auto log-in link even if their account has been suspended due to too many
       // incorrect log-in attempts
-      if ($user->getEnabled())
+      if (!$user->accountLockedByAdmins())
       {
         $this->user = $user;
         
@@ -88,9 +88,10 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     {
       if ($user->checkPassword($password))
       {
-        if ($user->getEnabled() != 1)
+        // check whether admins have locked the account
+        if ($user->accountLockedByAdmins() == 1)
         {
-          $this->setFlash('message', 'Your account not active. Please contact us.');
+          $this->setFlash('message', 'Your account has been locked. Please contact us.');
           return false;
         }
 
@@ -106,7 +107,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         }
 //echo 'here: ' . intval($this->getEmailConfirmed());exit;
         // make sure the threshold for login attempts hasn't been exceeded
-        if (!$user->accountIsActive())
+        if ($user->accountTemporarilyLocked())
         {
           $this->setFlash('message', 'Your account has been locked due to too many incorrect log in attempts. Please try later.');
           return false;
@@ -132,7 +133,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         $user->setLastLoginAttempt(time());
         $user->save();
 
-        if (!$user->accountIsActive())
+        if ($user->accountTemporarilyLocked())
         {
           $this->setFlash('message', 'Your account has been locked due to too many incorrect log in attempts. Please try later.');
         }
@@ -242,7 +243,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         return false;
       }
       
-      if ($user->accountIsActive())
+      if (!$user->accountTemporarilyLocked())
       {
         $this->user = $user;
         return true;

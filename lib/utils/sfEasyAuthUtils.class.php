@@ -58,9 +58,16 @@ class sfEasyAuthUtils
 
     $newQueryString = http_build_query($query);
 
+    // replace exclamation marks with '&&&'
+    
+    $queryString = str_replace('!', '&&&', $queryString);
+    
     // rebuild the url
-    $fullUrl = preg_replace("!\??{$queryString}!", '', $url);
+    $fullUrl = preg_replace("!\??{$queryString}!", '', str_replace('!', '&&&', $url));
 
+    // replace '&&&' with an exclamation mark
+    $fullUrl = str_replace('&&&', '!', $fullUrl);
+    
     $fullUrl = ($newQueryString) ? $fullUrl . '?' . $newQueryString : $fullUrl;
     
     return $fullUrl;

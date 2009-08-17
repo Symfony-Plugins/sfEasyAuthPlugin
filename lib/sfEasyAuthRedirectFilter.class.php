@@ -31,6 +31,12 @@ class sfEasyAuthRedirectFilter extends sfFilter
         
         // extract only the path part - but there shouldn't be anything else
         $redirUrl = parse_url($redirUrl, PHP_URL_PATH);
+
+        // if we're in the dev env, prepend the name of the controller to the url
+        if (sfConfig::get('sf_environment') != 'prod')
+        {
+          $redirUrl = sfConfig::get('app_controller') . '/' . ltrim($redirUrl, '/');
+        }
         
         // get the original query string
         $queryString = parse_url($request->getUri(), PHP_URL_QUERY);
@@ -43,7 +49,7 @@ class sfEasyAuthRedirectFilter extends sfFilter
           $redirUrl, 
           array('redir')
         ); 
-echo 'redirecting to ' . $url;exit;
+
         return $this->getContext()->getController()->redirect($url);
       }
     }

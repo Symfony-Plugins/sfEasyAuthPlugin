@@ -64,6 +64,11 @@ Installation
   * Optionally create a default admin user:
 
         $ symfony easyAuth:create-user ally 5ecret2 ally@example.com admin
+        
+  * Optionally go through the `app.yml` file, configuring the plugin for your needs. 
+    Note: to ease your upgrade path, it may be better to redefine settings in your 
+    application or project's `app.yml` files instead of modifying the one included with
+    the plugin. 
 
 Secure your application
 -----------------------
@@ -250,25 +255,53 @@ or false. Here is a template for such a function:
       }
     }
 
-Send password reset emails with your own mailer class
------------------------------------------------------
+Send password reset and account activation emails with your own mailer class
+----------------------------------------------------------------------------
 
-sfEasyAuth gives you the flexibility to send password reminders to users however you want.
+sfEasyAuth gives you the flexibility to send emails to users however you want.
 By default it uses the sfEasyAuthSimpleMailer class which uses the PHP `mail` method for
 sending emails. This function is simple, but doesn't support more advanced features like
 sending authenticated emails - important if your messages are signed with domain keys for
 instance. 
 
-To use your own class, simply edit the `mailer_callable` parameter in the `app.yml` file
+To use your own class, simply edit the `*_mailer_callable` parameters in the `app.yml` file
 as follows:
 
     [yml]
-    mailer_callable: [YourMailClass, sendMethod]
+    password_reset_mailer_callable: [YourMailClass, sendMethod]
 
-The method that is set up as a callable will be invoked with 2 parameters - the first being
-the sfEasyAuthUser object of the recipient, and the second the message to send. You can 
+The method that is set up as a callable will be invoked with 3 parameters - 
+the sfEasyAuthUser object of the recipient, the subject, and the the message to send. You can 
 then deliver the message however you want. Just create YourMailClass somewhere else in your 
 project.
+
+Email confirmation
+------------------
+
+If you are allowing users to register on your site, you may decide that they must confirm
+they have access to the email address they entered while signing up. 
+
+The `require_email_confirmation` setting in the plugin's `app.yml` file will, if set to 
+a true value, prevent users from logging in to the site if they have yet to confirm their
+email address.
+
+In order to send email confirmation emails, simply put something like the following in your
+action after saving your registration:
+
+    [php]
+    // inside the register action, after saving the form and creating the new user
+    
+    // get the sfEasyAuthUser just created - you'll need to add the getNewUser method to 
+    // your form class yourself 
+    $user = $this->form->getNewUser();
+    
+    // send them an email with a link to activate their account
+    $message = $this->getPartial('sfEasyAuth/emailConfirmationEmail', array('user' => $user));
+    $user->sendEmailConfirmationMessage($message); 
+
+You can customise the email users receive by creating a new sfEasyAuth module in your 
+application, and creating a template called _emailConfirmationEmail.php. This will 
+override the default template in that case.
 
 Adding more user types
 ----------------------

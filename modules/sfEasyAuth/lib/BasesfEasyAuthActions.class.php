@@ -70,6 +70,16 @@ class BasesfEasyAuthActions extends sfActions
         $username = $this->loginForm->getValue('username');
         $password = $this->loginForm->getValue('password');
 
+        // call an event prior to authentication
+        $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+          $this,
+          'sf_easy_auth.pre_authentication',
+          array(
+            'username' => $username,
+            'password' => $password
+          )
+        ));
+        
         if (is_array($authenticateMethod) && count($authenticateMethod) == 2)
         {
           $result = call_user_func($authenticateMethod, $username, $password);
@@ -78,6 +88,15 @@ class BasesfEasyAuthActions extends sfActions
         {
           $result = $user->authenticate($username, $password);
         }
+        
+        // call an event after authentication, but before processing the result
+        $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+          $this,
+          'sf_easy_auth.post_authentication',
+          array(
+            'result' => $result
+          )
+        ));
         
         if ($result === true)
         {
@@ -139,11 +158,27 @@ class BasesfEasyAuthActions extends sfActions
   */
   public function executeLogout(sfWebRequest $request)
   {
+    // call an event before logging the user out
+    $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+      $this,
+      'sf_easy_auth.pre_logout',
+      array('user' => $this->getUser())
+    ));
+    
     $this->getUser()->logOut();
 
     $url = sfConfig::get('app_sf_easy_auth_logout_success_url', $request->getReferer());
     
     $url = ($url) ? $url : '@homepage';
+    
+    // call an event after logging the user out and before redirecting them
+    $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
+      $this,
+      'sf_easy_auth.filter_logout_redirect_url',
+      array(
+        'user' => $this->getUser(),
+      )
+    ), $url)->getReturnValue();
     
     $this->redirect($url);
   }
@@ -168,6 +203,13 @@ class BasesfEasyAuthActions extends sfActions
         // try to retrieve the user with this email address
         if ($user = sfEasyAuthUserPeer::retrieveByEmail($email))
         {
+          // call an event before sending the reset message
+          $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+            $this,
+            'sf_easy_auth.pre_password_reset_message',
+            array('user' => $user)
+          ));
+          
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
           $this->sendPasswordResetMessage($user);
@@ -214,6 +256,15 @@ class BasesfEasyAuthActions extends sfActions
         // user table and is valid
         if ($user->validatePasswordResetToken($this->form->getValue('token')))
         {
+          // call an event before updating the user's password
+          $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+            $this,
+            'sf_easy_auth.pre_password_reset',
+            array(
+              'user' => $user,
+              'password' => $this->form->getValue('password'))
+          ));
+          
           // set and save the new password
           $user->updatePassword($this->form->getValue('password'));
           
@@ -227,6 +278,13 @@ class BasesfEasyAuthActions extends sfActions
     }
     else if (!$user->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
     {
+      // call an event before sending the reset message
+      $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+        $this,
+        'sf_easy_auth.pre_password_reset_resend_message',
+        array('user' => $user)
+      ));
+      
       // send them a new link
       $this->sendPasswordResetMessage($user->getAuthUser());
       

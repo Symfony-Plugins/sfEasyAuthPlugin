@@ -51,19 +51,21 @@ all:
     
     account_locked_by_admins: Your account has been locked. Please contact us.   # displayed
                                           # when admins have locked an account
+                                          
+    # displayed when users haven't confirmed their email address before logging in
     must_confirm_email: | 
       You need to confirm your email address before you can log in. If you don't 
       have your confirmation email, please use the reset password link below.
-    # displayed when users haven't confirmed their email address before logging in
     
+    # displayed when a user's account is locked because of too many incorrect log in attempts
     account_temporarily_locked: |
       Your account has been locked due to too many incorrect log in attempts. 
       Please try later.
     
-    # displayed when a user's account is locked because of too many incorrect log in attempts
-    
     username_required_message: Please enter your user name      # displayed if users don't
     password_required_message: Please enter your password       #  enter required fields
+    
+    password_min_length:  4               # the minimum length passwords are allowed to be
     reset_user_not_found: We couldn't find a user with that email address  # displayed when we
                                           # can't locate a user by their email address to reset
                                           # their password

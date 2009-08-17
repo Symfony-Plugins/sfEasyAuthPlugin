@@ -42,14 +42,14 @@ class sfEasyAuthPasswordResetSetPasswordForm extends sfForm
           array('min_length' => 12, 'max_length' => 12)
         ),
         'password' => new sfValidatorString(
-          array('min_length' => 4, 'max_length' => 50), 
+          array('min_length' => sfConfig::get('app_sf_easy_auth_password_min_length'), 'max_length' => 50), 
           array('required' => 'Please enter a password',
             'min_length' => 'Your password is too short. Please enter one at least %min_length% characters.',
             'max_length' => 'Your password is too long. Please enter one between %min_length% and %max_length%.'
           )
         ),
         'confirm_password' => new sfValidatorString(
-          array('min_length' => 4, 'max_length' => 50), 
+          array('min_length' => sfConfig::get('app_sf_easy_auth_password_min_length'), 'max_length' => 50), 
           // set blank messages since there is no point duplicating the messages from the 
           // first password field
           array('required' => ' ',

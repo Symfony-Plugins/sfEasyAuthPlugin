@@ -75,6 +75,26 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   }
   
   /**
+   * Sets a flash called 'message' for a user depending on whether we should i18n strings
+   * 
+   * @param string $message The message to set as a flash
+   */
+  protected function setMessage($message)
+  {
+    if (!$this->hasFlash('message'))
+    {
+      if (sfConfig::get('app_sf_easy_auth_use_i18n'))
+      {
+        return $this->setFlash('message', sfContext::getInstance()->getI18n()->__($message));
+      }
+      else
+      {
+        return $this->setFlash('message', $message);
+      }
+    }
+  }
+  
+  /**
    * Attempt to authenticate a user with the supplied credentials
    * 
    * @param string $username
@@ -91,7 +111,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         // check whether admins have locked the account
         if ($user->accountLockedByAdmins() == 1)
         {
-          $this->setFlash('message', 'Your account has been locked. Please contact us.');
+          $this->setMessage(sfConfig::get('app_sf_easy_auth_account_locked_by_admins'));
           return false;
         }
 
@@ -99,9 +119,9 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         // user has confirmed their email address
         if (sfConfig::get('app_sf_easy_auth_require_email_confirmation'))
         {
-          if (!$this->getEmailConfirmed())
+          if (!$user->getEmailConfirmed())
           {
-            $this->setFlash('message', 'You need to confirm your email address before you can log in. If you don\'t have your confirmation email, please use the reset password link below.');
+            $this->setMessage(sfConfig::get('app_sf_easy_auth_must_confirm_email'));
             return false;
           }
         }
@@ -109,7 +129,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         // make sure the threshold for login attempts hasn't been exceeded
         if ($user->accountTemporarilyLocked())
         {
-          $this->setFlash('message', 'Your account has been locked due to too many incorrect log in attempts. Please try later.');
+          $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
           return false;
         }
 
@@ -135,7 +155,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
 
         if ($user->accountTemporarilyLocked())
         {
-          $this->setFlash('message', 'Your account has been locked due to too many incorrect log in attempts. Please try later.');
+          $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
         }
         return false;
       }
@@ -310,12 +330,17 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   public function updatePassword($password)
   {
     $this->getAuthUser()->setPassword($password);
+    
     return $this->getAuthUser()->save();
   }
   
+  /**
+   * Invalidates the password reset token to prevent replay attacks
+   */
   public function invalidatePasswordResetToken()
   {
     $this->getAuthUser()->setPasswordResetToken('');
+    
     return $this->getAuthUser()->save();
   }
 }

@@ -241,7 +241,7 @@ class BasesfEasyAuthActions extends sfActions
    * 
    * @param string $message The message to set as a flash
    */
-  private function setFlash($message)
+  protected function setFlash($message)
   {
     if (!$user = $this->getUser())
     {
@@ -252,11 +252,11 @@ class BasesfEasyAuthActions extends sfActions
     {
       if (sfConfig::get('app_sf_easy_auth_use_i18n'))
       {
-        $user->setFlash('message', $this->getContext()->getI18n()->__($message));
+        return $user->setFlash('message', $this->getContext()->getI18n()->__($message));
       }
       else
       {
-        $user->setFlash('message', $message);
+        return $user->setFlash('message', $message);
       }
     }
   }

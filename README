@@ -104,9 +104,9 @@ To secure a symfony application:
           url:   /logout
           param: { module: sfEasyAuth, action: logout }
 
-#        sf_guard_password:
-#          url:   /request_password
-#          param: { module: sfEasyAuth, action: password }
+        sf_easy_auth_password_reset_set_password:
+          url:   /pw-reset-set-password
+          param: { module: sfEasyAuth, action: passwordResetSetPassword }
 
   You can customize the `url` parameter of each route.
   N.B.: You must have a `@homepage` routing rule (used when a user sign out)

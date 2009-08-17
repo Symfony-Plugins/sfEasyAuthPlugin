@@ -63,6 +63,17 @@ class sfEasyAuthRouting
         )
       )
     );
+    
+    // just clicking on the auto-login link will activate their account, so we can 
+    // send the user wherever we want. The homepage is a reasonable place to start 
+    $r->prependRoute('sf_easy_auth_email_confirmation_confirm', 
+      new sfRoute('/activate-account', 
+        array(
+          'module' => 'homepage', 
+          'action' => 'index'
+        )
+      )
+    );
   }
 
   static public function addRouteForAdminUser(sfEvent $event)

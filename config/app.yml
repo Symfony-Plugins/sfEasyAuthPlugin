@@ -10,12 +10,15 @@ all:
                                           # schema_inheritance keys, with the first character
                                           # converted to uppercase, e.g. SbBasicUser
   
-    password_reset_mailer_callable: [sfEasyAuthSimpleMailer, sendPasswordReset]    
-                                          # callable to send password 
-                                          # reset emails. It must be a static method. 
-                                          # It will be invoked with 2 parameters: 
-                                          #  * the (sfEasyAuthUser) user object of the recipient 
-                                          #  * and the (string) message to send
+    password_reset_mailer_callable: [sfEasyAuthSimpleMailer, mail]    
+      # callable to send password reset emails. It must be a static method.  It 
+      # will be invoked with 2 parameters: 
+      #  * the (sfEasyAuthUser) user object of the recipient 
+      #  * the (string) subject
+      #  * and the (string) message to send
+  
+    email_confirmation_mailer_callable: [sfEasyAuthSimpleMailer, mail]
+      # callable to send email confirmation links. Parameters are as above.
   
     base_url:  http://www.example.com     # base url for authentication stuff. This will be 
                                           # used as part of the password reset link. You should
@@ -76,4 +79,8 @@ all:
     reset_token_lifetime: 25200           # The length of time (in seconds) after requesting 
                                           # to reset the password reset link set to users 
                                           # remains valid for 
-    reset_from_name:    The team
+    reset_email_subject: Reset your password        # the subject for password reset emails
+    reset_from_name:    The team          # the from name for password reset emails
+    
+    email_confirmation_subject:  Activate your account # the subject for email confirmation emails
+    email_confirmation_from_name:    The team          # the from name for email confirmation emails

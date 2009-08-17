@@ -323,6 +323,35 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    */
   public function sendPasswordResetMessage($message)
   {
-    return call_user_func(sfConfig::get('app_sf_easy_auth_password_reset_mailer_callable'), $this, $message);
+    $callable = sfConfig::get('app_sf_easy_auth_password_reset_mailer_callable');
+    
+    if (is_array($callable) && count($callable) == 2)
+    {
+      $subject = ($subject) ? $subject :  
+        sfConfig::get('app_sf_easy_auth_reset_email_subject');
+      
+      return call_user_func($callable, $this, $subject, $message);
+    }
+  }  
+  
+  /**
+   * Sends a user an email with a link to confirm their email address and activate
+   * their account
+   * 
+   * @param string $message The message to send to this user
+   * @param string $subject A subject that will override the default one configured
+   * in the app.yml file
+   */
+  public function sendEmailConfirmationMessage($message, $subject='')
+  {
+    $callable = sfConfig::get('app_sf_easy_auth_email_confirmation_mailer_callable');
+    
+    if (is_array($callable) && count($callable) == 2)
+    {
+      $subject = ($subject) ? $subject :  
+        sfConfig::get('app_sf_easy_auth_email_confirmation_subject');
+      
+      return call_user_func($callable, $this, $subject, $message);
+    }
   }
 }

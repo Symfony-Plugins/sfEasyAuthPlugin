@@ -11,12 +11,11 @@ class sfEasyAuthSimpleMailer
    * Sends an email containing $message to $user
    * 
    * @param sfEasyAuthUser $user The recipient user
+   * @param string $subject The message subject
    * @param string $message The message to send
    */
-  public static function sendPasswordReset(sfEasyAuthUser $user, $message)
+  public static function mail(sfEasyAuthUser $user, $subject, $message)
   {
-    $subject = 'Reset your password on ' . $_SERVER['HTTP_HOST'];
-
     // i18n if necessary
     if (sfConfig::get('app_sf_easy_auth_use_i18n'))
     {
@@ -24,6 +23,6 @@ class sfEasyAuthSimpleMailer
     }
 
     // send the email
-    return mail($user->getEmail(), $subject, $message);
+    return self::mail($user->getEmail(), $subject, $message);
   }
 }

@@ -375,6 +375,16 @@ If you want to add more methods to the sfEasyAuthUserPeer class, it'd be better 
 create a sub-class of it, and store your sub-class in your main lib directory somewhere.
 This will ease your upgrade path in future should you choose to. 
 
+Events
+------
+
+sfEasyAuth notifies various events during its execution. See the file called EVENTS for more
+information on what is fired, when and parameters passed.
+
+To configure your application to listen for events, edit your application config PHP file,
+e.g. frontendConfiguration.class.php. Check the symfony documentation for more information
+on how to do this.
+
 I18n
 ----
 

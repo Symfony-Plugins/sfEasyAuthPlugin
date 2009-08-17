@@ -58,7 +58,7 @@ all:
     # displayed when users haven't confirmed their email address before logging in
     must_confirm_email: | 
       You need to confirm your email address before you can log in. If you don't 
-      have your confirmation email, please use the reset password link below.
+      have your confirmation email, please use the password reset link below.
     
     # displayed when a user's account is locked because of too many incorrect log in attempts
     account_temporarily_locked: |

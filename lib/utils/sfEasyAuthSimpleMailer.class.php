@@ -23,6 +23,6 @@ class sfEasyAuthSimpleMailer
     }
 
     // send the email
-    return self::mail($user->getEmail(), $subject, $message);
+    return mail($user->getEmail(), $subject, $message);
   }
 }

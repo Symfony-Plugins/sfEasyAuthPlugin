@@ -63,9 +63,21 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       {
         $this->user = $user;
         
-        // confirm the user's email address
-        $this->user->setEmailConfirmed(true);
-        $this->user->save();
+        if (!$this->user->getEmailConfirmed())
+        {
+          // confirm the user's email address
+          $this->user->setEmailConfirmed(true);
+          $this->user->save();
+          
+          // call an event indicating that a user has confirmed their email address
+          $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+            $this,
+            'sf_easy_auth.email_confirmed',
+            array(
+              'user' => $this->user
+            )
+          ));
+        }
         
         return $this->logIn();
       }
@@ -125,7 +137,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
             return false;
           }
         }
-//echo 'here: ' . intval($this->getEmailConfirmed());exit;
+
         // make sure the threshold for login attempts hasn't been exceeded
         if ($user->accountTemporarilyLocked())
         {
@@ -148,13 +160,28 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         {
           $user->setFailedLogins(0);
         }
-//echo 'wrong';exit;
+
+        $currentlyTemporarilyLocked = $user->accountTemporarilyLocked();
+        
         $user->setFailedLogins($user->getFailedLogins()+1);
         $user->setLastLoginAttempt(time());
         $user->save();
 
         if ($user->accountTemporarilyLocked())
         {
+          // if the user's account has just been locked, notify the system
+          if (!$currentlyTemporarilyLocked)
+          {
+            // call an event to notify that a user's account will be temporarily locked
+            $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+              $this,
+              'sf_easy_auth.account_temporarily_locked',
+              array(
+                'user' => $user
+              )
+            ));
+          }
+          
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
         }
         return false;

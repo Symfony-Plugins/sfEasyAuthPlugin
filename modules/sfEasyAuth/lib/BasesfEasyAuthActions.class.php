@@ -32,6 +32,15 @@ class BasesfEasyAuthActions extends sfActions
       // or to the homepage
       $url = sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage');
 
+      // call an event after logging the user out and before redirecting them
+      $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
+        $this,
+        'sf_easy_auth.filter_login_redirect_url',
+        array(
+          'user' => $this->getUser(),
+        )
+      ), $url)->getReturnValue();
+      
       return $this->redirect($url);
     }
   }
@@ -256,17 +265,17 @@ class BasesfEasyAuthActions extends sfActions
         // user table and is valid
         if ($user->validatePasswordResetToken($this->form->getValue('token')))
         {
+          // set and save the new password
+          $user->updatePassword($this->form->getValue('password'));
+                    
           // call an event before updating the user's password
           $this->getContext()->getEventDispatcher()->notify(new sfEvent(
             $this,
-            'sf_easy_auth.pre_password_reset',
+            'sf_easy_auth.post_password_reset',
             array(
               'user' => $user,
               'password' => $this->form->getValue('password'))
           ));
-          
-          // set and save the new password
-          $user->updatePassword($this->form->getValue('password'));
           
           // clear the password reset token so the link can't be used again
           $user->invalidatePasswordResetToken();

@@ -10,7 +10,8 @@ all:
                                           # schema_inheritance keys, with the first character
                                           # converted to uppercase, e.g. SbBasicUser
   
-    mailer_callable: [sfEasyAuthSimpleMailer, sendPasswordReset]    # callable to send password 
+    password_reset_mailer_callable: [sfEasyAuthSimpleMailer, sendPasswordReset]    
+                                          # callable to send password 
                                           # reset emails. It must be a static method. 
                                           # It will be invoked with 2 parameters: 
                                           #  * the (sfEasyAuthUser) user object of the recipient 
@@ -25,6 +26,13 @@ all:
     lockout_duration:         300         # number of seconds to lock an account 
                                           # after %APP_SF_EASY_AUTH_LOGIN_ATTEMPT_THRESHOLD%
                                           # attempts
+                                          
+    require_email_confirmation: true      # whether users must confirm their email address
+                                          # before being allowed to log in. See the README for
+                                          # details of how to implement this fully.  
+                                          # If a user clicks on an auto log-in link (perhaps
+                                          # because they asked to reset their password), 
+                                          # this field will automatically be confirmed.
                                                      
     plugin_routes_register:   true        # whether to register default routes
                                                      

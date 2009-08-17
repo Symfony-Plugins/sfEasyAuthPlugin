@@ -329,6 +329,6 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    */
   public function sendPasswordResetMessage($message)
   {
-    return call_user_func(sfConfig::get('app_sf_easy_auth_mailer_callable'), $this, $message);
+    return call_user_func(sfConfig::get('app_sf_easy_auth_password_reset_mailer_callable'), $this, $message);
   }
 }

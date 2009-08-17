@@ -62,6 +62,11 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       if ($user->getEnabled())
       {
         $this->user = $user;
+        
+        // confirm the user's email address
+        $this->user->setEmailConfirmed(true);
+        $this->user->save();
+        
         return $this->logIn();
       }
     }
@@ -89,6 +94,17 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           return false;
         }
 
+        // if email accounts need confirming, before users can log in, make sure the
+        // user has confirmed their email address
+        if (sfConfig::get('app_sf_easy_auth_require_email_confirmation'))
+        {
+          if (!$this->getEmailConfirmed())
+          {
+            $this->setFlash('message', 'You need to confirm your email address before you can log in. If you don\'t have your confirmation email, please use the reset password link below.');
+            return false;
+          }
+        }
+//echo 'here: ' . intval($this->getEmailConfirmed());exit;
         // make sure the threshold for login attempts hasn't been exceeded
         if (!$user->accountIsActive())
         {
@@ -111,7 +127,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         {
           $user->setFailedLogins(0);
         }
-
+//echo 'wrong';exit;
         $user->setFailedLogins($user->getFailedLogins()+1);
         $user->setLastLoginAttempt(time());
         $user->save();

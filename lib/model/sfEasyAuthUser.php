@@ -320,8 +320,10 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    * Sends a user an email with a link to reset their password
    * 
    * @param string $message The message to send to this user
+   * @param string $subject A subject that will override the default one configured
+   * in the app.yml file
    */
-  public function sendPasswordResetMessage($message)
+  public function sendPasswordResetMessage($message, $subject='')
   {
     $callable = sfConfig::get('app_sf_easy_auth_password_reset_mailer_callable');
     

@@ -402,10 +402,9 @@ based on code in that plugin too. Thanks to the developers of that plugin.
 TODO
 ----
 
-  * Add a password reminder - in progress
-  * Think of an easy way for admins to manage extra credentials
+  * Think of an easy way for admins to manage extra credentials and edit user profiles
+  * Support different password hash algorithms - MD5 or SHA1.
   * Support user profiles for users with extra credentials that are related to those
     extra credentials
-  * Clean up allowing users to configure destinations after logging in.
   * Improve i18n. Nearly there, just need to update strings in templates (submit buttons, etc)
     and the odd error message here and there.

@@ -291,7 +291,7 @@ class BasesfEasyAuthActions extends sfActions
       $this->getContext()->getEventDispatcher()->notify(new sfEvent(
         $this,
         'sf_easy_auth.pre_password_reset_resend_message',
-        array('sfUser' => $sfUser)
+        array('eaUser' => $sfUser->getAuthUser())
       ));
       
       // send them a new link

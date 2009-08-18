@@ -19,7 +19,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function getAuthUser()
   {
-    if (!$this->eaUser && $id = $this->getAttribute('security_user_id', null))
+    if (!$this->eaUser && $id = $this->getAttribute('security_user_id'))
     {
       $this->eaUser = sfEasyAuthUserPeer::retrieveByPk($id);
 

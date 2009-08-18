@@ -324,7 +324,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   {
     sfContext::getInstance()->getResponse()->setCookie('remember', '', -1);
     
-    $this->getAttributeHolder->remove('security_user_id');
+    $this->getAttributeHolder()->remove('security_user_id');
+    $this->getAttributeHolder()->remove('sf_easy_auth.restricted_url');
     $this->setAuthenticated(false);
     $this->clearCredentials();
     $this->eaUser = null;

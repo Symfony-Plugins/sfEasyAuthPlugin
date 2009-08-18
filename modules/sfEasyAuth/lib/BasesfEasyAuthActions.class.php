@@ -32,6 +32,11 @@ class BasesfEasyAuthActions extends sfActions
       // or to the homepage
       $url = sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage');
 
+      // if the original url the user was trying to access was saved, redirect them
+      // there
+      $url = ($this->getUser()->getAttribute('sf_easy_auth.restricted_url')) ? 
+        $this->getUser()->getAttribute('sf_easy_auth.restricted_url') : $url;
+      
       // call an event after logging the user out and before redirecting them
       $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
         $this,
@@ -126,6 +131,20 @@ class BasesfEasyAuthActions extends sfActions
       else
       {
         return false;
+      }
+    }
+    else
+    {
+      // store the uri of the page they were trying to access if the user isn't 
+      // just trying to log in normally
+      if (sfContext::getInstance()->getRouting()->getCurrentInternalUri() != 'sfEasyAuth/login')
+      {
+        $this->getUser()->setAttribute('sf_easy_auth.restricted_url', $request->getUri());
+      }
+      else
+      {
+        // otherwise clear the attribute in case the user is navigating around the site.
+        $this->getUser()->getAttributeHolder()->remove('sf_easy_auth.restricted_url');
       }
     }
   }

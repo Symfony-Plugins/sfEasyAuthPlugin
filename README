@@ -47,11 +47,20 @@ Installation
                 enabled_modules:      [default, sfEasyAuth]
 
   * Add the following to your `config/filters.yml` file between `security` and `cache`
+    if you want to allow auto-login links or want to require users to confirm their
+    email addresses before being able to log in.
   
             [yml]
             sf_easy_auth_auto_login:
               class: sfEasyAuthAutoLogin
             
+  * Add the following to your `config/filters.yml` file to enable the redirection
+    filter - simply embedding a GET parameter in the url will redirect a user to that
+    url. See the `Filters` section for more on the filters this plugin comes with.
+    
+            [yml]
+            sf_easy_auth_redirect:
+              class: sfEasyAuthRedirectFilter
 
   * Clear your cache
 
@@ -302,6 +311,48 @@ action after saving your registration:
 You can customise the email users receive by creating a new sfEasyAuth module in your 
 application, and creating a template called _emailConfirmationEmail.php. This will 
 override the default template in that case.
+
+Filters
+-------
+
+sfEasyAuthPlugin comes with several filters:
+
+  * sfEasyAuthAutoLoginFilter - This filter allows you to create urls that can be used to
+    automatically log users in. This could be useful when sending emails to your mailing
+    list - simply construct one of these urls, and users will be able to access secured
+    content seemlessly, without being prompted to log in.
+    
+    The format of these urls must be as follows:
+    
+      http://www.yoursite.com/any/path/here?uid=xx&alh=zzz
+      
+      * where 'xxx' is the user's user ID - this is their primary key in the sf_easy_auth_user
+        table, and
+      * 'zzz' is the user's auto_login_hash, also stored in the sf_easy_auth_user table.
+      
+    Upon being successfully logged in, users will be redirected to:
+    
+      http://www.yoursite.com/any/path/here
+      
+    The GET parameters 'uid' and 'alh' will be removed from this url, but any others will
+    be preserved.
+    
+  * sfEasyAuthRedirectFilter - This filter will simply redirect users to the URL given
+    as a value to a GET parameter called 'redir'. Thus, you could construct a URL like the
+    following to track responses to an email campaign:
+    
+      http://www.yoursite.com/tracking/email-campaign-3?redir=/top-content/new
+      
+    This would redirect users to:
+    
+      http://www.yoursite.com/top-content/new
+      
+    *after* executing the action at the original url:
+      
+      http://www.yoursite.com/tracking/email-campaign-3
+  
+For these filters to work, you must enable them by editing your `config/filters.yml` file
+in your application. This is described in the `installation` section.
 
 Adding more user types
 ----------------------

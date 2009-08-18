@@ -1,12 +1,11 @@
 <?php
 /**
- * Redirection filter for sfEasyAuth.
+ * Redirection filter.
  * 
  * This filter examines all requested urls for GET parameters that indicate that we
  * should redirect the user, and will do so if they are present.
  * 
  * @author al
- * @see sfEasyAuthAutoLoginFilter::execute
  *
  */
 class sfEasyAuthRedirectFilter extends sfFilter
@@ -20,7 +19,7 @@ class sfEasyAuthRedirectFilter extends sfFilter
   {
     if ($this->isFirstCall())
     {
-      // check whether the GET parameters 'uid' and 'alh' are present. 
+      // check whether the GET parameters 'redir' is present. 
       if (in_array('redir', array_keys($_GET)))
       {
         $request = $this->getContext()->getRequest();

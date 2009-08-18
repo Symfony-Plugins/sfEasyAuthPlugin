@@ -156,6 +156,26 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	private $lastSfEasyAuthUserCredentialsCriteria = null;
 
 	/**
+	 * @var        array SbUserMailingList[] Collection to store aggregation of SbUserMailingList objects.
+	 */
+	protected $collSbUserMailingLists;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collSbUserMailingLists.
+	 */
+	private $lastSbUserMailingListCriteria = null;
+
+	/**
+	 * @var        array SbUserMarketingQuestion[] Collection to store aggregation of SbUserMarketingQuestion objects.
+	 */
+	protected $collSbUserMarketingQuestions;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collSbUserMarketingQuestions.
+	 */
+	private $lastSbUserMarketingQuestionCriteria = null;
+
+	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -1287,6 +1307,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->collSfEasyAuthUserCredentialss = null;
 			$this->lastSfEasyAuthUserCredentialsCriteria = null;
 
+			$this->collSbUserMailingLists = null;
+			$this->lastSbUserMailingListCriteria = null;
+
+			$this->collSbUserMarketingQuestions = null;
+			$this->lastSbUserMarketingQuestionCriteria = null;
+
 		} // if (deep)
 	}
 
@@ -1445,6 +1471,22 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->collSbUserMailingLists !== null) {
+				foreach ($this->collSbUserMailingLists as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
+			if ($this->collSbUserMarketingQuestions !== null) {
+				foreach ($this->collSbUserMarketingQuestions as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			$this->alreadyInSave = false;
 
 		}
@@ -1518,6 +1560,22 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 				if ($this->collSfEasyAuthUserCredentialss !== null) {
 					foreach ($this->collSfEasyAuthUserCredentialss as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collSbUserMailingLists !== null) {
+					foreach ($this->collSbUserMailingLists as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collSbUserMarketingQuestions !== null) {
+					foreach ($this->collSbUserMarketingQuestions as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1928,6 +1986,18 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 				}
 			}
 
+			foreach ($this->getSbUserMailingLists() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addSbUserMailingList($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getSbUserMarketingQuestions() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addSbUserMarketingQuestion($relObj->copy($deepCopy));
+				}
+			}
+
 		} // if ($deepCopy)
 
 
@@ -2130,6 +2200,361 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Clears out the collSbUserMailingLists collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addSbUserMailingLists()
+	 */
+	public function clearSbUserMailingLists()
+	{
+		$this->collSbUserMailingLists = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collSbUserMailingLists collection (array).
+	 *
+	 * By default this just sets the collSbUserMailingLists collection to an empty array (like clearcollSbUserMailingLists());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initSbUserMailingLists()
+	{
+		$this->collSbUserMailingLists = array();
+	}
+
+	/**
+	 * Gets an array of SbUserMailingList objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUser has previously been saved, it will retrieve
+	 * related SbUserMailingLists from storage. If this sfEasyAuthUser is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array SbUserMailingList[]
+	 * @throws     PropelException
+	 */
+	public function getSbUserMailingLists($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserMailingLists === null) {
+			if ($this->isNew()) {
+			   $this->collSbUserMailingLists = array();
+			} else {
+
+				$criteria->add(SbUserMailingListPeer::USER_ID, $this->id);
+
+				SbUserMailingListPeer::addSelectColumns($criteria);
+				$this->collSbUserMailingLists = SbUserMailingListPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(SbUserMailingListPeer::USER_ID, $this->id);
+
+				SbUserMailingListPeer::addSelectColumns($criteria);
+				if (!isset($this->lastSbUserMailingListCriteria) || !$this->lastSbUserMailingListCriteria->equals($criteria)) {
+					$this->collSbUserMailingLists = SbUserMailingListPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastSbUserMailingListCriteria = $criteria;
+		return $this->collSbUserMailingLists;
+	}
+
+	/**
+	 * Returns the number of related SbUserMailingList objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related SbUserMailingList objects.
+	 * @throws     PropelException
+	 */
+	public function countSbUserMailingLists(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collSbUserMailingLists === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(SbUserMailingListPeer::USER_ID, $this->id);
+
+				$count = SbUserMailingListPeer::doCount($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(SbUserMailingListPeer::USER_ID, $this->id);
+
+				if (!isset($this->lastSbUserMailingListCriteria) || !$this->lastSbUserMailingListCriteria->equals($criteria)) {
+					$count = SbUserMailingListPeer::doCount($criteria, $con);
+				} else {
+					$count = count($this->collSbUserMailingLists);
+				}
+			} else {
+				$count = count($this->collSbUserMailingLists);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a SbUserMailingList object to this object
+	 * through the SbUserMailingList foreign key attribute.
+	 *
+	 * @param      SbUserMailingList $l SbUserMailingList
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addSbUserMailingList(SbUserMailingList $l)
+	{
+		if ($this->collSbUserMailingLists === null) {
+			$this->initSbUserMailingLists();
+		}
+		if (!in_array($l, $this->collSbUserMailingLists, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collSbUserMailingLists, $l);
+			$l->setsfEasyAuthUser($this);
+		}
+	}
+
+	/**
+	 * Clears out the collSbUserMarketingQuestions collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addSbUserMarketingQuestions()
+	 */
+	public function clearSbUserMarketingQuestions()
+	{
+		$this->collSbUserMarketingQuestions = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collSbUserMarketingQuestions collection (array).
+	 *
+	 * By default this just sets the collSbUserMarketingQuestions collection to an empty array (like clearcollSbUserMarketingQuestions());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initSbUserMarketingQuestions()
+	{
+		$this->collSbUserMarketingQuestions = array();
+	}
+
+	/**
+	 * Gets an array of SbUserMarketingQuestion objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUser has previously been saved, it will retrieve
+	 * related SbUserMarketingQuestions from storage. If this sfEasyAuthUser is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array SbUserMarketingQuestion[]
+	 * @throws     PropelException
+	 */
+	public function getSbUserMarketingQuestions($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserMarketingQuestions === null) {
+			if ($this->isNew()) {
+			   $this->collSbUserMarketingQuestions = array();
+			} else {
+
+				$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+				SbUserMarketingQuestionPeer::addSelectColumns($criteria);
+				$this->collSbUserMarketingQuestions = SbUserMarketingQuestionPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+				SbUserMarketingQuestionPeer::addSelectColumns($criteria);
+				if (!isset($this->lastSbUserMarketingQuestionCriteria) || !$this->lastSbUserMarketingQuestionCriteria->equals($criteria)) {
+					$this->collSbUserMarketingQuestions = SbUserMarketingQuestionPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastSbUserMarketingQuestionCriteria = $criteria;
+		return $this->collSbUserMarketingQuestions;
+	}
+
+	/**
+	 * Returns the number of related SbUserMarketingQuestion objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related SbUserMarketingQuestion objects.
+	 * @throws     PropelException
+	 */
+	public function countSbUserMarketingQuestions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collSbUserMarketingQuestions === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+				$count = SbUserMarketingQuestionPeer::doCount($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+				if (!isset($this->lastSbUserMarketingQuestionCriteria) || !$this->lastSbUserMarketingQuestionCriteria->equals($criteria)) {
+					$count = SbUserMarketingQuestionPeer::doCount($criteria, $con);
+				} else {
+					$count = count($this->collSbUserMarketingQuestions);
+				}
+			} else {
+				$count = count($this->collSbUserMarketingQuestions);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a SbUserMarketingQuestion object to this object
+	 * through the SbUserMarketingQuestion foreign key attribute.
+	 *
+	 * @param      SbUserMarketingQuestion $l SbUserMarketingQuestion
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addSbUserMarketingQuestion(SbUserMarketingQuestion $l)
+	{
+		if ($this->collSbUserMarketingQuestions === null) {
+			$this->initSbUserMarketingQuestions();
+		}
+		if (!in_array($l, $this->collSbUserMarketingQuestions, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collSbUserMarketingQuestions, $l);
+			$l->setsfEasyAuthUser($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUser is new, it will return
+	 * an empty collection; or if this sfEasyAuthUser has previously
+	 * been saved, it will retrieve related SbUserMarketingQuestions from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfEasyAuthUser.
+	 */
+	public function getSbUserMarketingQuestionsJoinSbMarketingQuestion($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserMarketingQuestions === null) {
+			if ($this->isNew()) {
+				$this->collSbUserMarketingQuestions = array();
+			} else {
+
+				$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+				$this->collSbUserMarketingQuestions = SbUserMarketingQuestionPeer::doSelectJoinSbMarketingQuestion($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(SbUserMarketingQuestionPeer::USER_ID, $this->id);
+
+			if (!isset($this->lastSbUserMarketingQuestionCriteria) || !$this->lastSbUserMarketingQuestionCriteria->equals($criteria)) {
+				$this->collSbUserMarketingQuestions = SbUserMarketingQuestionPeer::doSelectJoinSbMarketingQuestion($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastSbUserMarketingQuestionCriteria = $criteria;
+
+		return $this->collSbUserMarketingQuestions;
+	}
+
+	/**
 	 * Resets all collections of referencing foreign keys.
 	 *
 	 * This method is a user-space workaround for PHP's inability to garbage collect objects
@@ -2146,9 +2571,21 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collSbUserMailingLists) {
+				foreach ((array) $this->collSbUserMailingLists as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
+			if ($this->collSbUserMarketingQuestions) {
+				foreach ((array) $this->collSbUserMarketingQuestions as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
 		$this->collSfEasyAuthUserCredentialss = null;
+		$this->collSbUserMailingLists = null;
+		$this->collSbUserMarketingQuestions = null;
 	}
 
 

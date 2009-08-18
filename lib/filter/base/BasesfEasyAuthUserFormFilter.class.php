@@ -34,6 +34,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       'has_extra_credentials'           => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
       'type'                            => new sfWidgetFormFilterInput(),
       'profile_id'                      => new sfWidgetFormFilterInput(),
+      'sb_user_marketing_question_list' => new sfWidgetFormPropelChoice(array('model' => 'SbMarketingQuestion', 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
@@ -56,6 +57,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       'has_extra_credentials'           => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
       'type'                            => new sfValidatorPass(array('required' => false)),
       'profile_id'                      => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'sb_user_marketing_question_list' => new sfValidatorPropelChoice(array('model' => 'SbMarketingQuestion', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('sf_easy_auth_user_filters[%s]');
@@ -63,6 +65,31 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
     parent::setup();
+  }
+
+  public function addSbUserMarketingQuestionListColumnCriteria(Criteria $criteria, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $criteria->addJoin(SbUserMarketingQuestionPeer::USER_ID, sfEasyAuthUserPeer::ID);
+
+    $value = array_pop($values);
+    $criterion = $criteria->getNewCriterion(SbUserMarketingQuestionPeer::QUESTION_ID, $value);
+
+    foreach ($values as $value)
+    {
+      $criterion->addOr($criteria->getNewCriterion(SbUserMarketingQuestionPeer::QUESTION_ID, $value));
+    }
+
+    $criteria->add($criterion);
   }
 
   public function getModelName()
@@ -93,6 +120,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       'has_extra_credentials'           => 'Boolean',
       'type'                            => 'Text',
       'profile_id'                      => 'Number',
+      'sb_user_marketing_question_list' => 'ManyKey',
     );
   }
 }

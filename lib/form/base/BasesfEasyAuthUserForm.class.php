@@ -33,6 +33,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'has_extra_credentials'           => new sfWidgetFormInputCheckbox(),
       'type'                            => new sfWidgetFormInput(),
       'profile_id'                      => new sfWidgetFormInput(),
+      'sb_user_marketing_question_list' => new sfWidgetFormPropelChoiceMany(array('model' => 'SbMarketingQuestion')),
     ));
 
     $this->setValidators(array(
@@ -56,6 +57,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'has_extra_credentials'           => new sfValidatorBoolean(array('required' => false)),
       'type'                            => new sfValidatorString(array('max_length' => 10, 'required' => false)),
       'profile_id'                      => new sfValidatorInteger(array('required' => false)),
+      'sb_user_marketing_question_list' => new sfValidatorPropelChoiceMany(array('model' => 'SbMarketingQuestion', 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(
@@ -78,5 +80,64 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
     return 'sfEasyAuthUser';
   }
 
+
+  public function updateDefaultsFromObject()
+  {
+    parent::updateDefaultsFromObject();
+
+    if (isset($this->widgetSchema['sb_user_marketing_question_list']))
+    {
+      $values = array();
+      foreach ($this->object->getSbUserMarketingQuestions() as $obj)
+      {
+        $values[] = $obj->getQuestionId();
+      }
+
+      $this->setDefault('sb_user_marketing_question_list', $values);
+    }
+
+  }
+
+  protected function doSave($con = null)
+  {
+    parent::doSave($con);
+
+    $this->saveSbUserMarketingQuestionList($con);
+  }
+
+  public function saveSbUserMarketingQuestionList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['sb_user_marketing_question_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (is_null($con))
+    {
+      $con = $this->getConnection();
+    }
+
+    $c = new Criteria();
+    $c->add(SbUserMarketingQuestionPeer::USER_ID, $this->object->getPrimaryKey());
+    SbUserMarketingQuestionPeer::doDelete($c, $con);
+
+    $values = $this->getValue('sb_user_marketing_question_list');
+    if (is_array($values))
+    {
+      foreach ($values as $value)
+      {
+        $obj = new SbUserMarketingQuestion();
+        $obj->setUserId($this->object->getPrimaryKey());
+        $obj->setQuestionId($value);
+        $obj->save();
+      }
+    }
+  }
 
 }

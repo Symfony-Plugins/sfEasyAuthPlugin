@@ -70,7 +70,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           $this->eaUser->save();
           
           // call an event indicating that a user has confirmed their email address
-          $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+          $this->getEventDispatcher()->notify(new sfEvent(
             $this,
             'sf_easy_auth.email_confirmed',
             array(
@@ -173,7 +173,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           if (!$currentlyTemporarilyLocked)
           {
             // call an event to notify that a user's account will be temporarily locked
-            $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+            $this->getEventDispatcher()->notify(new sfEvent(
               $this,
               'sf_easy_auth.account_temporarily_locked',
               array(

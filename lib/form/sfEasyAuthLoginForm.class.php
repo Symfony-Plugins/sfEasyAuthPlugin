@@ -24,7 +24,7 @@ class sfEasyAuthLoginForm extends sfForm
     $this->getWidgetSchema()->setFormFormatterName('div');
     
     $this->widgetSchema->setLabels(array(
-      'username' => 'User name',
+      'username' => 'Username',
       'password' => 'Password',
       'remember' => 'Remember me'
     ));

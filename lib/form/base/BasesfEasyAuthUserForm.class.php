@@ -34,6 +34,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'type'                            => new sfWidgetFormInput(),
       'profile_id'                      => new sfWidgetFormInput(),
       'sb_user_marketing_question_list' => new sfWidgetFormPropelChoiceMany(array('model' => 'SbMarketingQuestion')),
+      'sb_user_mailing_list_list'       => new sfWidgetFormPropelChoiceMany(array('model' => 'SbMailingList')),
     ));
 
     $this->setValidators(array(
@@ -58,6 +59,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       'type'                            => new sfValidatorString(array('max_length' => 10, 'required' => false)),
       'profile_id'                      => new sfValidatorInteger(array('required' => false)),
       'sb_user_marketing_question_list' => new sfValidatorPropelChoiceMany(array('model' => 'SbMarketingQuestion', 'required' => false)),
+      'sb_user_mailing_list_list'       => new sfValidatorPropelChoiceMany(array('model' => 'SbMailingList', 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(
@@ -96,6 +98,17 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
       $this->setDefault('sb_user_marketing_question_list', $values);
     }
 
+    if (isset($this->widgetSchema['sb_user_mailing_list_list']))
+    {
+      $values = array();
+      foreach ($this->object->getSbUserMailingLists() as $obj)
+      {
+        $values[] = $obj->getMailingListId();
+      }
+
+      $this->setDefault('sb_user_mailing_list_list', $values);
+    }
+
   }
 
   protected function doSave($con = null)
@@ -103,6 +116,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
     parent::doSave($con);
 
     $this->saveSbUserMarketingQuestionList($con);
+    $this->saveSbUserMailingListList($con);
   }
 
   public function saveSbUserMarketingQuestionList($con = null)
@@ -135,6 +149,41 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
         $obj = new SbUserMarketingQuestion();
         $obj->setUserId($this->object->getPrimaryKey());
         $obj->setQuestionId($value);
+        $obj->save();
+      }
+    }
+  }
+
+  public function saveSbUserMailingListList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['sb_user_mailing_list_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (is_null($con))
+    {
+      $con = $this->getConnection();
+    }
+
+    $c = new Criteria();
+    $c->add(SbUserMailingListPeer::USER_ID, $this->object->getPrimaryKey());
+    SbUserMailingListPeer::doDelete($c, $con);
+
+    $values = $this->getValue('sb_user_mailing_list_list');
+    if (is_array($values))
+    {
+      foreach ($values as $value)
+      {
+        $obj = new SbUserMailingList();
+        $obj->setUserId($this->object->getPrimaryKey());
+        $obj->setMailingListId($value);
         $obj->save();
       }
     }

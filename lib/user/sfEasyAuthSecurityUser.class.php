@@ -173,7 +173,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           if (!$currentlyTemporarilyLocked)
           {
             // call an event to notify that a user's account will be temporarily locked
-            $this->getEventDispatcher()->notify(new sfEvent(
+            sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent(
               $this,
               'sf_easy_auth.account_temporarily_locked',
               array(

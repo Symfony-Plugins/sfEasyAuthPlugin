@@ -7,16 +7,16 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model.om
  */
-abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
+abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent {
 
 
-  const PEER = 'sfEasyAuthUserPeer';
+  const PEER = 'sfEasyAuthUserBasePeer';
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        sfEasyAuthUserPeer
+	 * @var        sfEasyAuthUserBasePeer
 	 */
 	protected static $peer;
 
@@ -190,7 +190,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	protected $alreadyInValidation = false;
 
 	/**
-	 * Initializes internal state of BasesfEasyAuthUser object.
+	 * Initializes internal state of BasesfEasyAuthUserBase object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -586,7 +586,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
@@ -596,7 +596,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::ID;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::ID;
 		}
 
 		return $this;
@@ -606,7 +606,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [username] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setUsername($v)
 	{
@@ -616,7 +616,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->username !== $v) {
 			$this->username = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::USERNAME;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::USERNAME;
 		}
 
 		return $this;
@@ -626,7 +626,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [password] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setPassword($v)
 	{
@@ -636,7 +636,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->password !== $v) {
 			$this->password = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::PASSWORD;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::PASSWORD;
 		}
 
 		return $this;
@@ -646,7 +646,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [email] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setEmail($v)
 	{
@@ -656,7 +656,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->email !== $v) {
 			$this->email = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::EMAIL;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::EMAIL;
 		}
 
 		return $this;
@@ -666,7 +666,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [email_confirmed] column.
 	 * 
 	 * @param      boolean $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setEmailConfirmed($v)
 	{
@@ -676,7 +676,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->email_confirmed !== $v || $v === false) {
 			$this->email_confirmed = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::EMAIL_CONFIRMED;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::EMAIL_CONFIRMED;
 		}
 
 		return $this;
@@ -686,7 +686,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [salt] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setSalt($v)
 	{
@@ -696,7 +696,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->salt !== $v) {
 			$this->salt = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::SALT;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::SALT;
 		}
 
 		return $this;
@@ -707,7 +707,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -744,7 +744,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::CREATED_AT;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -756,7 +756,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -793,7 +793,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::UPDATED_AT;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -805,7 +805,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setLastLogin($v)
 	{
@@ -842,7 +842,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->last_login = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::LAST_LOGIN;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::LAST_LOGIN;
 			}
 		} // if either are not null
 
@@ -854,7 +854,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setLastLoginAttempt($v)
 	{
@@ -891,7 +891,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->last_login_attempt = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::LAST_LOGIN_ATTEMPT;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::LAST_LOGIN_ATTEMPT;
 			}
 		} // if either are not null
 
@@ -902,7 +902,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [failed_logins] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setFailedLogins($v)
 	{
@@ -912,7 +912,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->failed_logins !== $v || $v === 0) {
 			$this->failed_logins = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::FAILED_LOGINS;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::FAILED_LOGINS;
 		}
 
 		return $this;
@@ -922,7 +922,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [locked_by_admins] column.
 	 * 
 	 * @param      boolean $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setLockedByAdmins($v)
 	{
@@ -932,7 +932,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->locked_by_admins !== $v || $v === false) {
 			$this->locked_by_admins = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::LOCKED_BY_ADMINS;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::LOCKED_BY_ADMINS;
 		}
 
 		return $this;
@@ -942,7 +942,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [remember_key] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setRememberKey($v)
 	{
@@ -952,7 +952,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->remember_key !== $v) {
 			$this->remember_key = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::REMEMBER_KEY;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::REMEMBER_KEY;
 		}
 
 		return $this;
@@ -963,7 +963,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setRememberKeyLifetime($v)
 	{
@@ -1000,7 +1000,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->remember_key_lifetime = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::REMEMBER_KEY_LIFETIME;
 			}
 		} // if either are not null
 
@@ -1011,7 +1011,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [auto_login_hash] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setAutoLoginHash($v)
 	{
@@ -1021,7 +1021,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->auto_login_hash !== $v) {
 			$this->auto_login_hash = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::AUTO_LOGIN_HASH;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::AUTO_LOGIN_HASH;
 		}
 
 		return $this;
@@ -1031,7 +1031,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [password_reset_token] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setPasswordResetToken($v)
 	{
@@ -1041,7 +1041,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->password_reset_token !== $v) {
 			$this->password_reset_token = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN;
 		}
 
 		return $this;
@@ -1052,7 +1052,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setPasswordResetTokenCreatedAt($v)
 	{
@@ -1089,7 +1089,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->password_reset_token_created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN_CREATED_AT;
 			}
 		} // if either are not null
 
@@ -1100,7 +1100,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [has_extra_credentials] column.
 	 * 
 	 * @param      boolean $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setHasExtraCredentials($v)
 	{
@@ -1110,7 +1110,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->has_extra_credentials !== $v || $v === false) {
 			$this->has_extra_credentials = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::HAS_EXTRA_CREDENTIALS;
 		}
 
 		return $this;
@@ -1120,7 +1120,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [type] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setType($v)
 	{
@@ -1130,7 +1130,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->type !== $v) {
 			$this->type = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::TYPE;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::TYPE;
 		}
 
 		return $this;
@@ -1140,7 +1140,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Set the value of [profile_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     sfEasyAuthUser The current object (for fluent API support)
+	 * @return     sfEasyAuthUserBase The current object (for fluent API support)
 	 */
 	public function setProfileId($v)
 	{
@@ -1150,7 +1150,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 		if ($this->profile_id !== $v || $v === 0) {
 			$this->profile_id = $v;
-			$this->modifiedColumns[] = sfEasyAuthUserPeer::PROFILE_ID;
+			$this->modifiedColumns[] = sfEasyAuthUserBasePeer::PROFILE_ID;
 		}
 
 		return $this;
@@ -1167,7 +1167,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserPeer::EMAIL_CONFIRMED,sfEasyAuthUserPeer::FAILED_LOGINS,sfEasyAuthUserPeer::LOCKED_BY_ADMINS,sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS,sfEasyAuthUserPeer::PROFILE_ID))) {
+			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserBasePeer::EMAIL_CONFIRMED,sfEasyAuthUserBasePeer::FAILED_LOGINS,sfEasyAuthUserBasePeer::LOCKED_BY_ADMINS,sfEasyAuthUserBasePeer::HAS_EXTRA_CREDENTIALS,sfEasyAuthUserBasePeer::PROFILE_ID))) {
 				return false;
 			}
 
@@ -1242,10 +1242,10 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 20; // 20 = sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 20; // 20 = sfEasyAuthUserBasePeer::NUM_COLUMNS - sfEasyAuthUserBasePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating sfEasyAuthUser object", $e);
+			throw new PropelException("Error populating sfEasyAuthUserBase object", $e);
 		}
 	}
 
@@ -1288,13 +1288,13 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(sfEasyAuthUserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserBasePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		$stmt = sfEasyAuthUserPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		$stmt = sfEasyAuthUserBasePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -1328,7 +1328,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function delete(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BasesfEasyAuthUser:delete:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserBase:delete:pre') as $callable)
     {
       $ret = call_user_func($callable, $this, $con);
       if ($ret)
@@ -1343,12 +1343,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(sfEasyAuthUserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserBasePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
-			sfEasyAuthUserPeer::doDelete($this, $con);
+			sfEasyAuthUserBasePeer::doDelete($this, $con);
 			$this->setDeleted(true);
 			$con->commit();
 		} catch (PropelException $e) {
@@ -1357,7 +1357,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 	
 
-    foreach (sfMixer::getCallables('BasesfEasyAuthUser:delete:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserBase:delete:post') as $callable)
     {
       call_user_func($callable, $this, $con);
     }
@@ -1379,7 +1379,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function save(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BasesfEasyAuthUser:save:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserBase:save:pre') as $callable)
     {
       $affectedRows = call_user_func($callable, $this, $con);
       if (is_int($affectedRows))
@@ -1389,12 +1389,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
     }
 
 
-    if ($this->isNew() && !$this->isColumnModified(sfEasyAuthUserPeer::CREATED_AT))
+    if ($this->isNew() && !$this->isColumnModified(sfEasyAuthUserBasePeer::CREATED_AT))
     {
       $this->setCreatedAt(time());
     }
 
-    if ($this->isModified() && !$this->isColumnModified(sfEasyAuthUserPeer::UPDATED_AT))
+    if ($this->isModified() && !$this->isColumnModified(sfEasyAuthUserBasePeer::UPDATED_AT))
     {
       $this->setUpdatedAt(time());
     }
@@ -1404,19 +1404,19 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(sfEasyAuthUserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserBasePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$affectedRows = $this->doSave($con);
 			$con->commit();
-    foreach (sfMixer::getCallables('BasesfEasyAuthUser:save:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserBase:save:post') as $callable)
     {
       call_user_func($callable, $this, $con, $affectedRows);
     }
 
-			sfEasyAuthUserPeer::addInstanceToPool($this);
+			sfEasyAuthUserBasePeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -1442,13 +1442,13 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$this->alreadyInSave = true;
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = sfEasyAuthUserPeer::ID;
+				$this->modifiedColumns[] = sfEasyAuthUserBasePeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = sfEasyAuthUserPeer::doInsert($this, $con);
+					$pk = sfEasyAuthUserBasePeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -1457,7 +1457,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
 					$this->setNew(false);
 				} else {
-					$affectedRows += sfEasyAuthUserPeer::doUpdate($this, $con);
+					$affectedRows += sfEasyAuthUserBasePeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -1553,7 +1553,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 			$failureMap = array();
 
 
-			if (($retval = sfEasyAuthUserPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = sfEasyAuthUserBasePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -1600,7 +1600,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = sfEasyAuthUserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = sfEasyAuthUserBasePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -1694,7 +1694,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = sfEasyAuthUserPeer::getFieldNames($keyType);
+		$keys = sfEasyAuthUserBasePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getUsername(),
@@ -1732,7 +1732,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = sfEasyAuthUserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = sfEasyAuthUserBasePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1829,7 +1829,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = sfEasyAuthUserPeer::getFieldNames($keyType);
+		$keys = sfEasyAuthUserBasePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setUsername($arr[$keys[1]]);
@@ -1860,28 +1860,28 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(sfEasyAuthUserPeer::ID)) $criteria->add(sfEasyAuthUserPeer::ID, $this->id);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::USERNAME)) $criteria->add(sfEasyAuthUserPeer::USERNAME, $this->username);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD)) $criteria->add(sfEasyAuthUserPeer::PASSWORD, $this->password);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::EMAIL)) $criteria->add(sfEasyAuthUserPeer::EMAIL, $this->email);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::EMAIL_CONFIRMED)) $criteria->add(sfEasyAuthUserPeer::EMAIL_CONFIRMED, $this->email_confirmed);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::SALT)) $criteria->add(sfEasyAuthUserPeer::SALT, $this->salt);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::CREATED_AT)) $criteria->add(sfEasyAuthUserPeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::UPDATED_AT)) $criteria->add(sfEasyAuthUserPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::LAST_LOGIN)) $criteria->add(sfEasyAuthUserPeer::LAST_LOGIN, $this->last_login);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::LAST_LOGIN_ATTEMPT)) $criteria->add(sfEasyAuthUserPeer::LAST_LOGIN_ATTEMPT, $this->last_login_attempt);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::FAILED_LOGINS)) $criteria->add(sfEasyAuthUserPeer::FAILED_LOGINS, $this->failed_logins);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::LOCKED_BY_ADMINS)) $criteria->add(sfEasyAuthUserPeer::LOCKED_BY_ADMINS, $this->locked_by_admins);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY, $this->remember_key);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserPeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::AUTO_LOGIN_HASH)) $criteria->add(sfEasyAuthUserPeer::AUTO_LOGIN_HASH, $this->auto_login_hash);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN)) $criteria->add(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN, $this->password_reset_token);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT)) $criteria->add(sfEasyAuthUserPeer::PASSWORD_RESET_TOKEN_CREATED_AT, $this->password_reset_token_created_at);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS)) $criteria->add(sfEasyAuthUserPeer::HAS_EXTRA_CREDENTIALS, $this->has_extra_credentials);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::TYPE)) $criteria->add(sfEasyAuthUserPeer::TYPE, $this->type);
-		if ($this->isColumnModified(sfEasyAuthUserPeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserPeer::PROFILE_ID, $this->profile_id);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::ID)) $criteria->add(sfEasyAuthUserBasePeer::ID, $this->id);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::USERNAME)) $criteria->add(sfEasyAuthUserBasePeer::USERNAME, $this->username);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::PASSWORD)) $criteria->add(sfEasyAuthUserBasePeer::PASSWORD, $this->password);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::EMAIL)) $criteria->add(sfEasyAuthUserBasePeer::EMAIL, $this->email);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::EMAIL_CONFIRMED)) $criteria->add(sfEasyAuthUserBasePeer::EMAIL_CONFIRMED, $this->email_confirmed);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::SALT)) $criteria->add(sfEasyAuthUserBasePeer::SALT, $this->salt);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::CREATED_AT)) $criteria->add(sfEasyAuthUserBasePeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::UPDATED_AT)) $criteria->add(sfEasyAuthUserBasePeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::LAST_LOGIN)) $criteria->add(sfEasyAuthUserBasePeer::LAST_LOGIN, $this->last_login);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::LAST_LOGIN_ATTEMPT)) $criteria->add(sfEasyAuthUserBasePeer::LAST_LOGIN_ATTEMPT, $this->last_login_attempt);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::FAILED_LOGINS)) $criteria->add(sfEasyAuthUserBasePeer::FAILED_LOGINS, $this->failed_logins);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::LOCKED_BY_ADMINS)) $criteria->add(sfEasyAuthUserBasePeer::LOCKED_BY_ADMINS, $this->locked_by_admins);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::REMEMBER_KEY)) $criteria->add(sfEasyAuthUserBasePeer::REMEMBER_KEY, $this->remember_key);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::REMEMBER_KEY_LIFETIME)) $criteria->add(sfEasyAuthUserBasePeer::REMEMBER_KEY_LIFETIME, $this->remember_key_lifetime);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::AUTO_LOGIN_HASH)) $criteria->add(sfEasyAuthUserBasePeer::AUTO_LOGIN_HASH, $this->auto_login_hash);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN)) $criteria->add(sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN, $this->password_reset_token);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN_CREATED_AT)) $criteria->add(sfEasyAuthUserBasePeer::PASSWORD_RESET_TOKEN_CREATED_AT, $this->password_reset_token_created_at);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::HAS_EXTRA_CREDENTIALS)) $criteria->add(sfEasyAuthUserBasePeer::HAS_EXTRA_CREDENTIALS, $this->has_extra_credentials);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::TYPE)) $criteria->add(sfEasyAuthUserBasePeer::TYPE, $this->type);
+		if ($this->isColumnModified(sfEasyAuthUserBasePeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserBasePeer::PROFILE_ID, $this->profile_id);
 
 		return $criteria;
 	}
@@ -1896,9 +1896,9 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+		$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 
-		$criteria->add(sfEasyAuthUserPeer::ID, $this->id);
+		$criteria->add(sfEasyAuthUserBasePeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -1929,7 +1929,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of sfEasyAuthUser (or compatible) type.
+	 * @param      object $copyObj An object of sfEasyAuthUserBase (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -2016,7 +2016,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     sfEasyAuthUser Clone of current object.
+	 * @return     sfEasyAuthUserBase Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -2035,12 +2035,12 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     sfEasyAuthUserPeer
+	 * @return     sfEasyAuthUserBasePeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new sfEasyAuthUserPeer();
+			self::$peer = new sfEasyAuthUserBasePeer();
 		}
 		return self::$peer;
 	}
@@ -2077,8 +2077,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Gets an array of SfEasyAuthUserCredentials objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this sfEasyAuthUser has previously been saved, it will retrieve
-	 * related SfEasyAuthUserCredentialss from storage. If this sfEasyAuthUser is new, it will return
+	 * Otherwise if this sfEasyAuthUserBase has previously been saved, it will retrieve
+	 * related SfEasyAuthUserCredentialss from storage. If this sfEasyAuthUserBase is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -2089,7 +2089,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function getSfEasyAuthUserCredentialss($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -2138,7 +2138,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function countSfEasyAuthUserCredentialss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -2195,7 +2195,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collSfEasyAuthUserCredentialss, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collSfEasyAuthUserCredentialss, $l);
-			$l->setsfEasyAuthUser($this);
+			$l->setsfEasyAuthUserBase($this);
 		}
 	}
 
@@ -2231,8 +2231,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Gets an array of SbUserMailingList objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this sfEasyAuthUser has previously been saved, it will retrieve
-	 * related SbUserMailingLists from storage. If this sfEasyAuthUser is new, it will return
+	 * Otherwise if this sfEasyAuthUserBase has previously been saved, it will retrieve
+	 * related SbUserMailingLists from storage. If this sfEasyAuthUserBase is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -2243,7 +2243,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function getSbUserMailingLists($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -2292,7 +2292,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function countSbUserMailingLists(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -2349,7 +2349,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collSbUserMailingLists, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collSbUserMailingLists, $l);
-			$l->setsfEasyAuthUser($this);
+			$l->setsfEasyAuthUserBase($this);
 		}
 	}
 
@@ -2357,18 +2357,18 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this sfEasyAuthUser is new, it will return
-	 * an empty collection; or if this sfEasyAuthUser has previously
+	 * Otherwise if this sfEasyAuthUserBase is new, it will return
+	 * an empty collection; or if this sfEasyAuthUserBase has previously
 	 * been saved, it will retrieve related SbUserMailingLists from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in sfEasyAuthUser.
+	 * actually need in sfEasyAuthUserBase.
 	 */
 	public function getSbUserMailingListsJoinSbMailingList($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -2432,8 +2432,8 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	 * Gets an array of SbUserMarketingQuestion objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this sfEasyAuthUser has previously been saved, it will retrieve
-	 * related SbUserMarketingQuestions from storage. If this sfEasyAuthUser is new, it will return
+	 * Otherwise if this sfEasyAuthUserBase has previously been saved, it will retrieve
+	 * related SbUserMarketingQuestions from storage. If this sfEasyAuthUserBase is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -2444,7 +2444,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function getSbUserMarketingQuestions($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -2493,7 +2493,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	public function countSbUserMarketingQuestions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -2550,7 +2550,7 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collSbUserMarketingQuestions, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collSbUserMarketingQuestions, $l);
-			$l->setsfEasyAuthUser($this);
+			$l->setsfEasyAuthUserBase($this);
 		}
 	}
 
@@ -2558,18 +2558,18 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this sfEasyAuthUser is new, it will return
-	 * an empty collection; or if this sfEasyAuthUser has previously
+	 * Otherwise if this sfEasyAuthUserBase is new, it will return
+	 * an empty collection; or if this sfEasyAuthUserBase has previously
 	 * been saved, it will retrieve related SbUserMarketingQuestions from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in sfEasyAuthUser.
+	 * actually need in sfEasyAuthUserBase.
 	 */
 	public function getSbUserMarketingQuestionsJoinSbMarketingQuestion($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -2638,9 +2638,9 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
 
   public function __call($method, $arguments)
   {
-    if (!$callable = sfMixer::getCallable('BasesfEasyAuthUser:'.$method))
+    if (!$callable = sfMixer::getCallable('BasesfEasyAuthUserBase:'.$method))
     {
-      throw new sfException(sprintf('Call to undefined method BasesfEasyAuthUser::%s', $method));
+      throw new sfException(sprintf('Call to undefined method BasesfEasyAuthUserBase::%s', $method));
     }
 
     array_unshift($arguments, $this);
@@ -2649,4 +2649,4 @@ abstract class BasesfEasyAuthUser extends BaseObject  implements Persistent {
   }
 
 
-} // BasesfEasyAuthUser
+} // BasesfEasyAuthUserBase

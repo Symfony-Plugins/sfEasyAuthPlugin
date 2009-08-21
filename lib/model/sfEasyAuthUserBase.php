@@ -1,6 +1,6 @@
 <?php
 
-class sfEasyAuthUser extends BasesfEasyAuthUser
+class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
 {
   const PASSWORD_MASK = '**PASSWORD MASKED**';
   

@@ -420,7 +420,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related sfEasyAuthUser table
+	 * Returns the number of rows matching criteria, joining the related sfEasyAuthUserBase table
 	 *
 	 * @param      Criteria $c
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -428,7 +428,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinsfEasyAuthUser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinsfEasyAuthUserBase(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -455,7 +455,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserPeer::ID,), $join_behavior);
+		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 
 
     foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
@@ -477,7 +477,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 
 	/**
-	 * Selects a collection of SfEasyAuthUserCredentials objects pre-filled with their sfEasyAuthUser objects.
+	 * Selects a collection of SfEasyAuthUserCredentials objects pre-filled with their sfEasyAuthUserBase objects.
 	 * @param      Criteria  $c
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -485,7 +485,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinsfEasyAuthUser(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinsfEasyAuthUserBase(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 
     foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doSelectJoin:doSelectJoin') as $callable)
@@ -503,9 +503,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 		SfEasyAuthUserCredentialsPeer::addSelectColumns($c);
 		$startcol = (SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
-		sfEasyAuthUserPeer::addSelectColumns($c);
+		sfEasyAuthUserBasePeer::addSelectColumns($c);
 
-		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserPeer::ID,), $join_behavior);
+		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
@@ -525,20 +525,20 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 				SfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = sfEasyAuthUserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = sfEasyAuthUserBasePeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = sfEasyAuthUserPeer::getInstanceFromPool($key2);
+				$obj2 = sfEasyAuthUserBasePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = sfEasyAuthUserPeer::getOMClass($row, $startcol);
+					$omClass = sfEasyAuthUserBasePeer::getOMClass($row, $startcol);
 
 					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					sfEasyAuthUserPeer::addInstanceToPool($obj2, $key2);
+					sfEasyAuthUserBasePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (SfEasyAuthUserCredentials) to $obj2 (sfEasyAuthUser)
+				// Add the $obj1 (SfEasyAuthUserCredentials) to $obj2 (sfEasyAuthUserBase)
 				$obj2->addSfEasyAuthUserCredentials($obj1);
 
 			} // if joined row was not null
@@ -586,7 +586,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserPeer::ID,), $join_behavior);
+		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 
     foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
     {
@@ -634,10 +634,10 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		SfEasyAuthUserCredentialsPeer::addSelectColumns($c);
 		$startcol2 = (SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		sfEasyAuthUserPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (sfEasyAuthUserPeer::NUM_COLUMNS - sfEasyAuthUserPeer::NUM_LAZY_LOAD_COLUMNS);
+		sfEasyAuthUserBasePeer::addSelectColumns($c);
+		$startcol3 = $startcol2 + (sfEasyAuthUserBasePeer::NUM_COLUMNS - sfEasyAuthUserBasePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserPeer::ID,), $join_behavior);
+		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
@@ -656,23 +656,23 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 				SfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined sfEasyAuthUser rows
+			// Add objects for joined sfEasyAuthUserBase rows
 
-			$key2 = sfEasyAuthUserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = sfEasyAuthUserBasePeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = sfEasyAuthUserPeer::getInstanceFromPool($key2);
+				$obj2 = sfEasyAuthUserBasePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = sfEasyAuthUserPeer::getOMClass($row, $startcol2);
+					$omClass = sfEasyAuthUserBasePeer::getOMClass($row, $startcol2);
 
 
 					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					sfEasyAuthUserPeer::addInstanceToPool($obj2, $key2);
+					sfEasyAuthUserBasePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (SfEasyAuthUserCredentials) to the collection in $obj2 (sfEasyAuthUser)
+				// Add the $obj1 (SfEasyAuthUserCredentials) to the collection in $obj2 (sfEasyAuthUserBase)
 				$obj2->addSfEasyAuthUserCredentials($obj1);
 			} // if joined row not null
 

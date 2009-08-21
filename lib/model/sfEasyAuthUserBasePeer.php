@@ -1,6 +1,6 @@
 <?php
 
-class sfEasyAuthUserPeer extends BasesfEasyAuthUserPeer
+class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
 {
   /**
    * Retrieve a user by their remember me key

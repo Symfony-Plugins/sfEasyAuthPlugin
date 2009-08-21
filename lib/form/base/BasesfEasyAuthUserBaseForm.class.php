@@ -1,14 +1,14 @@
 <?php
 
 /**
- * sfEasyAuthUser form base class.
+ * sfEasyAuthUserBase form base class.
  *
  * @package    ##PROJECT_NAME##
  * @subpackage form
  * @author     ##AUTHOR_NAME##
  * @version    SVN: $Id: sfPropelFormGeneratedTemplate.php 16976 2009-04-04 12:47:44Z fabien $
  */
-class BasesfEasyAuthUserForm extends BaseFormPropel
+class BasesfEasyAuthUserBaseForm extends BaseFormPropel
 {
   public function setup()
   {
@@ -38,7 +38,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'                              => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUser', 'column' => 'id', 'required' => false)),
+      'id'                              => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUserBase', 'column' => 'id', 'required' => false)),
       'username'                        => new sfValidatorString(array('max_length' => 50)),
       'password'                        => new sfValidatorString(array('max_length' => 32)),
       'email'                           => new sfValidatorString(array('max_length' => 255)),
@@ -64,13 +64,13 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
 
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
-        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('username'))),
-        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('email'))),
-        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUser', 'column' => array('remember_key'))),
+        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUserBase', 'column' => array('username'))),
+        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUserBase', 'column' => array('email'))),
+        new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUserBase', 'column' => array('remember_key'))),
       ))
     );
 
-    $this->widgetSchema->setNameFormat('sf_easy_auth_user[%s]');
+    $this->widgetSchema->setNameFormat('sf_easy_auth_user_base[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
@@ -79,7 +79,7 @@ class BasesfEasyAuthUserForm extends BaseFormPropel
 
   public function getModelName()
   {
-    return 'sfEasyAuthUser';
+    return 'sfEasyAuthUserBase';
   }
 
 

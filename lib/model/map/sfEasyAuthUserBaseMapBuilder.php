@@ -13,12 +13,12 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model.map
  */
-class sfEasyAuthUserMapBuilder implements MapBuilder {
+class sfEasyAuthUserBaseMapBuilder implements MapBuilder {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'plugins.sfEasyAuthPlugin.lib.model.map.sfEasyAuthUserMapBuilder';
+	const CLASS_NAME = 'plugins.sfEasyAuthPlugin.lib.model.map.sfEasyAuthUserBaseMapBuilder';
 
 	/**
 	 * The database map.
@@ -54,11 +54,11 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 	 */
 	public function doBuild()
 	{
-		$this->dbMap = Propel::getDatabaseMap(sfEasyAuthUserPeer::DATABASE_NAME);
+		$this->dbMap = Propel::getDatabaseMap(sfEasyAuthUserBasePeer::DATABASE_NAME);
 
-		$tMap = $this->dbMap->addTable(sfEasyAuthUserPeer::TABLE_NAME);
-		$tMap->setPhpName('sfEasyAuthUser');
-		$tMap->setClassname('sfEasyAuthUser');
+		$tMap = $this->dbMap->addTable(sfEasyAuthUserBasePeer::TABLE_NAME);
+		$tMap->setPhpName('sfEasyAuthUserBase');
+		$tMap->setClassname('sfEasyAuthUserBase');
 
 		$tMap->setUseIdGenerator(true);
 
@@ -104,4 +104,4 @@ class sfEasyAuthUserMapBuilder implements MapBuilder {
 
 	} // doBuild()
 
-} // sfEasyAuthUserMapBuilder
+} // sfEasyAuthUserBaseMapBuilder

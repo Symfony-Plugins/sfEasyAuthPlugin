@@ -15,13 +15,13 @@ class BaseSfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'user_id'    => new sfWidgetFormPropelChoice(array('model' => 'sfEasyAuthUser', 'add_empty' => true)),
+      'user_id'    => new sfWidgetFormPropelChoice(array('model' => 'sfEasyAuthUserBase', 'add_empty' => true)),
       'credential' => new sfWidgetFormFilterInput(),
       'profile_id' => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
-      'user_id'    => new sfValidatorPropelChoice(array('required' => false, 'model' => 'sfEasyAuthUser', 'column' => 'id')),
+      'user_id'    => new sfValidatorPropelChoice(array('required' => false, 'model' => 'sfEasyAuthUserBase', 'column' => 'id')),
       'credential' => new sfValidatorPass(array('required' => false)),
       'profile_id' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));

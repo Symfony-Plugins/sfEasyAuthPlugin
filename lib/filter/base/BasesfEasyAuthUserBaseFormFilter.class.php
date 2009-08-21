@@ -3,14 +3,14 @@
 require_once(sfConfig::get('sf_lib_dir').'/filter/base/BaseFormFilterPropel.class.php');
 
 /**
- * sfEasyAuthUser filter form base class.
+ * sfEasyAuthUserBase filter form base class.
  *
  * @package    ##PROJECT_NAME##
  * @subpackage filter
  * @author     ##AUTHOR_NAME##
  * @version    SVN: $Id: sfPropelFormFilterGeneratedTemplate.php 16976 2009-04-04 12:47:44Z fabien $
  */
-class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
+class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
 {
   public function setup()
   {
@@ -62,7 +62,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       'sb_user_mailing_list_list'       => new sfValidatorPropelChoice(array('model' => 'SbMailingList', 'required' => false)),
     ));
 
-    $this->widgetSchema->setNameFormat('sf_easy_auth_user_filters[%s]');
+    $this->widgetSchema->setNameFormat('sf_easy_auth_user_base_filters[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
@@ -81,7 +81,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       return;
     }
 
-    $criteria->addJoin(SbUserMarketingQuestionPeer::USER_ID, sfEasyAuthUserPeer::ID);
+    $criteria->addJoin(SbUserMarketingQuestionPeer::USER_ID, sfEasyAuthUserBasePeer::ID);
 
     $value = array_pop($values);
     $criterion = $criteria->getNewCriterion(SbUserMarketingQuestionPeer::QUESTION_ID, $value);
@@ -106,7 +106,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
       return;
     }
 
-    $criteria->addJoin(SbUserMailingListPeer::USER_ID, sfEasyAuthUserPeer::ID);
+    $criteria->addJoin(SbUserMailingListPeer::USER_ID, sfEasyAuthUserBasePeer::ID);
 
     $value = array_pop($values);
     $criterion = $criteria->getNewCriterion(SbUserMailingListPeer::MAILING_LIST_ID, $value);
@@ -121,7 +121,7 @@ class BasesfEasyAuthUserFormFilter extends BaseFormFilterPropel
 
   public function getModelName()
   {
-    return 'sfEasyAuthUser';
+    return 'sfEasyAuthUserBase';
   }
 
   public function getFields()

@@ -12,7 +12,7 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model
  */
-class sfEasyAuthAdmin extends sfEasyAuthUser {
+class sfEasyAuthAdmin extends sfEasyAuthAdminLocal {
 
 	/**
 	 * Constructs a new sfEasyAuthAdmin class, setting the type column to sfEasyAuthUserPeer::CLASSKEY_ADMIN.

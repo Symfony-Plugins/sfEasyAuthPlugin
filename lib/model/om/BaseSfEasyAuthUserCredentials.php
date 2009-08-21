@@ -46,9 +46,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	protected $profile_id;
 
 	/**
-	 * @var        sfEasyAuthUser
+	 * @var        sfEasyAuthUserBase
 	 */
-	protected $asfEasyAuthUser;
+	protected $asfEasyAuthUserBase;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -162,8 +162,8 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::USER_ID;
 		}
 
-		if ($this->asfEasyAuthUser !== null && $this->asfEasyAuthUser->getId() !== $v) {
-			$this->asfEasyAuthUser = null;
+		if ($this->asfEasyAuthUserBase !== null && $this->asfEasyAuthUserBase->getId() !== $v) {
+			$this->asfEasyAuthUserBase = null;
 		}
 
 		return $this;
@@ -286,8 +286,8 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function ensureConsistency()
 	{
 
-		if ($this->asfEasyAuthUser !== null && $this->user_id !== $this->asfEasyAuthUser->getId()) {
-			$this->asfEasyAuthUser = null;
+		if ($this->asfEasyAuthUserBase !== null && $this->user_id !== $this->asfEasyAuthUserBase->getId()) {
+			$this->asfEasyAuthUserBase = null;
 		}
 	} // ensureConsistency
 
@@ -328,7 +328,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->asfEasyAuthUser = null;
+			$this->asfEasyAuthUserBase = null;
 		} // if (deep)
 	}
 
@@ -452,11 +452,11 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->asfEasyAuthUser !== null) {
-				if ($this->asfEasyAuthUser->isModified() || $this->asfEasyAuthUser->isNew()) {
-					$affectedRows += $this->asfEasyAuthUser->save($con);
+			if ($this->asfEasyAuthUserBase !== null) {
+				if ($this->asfEasyAuthUserBase->isModified() || $this->asfEasyAuthUserBase->isNew()) {
+					$affectedRows += $this->asfEasyAuthUserBase->save($con);
 				}
-				$this->setsfEasyAuthUser($this->asfEasyAuthUser);
+				$this->setsfEasyAuthUserBase($this->asfEasyAuthUserBase);
 			}
 
 			if ($this->isNew() ) {
@@ -552,9 +552,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->asfEasyAuthUser !== null) {
-				if (!$this->asfEasyAuthUser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->asfEasyAuthUser->getValidationFailures());
+			if ($this->asfEasyAuthUserBase !== null) {
+				if (!$this->asfEasyAuthUserBase->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->asfEasyAuthUserBase->getValidationFailures());
 				}
 			}
 
@@ -826,13 +826,13 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	}
 
 	/**
-	 * Declares an association between this object and a sfEasyAuthUser object.
+	 * Declares an association between this object and a sfEasyAuthUserBase object.
 	 *
-	 * @param      sfEasyAuthUser $v
+	 * @param      sfEasyAuthUserBase $v
 	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setsfEasyAuthUser(sfEasyAuthUser $v = null)
+	public function setsfEasyAuthUserBase(sfEasyAuthUserBase $v = null)
 	{
 		if ($v === null) {
 			$this->setUserId(NULL);
@@ -840,10 +840,10 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			$this->setUserId($v->getId());
 		}
 
-		$this->asfEasyAuthUser = $v;
+		$this->asfEasyAuthUserBase = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the sfEasyAuthUser object, it will not be re-added.
+		// If this object has already been added to the sfEasyAuthUserBase object, it will not be re-added.
 		if ($v !== null) {
 			$v->addSfEasyAuthUserCredentials($this);
 		}
@@ -853,27 +853,27 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 
 	/**
-	 * Get the associated sfEasyAuthUser object
+	 * Get the associated sfEasyAuthUserBase object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     sfEasyAuthUser The associated sfEasyAuthUser object.
+	 * @return     sfEasyAuthUserBase The associated sfEasyAuthUserBase object.
 	 * @throws     PropelException
 	 */
-	public function getsfEasyAuthUser(PropelPDO $con = null)
+	public function getsfEasyAuthUserBase(PropelPDO $con = null)
 	{
-		if ($this->asfEasyAuthUser === null && ($this->user_id !== null)) {
-			$c = new Criteria(sfEasyAuthUserPeer::DATABASE_NAME);
-			$c->add(sfEasyAuthUserPeer::ID, $this->user_id);
-			$this->asfEasyAuthUser = sfEasyAuthUserPeer::doSelectOne($c, $con);
+		if ($this->asfEasyAuthUserBase === null && ($this->user_id !== null)) {
+			$c = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
+			$c->add(sfEasyAuthUserBasePeer::ID, $this->user_id);
+			$this->asfEasyAuthUserBase = sfEasyAuthUserBasePeer::doSelectOne($c, $con);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->asfEasyAuthUser->addSfEasyAuthUserCredentialss($this);
+			   $this->asfEasyAuthUserBase->addSfEasyAuthUserCredentialss($this);
 			 */
 		}
-		return $this->asfEasyAuthUser;
+		return $this->asfEasyAuthUserBase;
 	}
 
 	/**
@@ -890,7 +890,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		if ($deep) {
 		} // if ($deep)
 
-			$this->asfEasyAuthUser = null;
+			$this->asfEasyAuthUserBase = null;
 	}
 
 

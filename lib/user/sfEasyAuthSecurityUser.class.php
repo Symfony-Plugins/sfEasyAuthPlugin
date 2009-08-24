@@ -70,7 +70,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           $this->eaUser->save();
           
           // call an event indicating that a user has confirmed their email address
-          $this->getEventDispatcher()->notify(new sfEvent(
+          sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent(
             $this,
             'sf_easy_auth.email_confirmed',
             array(

@@ -75,13 +75,12 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   {
     $id = $this->getId();
     $profile = $this->getProfile();
-    
-    if ($return = parent::delete($con))
+
+    $return = parent::delete($con);
+
+    if (is_object($profile))
     {
-      if (is_object($profile))
-      {
-        $profile->delete();
-      }
+      $profile->delete();
     }
     
     return $return;

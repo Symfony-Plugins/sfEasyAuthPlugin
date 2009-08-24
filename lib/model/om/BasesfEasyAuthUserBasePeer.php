@@ -711,6 +711,7 @@ abstract class BasesfEasyAuthUserBasePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += sfEasyAuthUserBasePeer::doOnDeleteCascade(new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(sfEasyAuthUserBasePeer::TABLE_NAME, $con);
 			$con->commit();
 			return $affectedRows;
@@ -773,8 +774,24 @@ abstract class BasesfEasyAuthUserBasePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += sfEasyAuthUserBasePeer::doOnDeleteCascade($criteria, $con);
+			
+				// Because this db requires some delete cascade/set null emulation, we have to
+				// clear the cached instance *after* the emulation has happened (since
+				// instances get re-added by the select statement contained therein).
+				if ($values instanceof Criteria) {
+					sfEasyAuthUserBasePeer::clearInstancePool();
+				} else { // it's a PK or object
+					sfEasyAuthUserBasePeer::removeInstanceFromPool($values);
+				}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
+
+			// invalidate objects in SbUserMailingListPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
+			SbUserMailingListPeer::clearInstancePool();
+
+			// invalidate objects in SbUserMarketingQuestionPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
+			SbUserMarketingQuestionPeer::clearInstancePool();
 
 			$con->commit();
 			return $affectedRows;
@@ -782,6 +799,44 @@ abstract class BasesfEasyAuthUserBasePeer {
 			$con->rollBack();
 			throw $e;
 		}
+	}
+
+	/**
+	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 */
+	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	{
+		// initialize var to track total num of affected rows
+		$affectedRows = 0;
+
+		// first find the objects that are implicated by the $criteria
+		$objects = sfEasyAuthUserBasePeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+
+			// delete related SbUserMailingList objects
+			$c = new Criteria(SbUserMailingListPeer::DATABASE_NAME);
+			
+			$c->add(SbUserMailingListPeer::USER_ID, $obj->getId());
+			$affectedRows += SbUserMailingListPeer::doDelete($c, $con);
+
+			// delete related SbUserMarketingQuestion objects
+			$c = new Criteria(SbUserMarketingQuestionPeer::DATABASE_NAME);
+			
+			$c->add(SbUserMarketingQuestionPeer::USER_ID, $obj->getId());
+			$affectedRows += SbUserMarketingQuestionPeer::doDelete($c, $con);
+		}
+		return $affectedRows;
 	}
 
 	/**

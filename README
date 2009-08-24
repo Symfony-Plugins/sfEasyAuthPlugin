@@ -22,6 +22,16 @@ Installation
 
         $ symfony plugin:install sfEasyAuthPlugin
 
+  * Create some new classes in your lib/model directory:
+  
+    class sfEasyAuthUser extends sfEasyAuthUserBase
+    {}
+    class sfEasyAuthUserPeer extends sfEasyAuthUserBasePeer
+    {}
+    // create as many of the following classes as you have different user types.
+    class sfEasyAuthAdminLocal extends sfEasyAuthUser
+    {}
+    
   * Rebuild your model
 
         $ symfony propel:build-model
@@ -405,6 +415,32 @@ the following:
 If you want to add more methods to the sfEasyAuthUserPeer class, it'd be better to 
 create a sub-class of it, and store your sub-class in your main lib directory somewhere.
 This will ease your upgrade path in future should you choose to. 
+
+Inheritance
+-----------
+
+To make your upgrade path as simple as possible, there is quite a complicated inheritance hierachy
+for the classes created by this plugin. It looks something like this:
+
+                                    BasesfEasyAuthUserBase*
+                                              |
+                                      sfEasyAuthUserBase*
+                                              |
+                                        sfEasyAuthUser
+                                              |
+                                    --------------------------------------------- ...
+                        sfEasyAuthAdminLocal     sfEasyAuthBasicUserLocal
+                                    |                    |
+                            sfEasyAuthAdmin*       sfEasyAuthBasicUser*
+                                      
+In the above diagram, classes with an asterisk (*) next to their names are in the plugin/sfEasyAuth/lib
+directory. You need to create the other classes manually as mentioned in the `Installation` section.
+
+This class hierarchy allows you to override methods of the various classes and customise them locally. It
+gives you a way to, for example, add methods to the sfEasyAuthUser class without touching the core
+plugin code. 
+
+Remember to clear your symfony cache after adding any new classes.                                      
 
 Events
 ------

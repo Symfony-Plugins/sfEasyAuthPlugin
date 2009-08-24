@@ -60,6 +60,32 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     
     return $extraCredentials;
   }
+
+  /**
+   * Removes this object and related objects from datastore
+   *
+   * @param      PropelPDO $con
+   * @return     void
+   * @throws     PropelException
+   * @see		 BasesfEasyAuthUserBase::delete()
+   * @see        BaseObject::setDeleted()
+   * @see        BaseObject::isDeleted()
+   */
+  public function delete(PropelPDO $con=null)
+  {
+    $id = $this->getId();
+    $profile = $this->getProfile();
+    
+    if ($return = parent::delete($con))
+    {
+      if (is_object($profile))
+      {
+        $profile->delete();
+      }
+    }
+    
+    return $return;
+  }
   
   /**
    * Returns the default profile associated with the current class

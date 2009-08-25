@@ -381,4 +381,26 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
       return call_user_func($callable, $this, $subject, $message);
     }
   }
+  
+  /**
+   * Returns all credentials belonging to this user as a string
+   * 
+   * @return string
+   */
+  public function getCredentialsAsString()
+  {
+    $credentials = array();
+    foreach ($this->getCredentials() as $credential)
+    {
+      // ignore credentials that end 'Local'
+      if (!preg_match('/Local$/', $credential))
+      {
+        $credentials[] = $credential;
+      }
+    }
+    
+    sort($credentials);
+    
+    return implode(', ', $credentials);
+  }
 }

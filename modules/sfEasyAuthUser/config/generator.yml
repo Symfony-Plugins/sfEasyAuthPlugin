@@ -14,10 +14,11 @@ generator:
       fields: 
         password:                   { label: New password }
         account_temporarily_locked: { label: Temporarily locked, type: boolean }
+        credentials_as_string: 		{ label: Credentials }
       list:
         sort: [ username, asc ]
         title:   User list
-        display: [=username, type, created_at, last_login, locked_by_admins, account_temporarily_locked ]
+        display: [=username, credentials_as_string, created_at, last_login, locked_by_admins, account_temporarily_locked ]
       filter:  
         display: [ username, locked_by_admins, type ]
       form: ~

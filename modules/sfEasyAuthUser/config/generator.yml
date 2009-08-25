@@ -1,7 +1,7 @@
 generator:
   class: sfPropelGenerator
   param:
-    model_class:           sfEasyAuthUser
+    model_class:           sfEasyAuthUserBase
     theme:                 admin
     non_verbose_templates: true
     with_show:             false
@@ -17,9 +17,9 @@ generator:
       list:
         sort: [ username, asc ]
         title:   User list
-        display: [=username, enabled, type, created_at, last_login, account_temporarily_locked ]
+        display: [=username, type, created_at, last_login, locked_by_admins, account_temporarily_locked ]
       filter:  
-        display: [ username, enabled, type ]
+        display: [ username, locked_by_admins, type ]
       form: ~
       edit:
         title: Editing User "%%username%%"

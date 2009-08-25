@@ -25,6 +25,12 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     // get default credentials for each parent class
     do
     {
+      // ignore credentials that end 'Local'
+      if (!preg_match('/Local$/', $credential))
+      {
+        continue;
+      }
+      
       $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
       $userReflection = new ReflectionClass($className);
       $className = $userReflection->getParentClass()->getName(); 
@@ -389,18 +395,22 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    */
   public function getCredentialsAsString()
   {
-    $credentials = array();
-    foreach ($this->getCredentials() as $credential)
-    {
-      // ignore credentials that end 'Local'
-      if (!preg_match('/Local$/', $credential))
-      {
-        $credentials[] = $credential;
-      }
-    }
+    $credentials = $this->getCredentials();
     
     sort($credentials);
-    
+
     return implode(', ', $credentials);
+  }
+  
+  /**
+   * Returns an array of all possible credential types (found by querying the database), 
+   * with the credentials this user has selected 
+   * 
+   * @return array
+   */
+  public function getCredentialsForForm()
+  {
+    return array();
+    //$allCredentials = sfEasyAuthUserCredentialsPeer::retrieveAllCredentials();
   }
 }

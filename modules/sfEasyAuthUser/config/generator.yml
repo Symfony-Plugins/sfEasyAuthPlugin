@@ -15,6 +15,9 @@ generator:
         password:                   { label: New password }
         account_temporarily_locked: { label: Temporarily locked, type: boolean }
         credentials_as_string: 		{ label: Credentials }
+        sb_user_mailing_list_list:  { label: Mailing lists }
+        sb_user_marketing_question_list:  { label: Marketing questions }
+        email:  { label: Email address }
       list:
         sort: [ username, asc ]
         title:   User list

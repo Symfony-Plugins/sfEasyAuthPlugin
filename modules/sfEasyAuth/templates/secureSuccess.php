@@ -13,7 +13,7 @@
   <?php endif ?>
 
   <form action="<?php echo url_for('@sf_easy_auth_secure') ?>" method="post">
-    <?php echo $form ?>
+    <?php echo $loginForm ?>
 
     <input type="submit" value="Log in" />
   </form>

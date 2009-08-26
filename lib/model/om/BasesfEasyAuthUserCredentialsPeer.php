@@ -7,7 +7,7 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model.om
  */
-abstract class BaseSfEasyAuthUserCredentialsPeer {
+abstract class BasesfEasyAuthUserCredentialsPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
@@ -16,7 +16,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	const TABLE_NAME = 'sf_easy_auth_user_credentials';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'plugins.sfEasyAuthPlugin.lib.model.SfEasyAuthUserCredentials';
+	const CLASS_DEFAULT = 'plugins.sfEasyAuthPlugin.lib.model.sfEasyAuthUserCredentials';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 4;
@@ -37,10 +37,10 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	const PROFILE_ID = 'sf_easy_auth_user_credentials.PROFILE_ID';
 
 	/**
-	 * An identiy map to hold any loaded instances of SfEasyAuthUserCredentials objects.
+	 * An identiy map to hold any loaded instances of sfEasyAuthUserCredentials objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array SfEasyAuthUserCredentials[]
+	 * @var        array sfEasyAuthUserCredentials[]
 	 */
 	public static $instances = array();
 
@@ -85,7 +85,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function getMapBuilder()
 	{
 		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new SfEasyAuthUserCredentialsMapBuilder();
+			self::$mapBuilder = new sfEasyAuthUserCredentialsMapBuilder();
 		}
 		return self::$mapBuilder;
 	}
@@ -135,12 +135,12 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. SfEasyAuthUserCredentialsPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. sfEasyAuthUserCredentialsPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(SfEasyAuthUserCredentialsPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(sfEasyAuthUserCredentialsPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -157,13 +157,13 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 
-		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::ID);
+		$criteria->addSelectColumn(sfEasyAuthUserCredentialsPeer::ID);
 
-		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::USER_ID);
+		$criteria->addSelectColumn(sfEasyAuthUserCredentialsPeer::USER_ID);
 
-		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::CREDENTIAL);
+		$criteria->addSelectColumn(sfEasyAuthUserCredentialsPeer::CREDENTIAL);
 
-		$criteria->addSelectColumn(SfEasyAuthUserCredentialsPeer::PROFILE_ID);
+		$criteria->addSelectColumn(sfEasyAuthUserCredentialsPeer::PROFILE_ID);
 
 	}
 
@@ -183,27 +183,27 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(SfEasyAuthUserCredentialsPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(sfEasyAuthUserCredentialsPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			SfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
+			sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $criteria, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $criteria, $con);
     }
 
 
@@ -223,7 +223,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     SfEasyAuthUserCredentials
+	 * @return     sfEasyAuthUserCredentials
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -231,7 +231,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = SfEasyAuthUserCredentialsPeer::doSelect($critcopy, $con);
+		$objects = sfEasyAuthUserCredentialsPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -248,7 +248,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return SfEasyAuthUserCredentialsPeer::populateObjects(SfEasyAuthUserCredentialsPeer::doSelectStmt($criteria, $con));
+		return sfEasyAuthUserCredentialsPeer::populateObjects(sfEasyAuthUserCredentialsPeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -266,19 +266,19 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doSelectStmt:doSelectStmt') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doSelectStmt:doSelectStmt') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $criteria, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $criteria, $con);
     }
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			SfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
+			sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -296,10 +296,10 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      SfEasyAuthUserCredentials $value A SfEasyAuthUserCredentials object.
+	 * @param      sfEasyAuthUserCredentials $value A sfEasyAuthUserCredentials object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(SfEasyAuthUserCredentials $obj, $key = null)
+	public static function addInstanceToPool(sfEasyAuthUserCredentials $obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -317,18 +317,18 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A SfEasyAuthUserCredentials object or a primary key value.
+	 * @param      mixed $value A sfEasyAuthUserCredentials object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof SfEasyAuthUserCredentials) {
+			if (is_object($value) && $value instanceof sfEasyAuthUserCredentials) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or SfEasyAuthUserCredentials object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or sfEasyAuthUserCredentials object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -343,7 +343,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     SfEasyAuthUserCredentials Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     sfEasyAuthUserCredentials Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -397,12 +397,12 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = SfEasyAuthUserCredentialsPeer::getOMClass();
+		$cls = sfEasyAuthUserCredentialsPeer::getOMClass();
 		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = SfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = SfEasyAuthUserCredentialsPeer::getInstanceFromPool($key))) {
+			$key = sfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = sfEasyAuthUserCredentialsPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -412,7 +412,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				SfEasyAuthUserCredentialsPeer::addInstanceToPool($obj, $key);
+				sfEasyAuthUserCredentialsPeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
@@ -436,14 +436,14 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(SfEasyAuthUserCredentialsPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(sfEasyAuthUserCredentialsPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			SfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
+			sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -452,15 +452,15 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
+		$criteria->addJoin(array(sfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $criteria, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $criteria, $con);
     }
 
 
@@ -477,20 +477,20 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 
 	/**
-	 * Selects a collection of SfEasyAuthUserCredentials objects pre-filled with their sfEasyAuthUserBase objects.
+	 * Selects a collection of sfEasyAuthUserCredentials objects pre-filled with their sfEasyAuthUserBase objects.
 	 * @param      Criteria  $c
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of SfEasyAuthUserCredentials objects.
+	 * @return     array Array of sfEasyAuthUserCredentials objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
 	public static function doSelectJoinsfEasyAuthUserBase(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doSelectJoin:doSelectJoin') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doSelectJoin:doSelectJoin') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $c, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $c, $con);
     }
 
 
@@ -501,28 +501,28 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 			$c->setDbName(self::DATABASE_NAME);
 		}
 
-		SfEasyAuthUserCredentialsPeer::addSelectColumns($c);
-		$startcol = (SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
+		sfEasyAuthUserCredentialsPeer::addSelectColumns($c);
+		$startcol = (sfEasyAuthUserCredentialsPeer::NUM_COLUMNS - sfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
 		sfEasyAuthUserBasePeer::addSelectColumns($c);
 
-		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
+		$c->addJoin(array(sfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = SfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = SfEasyAuthUserCredentialsPeer::getInstanceFromPool($key1))) {
+			$key1 = sfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = sfEasyAuthUserCredentialsPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = SfEasyAuthUserCredentialsPeer::getOMClass();
+				$omClass = sfEasyAuthUserCredentialsPeer::getOMClass();
 
 				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				SfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
+				sfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
 			$key2 = sfEasyAuthUserBasePeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -538,8 +538,8 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 					sfEasyAuthUserBasePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (SfEasyAuthUserCredentials) to $obj2 (sfEasyAuthUserBase)
-				$obj2->addSfEasyAuthUserCredentials($obj1);
+				// Add the $obj1 (sfEasyAuthUserCredentials) to $obj2 (sfEasyAuthUserBase)
+				$obj2->addsfEasyAuthUserCredentials($obj1);
 
 			} // if joined row was not null
 
@@ -567,14 +567,14 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(SfEasyAuthUserCredentialsPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(sfEasyAuthUserCredentialsPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			SfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
+			sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -583,14 +583,14 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
+		$criteria->addJoin(array(sfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $criteria, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $criteria, $con);
     }
 
 
@@ -606,21 +606,21 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	}
 
 	/**
-	 * Selects a collection of SfEasyAuthUserCredentials objects pre-filled with all related objects.
+	 * Selects a collection of sfEasyAuthUserCredentials objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $c
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of SfEasyAuthUserCredentials objects.
+	 * @return     array Array of sfEasyAuthUserCredentials objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
 	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doSelectJoinAll:doSelectJoinAll') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doSelectJoinAll:doSelectJoinAll') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $c, $con);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $c, $con);
     }
 
 
@@ -631,29 +631,29 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 			$c->setDbName(self::DATABASE_NAME);
 		}
 
-		SfEasyAuthUserCredentialsPeer::addSelectColumns($c);
-		$startcol2 = (SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
+		sfEasyAuthUserCredentialsPeer::addSelectColumns($c);
+		$startcol2 = (sfEasyAuthUserCredentialsPeer::NUM_COLUMNS - sfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		sfEasyAuthUserBasePeer::addSelectColumns($c);
 		$startcol3 = $startcol2 + (sfEasyAuthUserBasePeer::NUM_COLUMNS - sfEasyAuthUserBasePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$c->addJoin(array(SfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
+		$c->addJoin(array(sfEasyAuthUserCredentialsPeer::USER_ID,), array(sfEasyAuthUserBasePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = SfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = SfEasyAuthUserCredentialsPeer::getInstanceFromPool($key1))) {
+			$key1 = sfEasyAuthUserCredentialsPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = sfEasyAuthUserCredentialsPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = SfEasyAuthUserCredentialsPeer::getOMClass();
+				$omClass = sfEasyAuthUserCredentialsPeer::getOMClass();
 
 				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				SfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
+				sfEasyAuthUserCredentialsPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
 			// Add objects for joined sfEasyAuthUserBase rows
@@ -672,8 +672,8 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 					sfEasyAuthUserBasePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (SfEasyAuthUserCredentials) to the collection in $obj2 (sfEasyAuthUserBase)
-				$obj2->addSfEasyAuthUserCredentials($obj1);
+				// Add the $obj1 (sfEasyAuthUserCredentials) to the collection in $obj2 (sfEasyAuthUserBase)
+				$obj2->addsfEasyAuthUserCredentials($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -710,13 +710,13 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 */
 	public static function getOMClass()
 	{
-		return SfEasyAuthUserCredentialsPeer::CLASS_DEFAULT;
+		return sfEasyAuthUserCredentialsPeer::CLASS_DEFAULT;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a SfEasyAuthUserCredentials or Criteria object.
+	 * Method perform an INSERT on the database, given a sfEasyAuthUserCredentials or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or SfEasyAuthUserCredentials object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or sfEasyAuthUserCredentials object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -725,9 +725,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doInsert:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doInsert:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $values, $con);
+      $ret = call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -736,17 +736,17 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from SfEasyAuthUserCredentials object
+			$criteria = $values->buildCriteria(); // build Criteria from sfEasyAuthUserCredentials object
 		}
 
-		if ($criteria->containsKey(SfEasyAuthUserCredentialsPeer::ID) && $criteria->keyContainsValue(SfEasyAuthUserCredentialsPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.SfEasyAuthUserCredentialsPeer::ID.')');
+		if ($criteria->containsKey(sfEasyAuthUserCredentialsPeer::ID) && $criteria->keyContainsValue(sfEasyAuthUserCredentialsPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.sfEasyAuthUserCredentialsPeer::ID.')');
 		}
 
 
@@ -765,18 +765,18 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		}
 
 		
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doInsert:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doInsert:post') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $values, $con, $pk);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $values, $con, $pk);
     }
 
     return $pk;
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a SfEasyAuthUserCredentials or Criteria object.
+	 * Method perform an UPDATE on the database, given a sfEasyAuthUserCredentials or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or SfEasyAuthUserCredentials object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or sfEasyAuthUserCredentials object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -785,9 +785,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doUpdate:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doUpdate:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $values, $con);
+      $ret = call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -796,7 +796,7 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -804,10 +804,10 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(SfEasyAuthUserCredentialsPeer::ID);
-			$selectCriteria->add(SfEasyAuthUserCredentialsPeer::ID, $criteria->remove(SfEasyAuthUserCredentialsPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(sfEasyAuthUserCredentialsPeer::ID);
+			$selectCriteria->add(sfEasyAuthUserCredentialsPeer::ID, $criteria->remove(sfEasyAuthUserCredentialsPeer::ID), $comparison);
 
-		} else { // $values is SfEasyAuthUserCredentials object
+		} else { // $values is sfEasyAuthUserCredentials object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -818,9 +818,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 		$ret = BasePeer::doUpdate($selectCriteria, $criteria, $con);
 	
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentialsPeer:doUpdate:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentialsPeer:doUpdate:post') as $callable)
     {
-      call_user_func($callable, 'BaseSfEasyAuthUserCredentialsPeer', $values, $con, $ret);
+      call_user_func($callable, 'BasesfEasyAuthUserCredentialsPeer', $values, $con, $ret);
     }
 
     return $ret;
@@ -834,14 +834,14 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(SfEasyAuthUserCredentialsPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(sfEasyAuthUserCredentialsPeer::TABLE_NAME, $con);
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -851,9 +851,9 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a SfEasyAuthUserCredentials or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a sfEasyAuthUserCredentials or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or SfEasyAuthUserCredentials object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or sfEasyAuthUserCredentials object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -864,20 +864,20 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			SfEasyAuthUserCredentialsPeer::clearInstancePool();
+			sfEasyAuthUserCredentialsPeer::clearInstancePool();
 
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof SfEasyAuthUserCredentials) {
+		} elseif ($values instanceof sfEasyAuthUserCredentials) {
 			// invalidate the cache for this single object
-			SfEasyAuthUserCredentialsPeer::removeInstanceFromPool($values);
+			sfEasyAuthUserCredentialsPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else {
@@ -886,11 +886,11 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(SfEasyAuthUserCredentialsPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(sfEasyAuthUserCredentialsPeer::ID, (array) $values, Criteria::IN);
 
 			foreach ((array) $values as $singleval) {
 				// we can invalidate the cache for this single object
-				SfEasyAuthUserCredentialsPeer::removeInstanceFromPool($singleval);
+				sfEasyAuthUserCredentialsPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -915,24 +915,24 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given SfEasyAuthUserCredentials object.
+	 * Validates all modified columns of given sfEasyAuthUserCredentials object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      SfEasyAuthUserCredentials $obj The object to validate.
+	 * @param      sfEasyAuthUserCredentials $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(SfEasyAuthUserCredentials $obj, $cols = null)
+	public static function doValidate(sfEasyAuthUserCredentials $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(SfEasyAuthUserCredentialsPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(SfEasyAuthUserCredentialsPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(sfEasyAuthUserCredentialsPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -948,11 +948,11 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 
 		}
 
-		$res =  BasePeer::doValidate(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, SfEasyAuthUserCredentialsPeer::TABLE_NAME, $columns);
+		$res =  BasePeer::doValidate(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, sfEasyAuthUserCredentialsPeer::TABLE_NAME, $columns);
     if ($res !== true) {
         $request = sfContext::getInstance()->getRequest();
         foreach ($res as $failed) {
-            $col = SfEasyAuthUserCredentialsPeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
+            $col = sfEasyAuthUserCredentialsPeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
         }
     }
 
@@ -964,23 +964,23 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     SfEasyAuthUserCredentials
+	 * @return     sfEasyAuthUserCredentials
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = SfEasyAuthUserCredentialsPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = sfEasyAuthUserCredentialsPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(SfEasyAuthUserCredentialsPeer::DATABASE_NAME);
-		$criteria->add(SfEasyAuthUserCredentialsPeer::ID, $pk);
+		$criteria = new Criteria(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+		$criteria->add(sfEasyAuthUserCredentialsPeer::ID, $pk);
 
-		$v = SfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
+		$v = sfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -996,30 +996,30 @@ abstract class BaseSfEasyAuthUserCredentialsPeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(SfEasyAuthUserCredentialsPeer::DATABASE_NAME);
-			$criteria->add(SfEasyAuthUserCredentialsPeer::ID, $pks, Criteria::IN);
-			$objs = SfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+			$criteria->add(sfEasyAuthUserCredentialsPeer::ID, $pks, Criteria::IN);
+			$objs = sfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BaseSfEasyAuthUserCredentialsPeer
+} // BasesfEasyAuthUserCredentialsPeer
 
 // This is the static code needed to register the MapBuilder for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the SfEasyAuthUserCredentialsPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the SfEasyAuthUserCredentialsPeer class:
+// NOTE: This static code cannot call methods on the sfEasyAuthUserCredentialsPeer class, because it is not defined yet.
+// If you need to use overridden methods, you can add this code to the bottom of the sfEasyAuthUserCredentialsPeer class:
 //
-// Propel::getDatabaseMap(SfEasyAuthUserCredentialsPeer::DATABASE_NAME)->addTableBuilder(SfEasyAuthUserCredentialsPeer::TABLE_NAME, SfEasyAuthUserCredentialsPeer::getMapBuilder());
+// Propel::getDatabaseMap(sfEasyAuthUserCredentialsPeer::DATABASE_NAME)->addTableBuilder(sfEasyAuthUserCredentialsPeer::TABLE_NAME, sfEasyAuthUserCredentialsPeer::getMapBuilder());
 //
 // Doing so will effectively overwrite the registration below.
 
-Propel::getDatabaseMap(BaseSfEasyAuthUserCredentialsPeer::DATABASE_NAME)->addTableBuilder(BaseSfEasyAuthUserCredentialsPeer::TABLE_NAME, BaseSfEasyAuthUserCredentialsPeer::getMapBuilder());
+Propel::getDatabaseMap(BasesfEasyAuthUserCredentialsPeer::DATABASE_NAME)->addTableBuilder(BasesfEasyAuthUserCredentialsPeer::TABLE_NAME, BasesfEasyAuthUserCredentialsPeer::getMapBuilder());
 

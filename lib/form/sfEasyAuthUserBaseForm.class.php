@@ -27,7 +27,7 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
     $this->widgetSchema['password'] = new sfWidgetFormInputConfigurable(array(
       'value' => ($this->isNew()) ? '' : sfEasyAuthUser::PASSWORD_MASK
     ));
-    
+//print_r(sfEasyAuthUserPeer::getTypes());exit;
     $this->widgetSchema['type'] = new sfWidgetFormChoice(array(
       'choices' => sfEasyAuthUserPeer::getTypes(),
       'expanded' => true

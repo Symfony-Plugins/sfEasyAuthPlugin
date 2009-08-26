@@ -7,16 +7,16 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model.om
  */
-abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Persistent {
+abstract class BasesfEasyAuthUserCredentials extends BaseObject  implements Persistent {
 
 
-  const PEER = 'SfEasyAuthUserCredentialsPeer';
+  const PEER = 'sfEasyAuthUserCredentialsPeer';
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        SfEasyAuthUserCredentialsPeer
+	 * @var        sfEasyAuthUserCredentialsPeer
 	 */
 	protected static $peer;
 
@@ -65,7 +65,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	protected $alreadyInValidation = false;
 
 	/**
-	 * Initializes internal state of BaseSfEasyAuthUserCredentials object.
+	 * Initializes internal state of BasesfEasyAuthUserCredentials object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -129,7 +129,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 * @return     sfEasyAuthUserCredentials The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
@@ -139,7 +139,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::ID;
+			$this->modifiedColumns[] = sfEasyAuthUserCredentialsPeer::ID;
 		}
 
 		return $this;
@@ -149,7 +149,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * Set the value of [user_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 * @return     sfEasyAuthUserCredentials The current object (for fluent API support)
 	 */
 	public function setUserId($v)
 	{
@@ -159,7 +159,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 		if ($this->user_id !== $v) {
 			$this->user_id = $v;
-			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::USER_ID;
+			$this->modifiedColumns[] = sfEasyAuthUserCredentialsPeer::USER_ID;
 		}
 
 		if ($this->asfEasyAuthUserBase !== null && $this->asfEasyAuthUserBase->getId() !== $v) {
@@ -173,7 +173,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * Set the value of [credential] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 * @return     sfEasyAuthUserCredentials The current object (for fluent API support)
 	 */
 	public function setCredential($v)
 	{
@@ -183,7 +183,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 		if ($this->credential !== $v) {
 			$this->credential = $v;
-			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::CREDENTIAL;
+			$this->modifiedColumns[] = sfEasyAuthUserCredentialsPeer::CREDENTIAL;
 		}
 
 		return $this;
@@ -193,7 +193,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * Set the value of [profile_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 * @return     sfEasyAuthUserCredentials The current object (for fluent API support)
 	 */
 	public function setProfileId($v)
 	{
@@ -203,7 +203,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 		if ($this->profile_id !== $v || $v === 0) {
 			$this->profile_id = $v;
-			$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::PROFILE_ID;
+			$this->modifiedColumns[] = sfEasyAuthUserCredentialsPeer::PROFILE_ID;
 		}
 
 		return $this;
@@ -220,7 +220,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(SfEasyAuthUserCredentialsPeer::PROFILE_ID))) {
+			if (array_diff($this->modifiedColumns, array(sfEasyAuthUserCredentialsPeer::PROFILE_ID))) {
 				return false;
 			}
 
@@ -263,10 +263,10 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 4; // 4 = SfEasyAuthUserCredentialsPeer::NUM_COLUMNS - SfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 4; // 4 = sfEasyAuthUserCredentialsPeer::NUM_COLUMNS - sfEasyAuthUserCredentialsPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating SfEasyAuthUserCredentials object", $e);
+			throw new PropelException("Error populating sfEasyAuthUserCredentials object", $e);
 		}
 	}
 
@@ -312,13 +312,13 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		$stmt = SfEasyAuthUserCredentialsPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		$stmt = sfEasyAuthUserCredentialsPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -344,7 +344,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function delete(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentials:delete:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentials:delete:pre') as $callable)
     {
       $ret = call_user_func($callable, $this, $con);
       if ($ret)
@@ -359,12 +359,12 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
-			SfEasyAuthUserCredentialsPeer::doDelete($this, $con);
+			sfEasyAuthUserCredentialsPeer::doDelete($this, $con);
 			$this->setDeleted(true);
 			$con->commit();
 		} catch (PropelException $e) {
@@ -373,7 +373,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		}
 	
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentials:delete:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentials:delete:post') as $callable)
     {
       call_user_func($callable, $this, $con);
     }
@@ -395,7 +395,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	public function save(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentials:save:pre') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentials:save:pre') as $callable)
     {
       $affectedRows = call_user_func($callable, $this, $con);
       if (is_int($affectedRows))
@@ -410,19 +410,19 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(SfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(sfEasyAuthUserCredentialsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$affectedRows = $this->doSave($con);
 			$con->commit();
-    foreach (sfMixer::getCallables('BaseSfEasyAuthUserCredentials:save:post') as $callable)
+    foreach (sfMixer::getCallables('BasesfEasyAuthUserCredentials:save:post') as $callable)
     {
       call_user_func($callable, $this, $con, $affectedRows);
     }
 
-			SfEasyAuthUserCredentialsPeer::addInstanceToPool($this);
+			sfEasyAuthUserCredentialsPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -460,13 +460,13 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = SfEasyAuthUserCredentialsPeer::ID;
+				$this->modifiedColumns[] = sfEasyAuthUserCredentialsPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = SfEasyAuthUserCredentialsPeer::doInsert($this, $con);
+					$pk = sfEasyAuthUserCredentialsPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -475,7 +475,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
 					$this->setNew(false);
 				} else {
-					$affectedRows += SfEasyAuthUserCredentialsPeer::doUpdate($this, $con);
+					$affectedRows += sfEasyAuthUserCredentialsPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -559,7 +559,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			}
 
 
-			if (($retval = SfEasyAuthUserCredentialsPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = sfEasyAuthUserCredentialsPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -582,7 +582,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = SfEasyAuthUserCredentialsPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = sfEasyAuthUserCredentialsPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -628,7 +628,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = SfEasyAuthUserCredentialsPeer::getFieldNames($keyType);
+		$keys = sfEasyAuthUserCredentialsPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getUserId(),
@@ -650,7 +650,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = SfEasyAuthUserCredentialsPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = sfEasyAuthUserCredentialsPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -699,7 +699,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = SfEasyAuthUserCredentialsPeer::getFieldNames($keyType);
+		$keys = sfEasyAuthUserCredentialsPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
@@ -714,12 +714,12 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(SfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+		$criteria = new Criteria(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::ID, $this->id);
-		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::USER_ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::USER_ID, $this->user_id);
-		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::CREDENTIAL)) $criteria->add(SfEasyAuthUserCredentialsPeer::CREDENTIAL, $this->credential);
-		if ($this->isColumnModified(SfEasyAuthUserCredentialsPeer::PROFILE_ID)) $criteria->add(SfEasyAuthUserCredentialsPeer::PROFILE_ID, $this->profile_id);
+		if ($this->isColumnModified(sfEasyAuthUserCredentialsPeer::ID)) $criteria->add(sfEasyAuthUserCredentialsPeer::ID, $this->id);
+		if ($this->isColumnModified(sfEasyAuthUserCredentialsPeer::USER_ID)) $criteria->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->user_id);
+		if ($this->isColumnModified(sfEasyAuthUserCredentialsPeer::CREDENTIAL)) $criteria->add(sfEasyAuthUserCredentialsPeer::CREDENTIAL, $this->credential);
+		if ($this->isColumnModified(sfEasyAuthUserCredentialsPeer::PROFILE_ID)) $criteria->add(sfEasyAuthUserCredentialsPeer::PROFILE_ID, $this->profile_id);
 
 		return $criteria;
 	}
@@ -734,9 +734,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(SfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+		$criteria = new Criteria(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
 
-		$criteria->add(SfEasyAuthUserCredentialsPeer::ID, $this->id);
+		$criteria->add(sfEasyAuthUserCredentialsPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -767,7 +767,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of SfEasyAuthUserCredentials (or compatible) type.
+	 * @param      object $copyObj An object of sfEasyAuthUserCredentials (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -796,7 +796,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     SfEasyAuthUserCredentials Clone of current object.
+	 * @return     sfEasyAuthUserCredentials Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -815,12 +815,12 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     SfEasyAuthUserCredentialsPeer
+	 * @return     sfEasyAuthUserCredentialsPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new SfEasyAuthUserCredentialsPeer();
+			self::$peer = new sfEasyAuthUserCredentialsPeer();
 		}
 		return self::$peer;
 	}
@@ -829,7 +829,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 	 * Declares an association between this object and a sfEasyAuthUserBase object.
 	 *
 	 * @param      sfEasyAuthUserBase $v
-	 * @return     SfEasyAuthUserCredentials The current object (for fluent API support)
+	 * @return     sfEasyAuthUserCredentials The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setsfEasyAuthUserBase(sfEasyAuthUserBase $v = null)
@@ -845,7 +845,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the sfEasyAuthUserBase object, it will not be re-added.
 		if ($v !== null) {
-			$v->addSfEasyAuthUserCredentials($this);
+			$v->addsfEasyAuthUserCredentials($this);
 		}
 
 		return $this;
@@ -870,7 +870,7 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->asfEasyAuthUserBase->addSfEasyAuthUserCredentialss($this);
+			   $this->asfEasyAuthUserBase->addsfEasyAuthUserCredentialss($this);
 			 */
 		}
 		return $this->asfEasyAuthUserBase;
@@ -896,9 +896,9 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
 
   public function __call($method, $arguments)
   {
-    if (!$callable = sfMixer::getCallable('BaseSfEasyAuthUserCredentials:'.$method))
+    if (!$callable = sfMixer::getCallable('BasesfEasyAuthUserCredentials:'.$method))
     {
-      throw new sfException(sprintf('Call to undefined method BaseSfEasyAuthUserCredentials::%s', $method));
+      throw new sfException(sprintf('Call to undefined method BasesfEasyAuthUserCredentials::%s', $method));
     }
 
     array_unshift($arguments, $this);
@@ -907,4 +907,4 @@ abstract class BaseSfEasyAuthUserCredentials extends BaseObject  implements Pers
   }
 
 
-} // BaseSfEasyAuthUserCredentials
+} // BasesfEasyAuthUserCredentials

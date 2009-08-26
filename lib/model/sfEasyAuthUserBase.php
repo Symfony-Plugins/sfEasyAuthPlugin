@@ -26,12 +26,11 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     do
     {
       // ignore credentials that end 'Local'
-      if (!preg_match('/Local$/', $credential))
+      if (!preg_match('/Local$/', $className))
       {
-        continue;
+        $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
       }
       
-      $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
       $userReflection = new ReflectionClass($className);
       $className = $userReflection->getParentClass()->getName(); 
     } while ($className !== $superClass);
@@ -53,9 +52,9 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   protected function getExtraCredentials()
   {
     $c = new Criteria();
-    $c->add(SfEasyAuthUserCredentialsPeer::USER_ID, $this->getId());
+    $c->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->getId());
     
-    $credentials = SfEasyAuthUserCredentialsPeer::doSelect($c);
+    $credentials = sfEasyAuthUserCredentialsPeer::doSelect($c);
     
     $extraCredentials = array();
     
@@ -410,7 +409,21 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    */
   public function getCredentialsForForm()
   {
-    return array();
-    //$allCredentials = sfEasyAuthUserCredentialsPeer::retrieveAllCredentials();
+    $credentials = array();
+    
+    $userCredentials = $this->getCredentials();
+    
+    foreach (sfEasyAuthUserCredentialsPeer::retrieveAllCredentials() as $credential)
+    {
+      // if the user has the credential we're examining, set the value so the checkbox will be checked
+      if (in_array($credential, $userCredentials))
+      {
+        
+      }
+      else
+      {
+        // otherwise just add the string to the array.
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SfEasyAuthUserCredentials form.
+ * SfEasyAuthUserCredential form.
  *
  * @package    ##PROJECT_NAME##
  * @subpackage form

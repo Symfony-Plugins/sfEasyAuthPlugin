@@ -54,7 +54,7 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
     $this->widgetSchema['extra_credentials']->setDefault($eaUser->getCredentials());
     
     $this->getWidgetSchema()->setHelps(
-      array('type' => 'You may not edit this')
+      array('type' => 'Do <u>not</u> edit this')
     );
     
     // set up the validator
@@ -64,6 +64,17 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
           'choices' => $eaUser->getPossibleExtraCredentials(),
           'multiple' => true,
           'required' => false
+        )
+      )
+    );
+    
+    $this->setValidator('type',
+      new sfValidatorRegex(
+        array(
+          'pattern' => '/' . $eaUser->getType() . '/' 
+        ),
+        array(
+          'invalid' => 'You cannot change the user type. Please set it back to ' . $eaUser->getType() . '.'
         )
       )
     );

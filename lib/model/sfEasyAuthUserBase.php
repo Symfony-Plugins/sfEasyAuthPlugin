@@ -52,9 +52,9 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   protected function getExtraCredentials()
   {
     $c = new Criteria();
-    $c->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->getId());
+    $c->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->getId());
     
-    $credentials = sfEasyAuthUserCredentialsPeer::doSelect($c);
+    $credentials = sfEasyAuthUserCredentialPeer::doSelect($c);
     
     $extraCredentials = array();
     
@@ -413,7 +413,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     
     $userCredentials = $this->getCredentials();
 
-    foreach (sfEasyAuthUserCredentialsPeer::retrieveAllCredentials() as $credential)
+    foreach (sfEasyAuthUserCredentialPeer::retrieveAllCredentials() as $credential)
     {
       // if the credential is different from the user's type, add it to an array
       if (strtolower($credential) != strtolower($this->getType()))
@@ -435,13 +435,13 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     // first, remove old extra credentials
     
     $c = new Criteria();
-    $c->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->getId());
-    sfEasyAuthUserCredentialsPeer::doDelete($c);
+    $c->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->getId());
+    sfEasyAuthUserCredentialPeer::doDelete($c);
     
     // now, if there are extra credentials, add them
     foreach ($credentials as $credential)
     {
-      $userCredential = new sfEasyAuthUserCredentials();
+      $userCredential = new sfEasyAuthUserCredential();
       $userCredential->setUserId($this->getId());
       $userCredential->setCredential($credential);
       $userCredential->save();

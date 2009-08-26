@@ -413,7 +413,10 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     
     $userCredentials = $this->getCredentials();
 
-    foreach (sfEasyAuthUserCredentialPeer::retrieveAllCredentials() as $credential)
+    $possibleCredentials = array_merge(sfEasyAuthUserPeer::getTypes(), 
+      sfEasyAuthUserCredentialPeer::retrieveAllCredentials());
+    
+    foreach (array_unique($possibleCredentials) as $credential)
     {
       // if the credential is different from the user's type, add it to an array
       if (strtolower($credential) != strtolower($this->getType()))

@@ -68,6 +68,8 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
       )
     );
     
+    // don't allow admins to edit the user's type, or it could break foreign key relationships
+    // with profiles
     $this->setValidator('type',
       new sfValidatorRegex(
         array(

@@ -402,33 +402,54 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   }
   
   /**
-   * Returns an array of all possible credential types (found by querying the database), 
-   * with the credentials this user has selected 
+   * Returns an array of all possible credential types (found by querying the database)
+   * that this user could be associated with.
    * 
    * @return array
    */
-  /*
-  public function getCredentialsForForm()
+  public function getPossibleExtraCredentials()
   {
     $credentials = array();
     
     $userCredentials = $this->getCredentials();
-    
+
     foreach (sfEasyAuthUserCredentialsPeer::retrieveAllCredentials() as $credential)
     {
-      // if the user has the credential we're examining, set the value so the checkbox will be checked
-      if (in_array($credential, $userCredentials))
+      // if the credential is different from the user's type, add it to an array
+      if (strtolower($credential) != strtolower($this->getType()))
       {
-        $credentials[$credential] = $credential;
-      }
-      else
-      {
-        // otherwise just add the string to the array.
         $credentials[$credential] = $credential;
       }
     }
     
     return $credentials;
   }
-  */
+  
+  /**
+   * Updates extra credentials for a user
+   * 
+   * @param array An array of extra credentials to save for this user
+   */
+  public function saveExtraCredentials(array $credentials)
+  {
+    // first, remove old extra credentials
+    
+    $c = new Criteria();
+    $c->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->getId());
+    sfEasyAuthUserCredentialsPeer::doDelete($c);
+    
+    // now, if there are extra credentials, add them
+    foreach ($credentials as $credential)
+    {
+      $userCredential = new sfEasyAuthUserCredentials();
+      $userCredential->setUserId($this->getId());
+      $userCredential->setCredential($credential);
+      $userCredential->save();
+    }
+    
+    // save whether the user has extra credentials
+    $this->setHasExtraCredentials(count($credentials) > 0);
+    $this->save();
+  }
+  
 }

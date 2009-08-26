@@ -1,14 +1,14 @@
 <?php
 
 /**
- * sfEasyAuthUserCredentials form base class.
+ * sfEasyAuthUserCredential form base class.
  *
  * @package    ##PROJECT_NAME##
  * @subpackage form
  * @author     ##AUTHOR_NAME##
  * @version    SVN: $Id: sfPropelFormGeneratedTemplate.php 16976 2009-04-04 12:47:44Z fabien $
  */
-class BasesfEasyAuthUserCredentialsForm extends BaseFormPropel
+class BasesfEasyAuthUserCredentialForm extends BaseFormPropel
 {
   public function setup()
   {
@@ -20,13 +20,13 @@ class BasesfEasyAuthUserCredentialsForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'         => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUserCredentials', 'column' => 'id', 'required' => false)),
+      'id'         => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUserCredential', 'column' => 'id', 'required' => false)),
       'user_id'    => new sfValidatorPropelChoice(array('model' => 'sfEasyAuthUserBase', 'column' => 'id')),
       'credential' => new sfValidatorString(array('max_length' => 60)),
       'profile_id' => new sfValidatorInteger(array('required' => false)),
     ));
 
-    $this->widgetSchema->setNameFormat('sf_easy_auth_user_credentials[%s]');
+    $this->widgetSchema->setNameFormat('sf_easy_auth_user_credential[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
@@ -35,7 +35,7 @@ class BasesfEasyAuthUserCredentialsForm extends BaseFormPropel
 
   public function getModelName()
   {
-    return 'sfEasyAuthUserCredentials';
+    return 'sfEasyAuthUserCredential';
   }
 
 

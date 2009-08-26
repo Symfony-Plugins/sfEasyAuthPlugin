@@ -53,6 +53,10 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
     // select the options that should be selected
     $this->widgetSchema['extra_credentials']->setDefault($eaUser->getCredentials());
     
+    $this->getWidgetSchema()->setHelps(
+      array('type' => 'You may not edit this')
+    );
+    
     // set up the validator
     $this->setValidator('extra_credentials', 
       new sfValidatorChoice(

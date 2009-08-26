@@ -146,14 +146,14 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 	protected $profile_id;
 
 	/**
-	 * @var        array sfEasyAuthUserCredentials[] Collection to store aggregation of sfEasyAuthUserCredentials objects.
+	 * @var        array sfEasyAuthUserCredential[] Collection to store aggregation of sfEasyAuthUserCredential objects.
 	 */
-	protected $collsfEasyAuthUserCredentialss;
+	protected $collsfEasyAuthUserCredentials;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collsfEasyAuthUserCredentialss.
+	 * @var        Criteria The criteria used to select the current contents of collsfEasyAuthUserCredentials.
 	 */
-	private $lastsfEasyAuthUserCredentialsCriteria = null;
+	private $lastsfEasyAuthUserCredentialCriteria = null;
 
 	/**
 	 * @var        array SbUserMailingList[] Collection to store aggregation of SbUserMailingList objects.
@@ -1304,8 +1304,8 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->collsfEasyAuthUserCredentialss = null;
-			$this->lastsfEasyAuthUserCredentialsCriteria = null;
+			$this->collsfEasyAuthUserCredentials = null;
+			$this->lastsfEasyAuthUserCredentialCriteria = null;
 
 			$this->collSbUserMailingLists = null;
 			$this->lastSbUserMailingListCriteria = null;
@@ -1463,8 +1463,8 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
-			if ($this->collsfEasyAuthUserCredentialss !== null) {
-				foreach ($this->collsfEasyAuthUserCredentialss as $referrerFK) {
+			if ($this->collsfEasyAuthUserCredentials !== null) {
+				foreach ($this->collsfEasyAuthUserCredentials as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -1558,8 +1558,8 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			}
 
 
-				if ($this->collsfEasyAuthUserCredentialss !== null) {
-					foreach ($this->collsfEasyAuthUserCredentialss as $referrerFK) {
+				if ($this->collsfEasyAuthUserCredentials !== null) {
+					foreach ($this->collsfEasyAuthUserCredentials as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1980,9 +1980,9 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getsfEasyAuthUserCredentialss() as $relObj) {
+			foreach ($this->getsfEasyAuthUserCredentials() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addsfEasyAuthUserCredentials($relObj->copy($deepCopy));
+					$copyObj->addsfEasyAuthUserCredential($relObj->copy($deepCopy));
 				}
 			}
 
@@ -2046,47 +2046,47 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Clears out the collsfEasyAuthUserCredentialss collection (array).
+	 * Clears out the collsfEasyAuthUserCredentials collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addsfEasyAuthUserCredentialss()
+	 * @see        addsfEasyAuthUserCredentials()
 	 */
-	public function clearsfEasyAuthUserCredentialss()
+	public function clearsfEasyAuthUserCredentials()
 	{
-		$this->collsfEasyAuthUserCredentialss = null; // important to set this to NULL since that means it is uninitialized
+		$this->collsfEasyAuthUserCredentials = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collsfEasyAuthUserCredentialss collection (array).
+	 * Initializes the collsfEasyAuthUserCredentials collection (array).
 	 *
-	 * By default this just sets the collsfEasyAuthUserCredentialss collection to an empty array (like clearcollsfEasyAuthUserCredentialss());
+	 * By default this just sets the collsfEasyAuthUserCredentials collection to an empty array (like clearcollsfEasyAuthUserCredentials());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initsfEasyAuthUserCredentialss()
+	public function initsfEasyAuthUserCredentials()
 	{
-		$this->collsfEasyAuthUserCredentialss = array();
+		$this->collsfEasyAuthUserCredentials = array();
 	}
 
 	/**
-	 * Gets an array of sfEasyAuthUserCredentials objects which contain a foreign key that references this object.
+	 * Gets an array of sfEasyAuthUserCredential objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
 	 * Otherwise if this sfEasyAuthUserBase has previously been saved, it will retrieve
-	 * related sfEasyAuthUserCredentialss from storage. If this sfEasyAuthUserBase is new, it will return
+	 * related sfEasyAuthUserCredentials from storage. If this sfEasyAuthUserBase is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array sfEasyAuthUserCredentials[]
+	 * @return     array sfEasyAuthUserCredential[]
 	 * @throws     PropelException
 	 */
-	public function getsfEasyAuthUserCredentialss($criteria = null, PropelPDO $con = null)
+	public function getsfEasyAuthUserCredentials($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
@@ -2096,15 +2096,15 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collsfEasyAuthUserCredentialss === null) {
+		if ($this->collsfEasyAuthUserCredentials === null) {
 			if ($this->isNew()) {
-			   $this->collsfEasyAuthUserCredentialss = array();
+			   $this->collsfEasyAuthUserCredentials = array();
 			} else {
 
-				$criteria->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->id);
+				$criteria->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->id);
 
-				sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
-				$this->collsfEasyAuthUserCredentialss = sfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
+				sfEasyAuthUserCredentialPeer::addSelectColumns($criteria);
+				$this->collsfEasyAuthUserCredentials = sfEasyAuthUserCredentialPeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -2114,28 +2114,28 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 				// one, just return the collection.
 
 
-				$criteria->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->id);
+				$criteria->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->id);
 
-				sfEasyAuthUserCredentialsPeer::addSelectColumns($criteria);
-				if (!isset($this->lastsfEasyAuthUserCredentialsCriteria) || !$this->lastsfEasyAuthUserCredentialsCriteria->equals($criteria)) {
-					$this->collsfEasyAuthUserCredentialss = sfEasyAuthUserCredentialsPeer::doSelect($criteria, $con);
+				sfEasyAuthUserCredentialPeer::addSelectColumns($criteria);
+				if (!isset($this->lastsfEasyAuthUserCredentialCriteria) || !$this->lastsfEasyAuthUserCredentialCriteria->equals($criteria)) {
+					$this->collsfEasyAuthUserCredentials = sfEasyAuthUserCredentialPeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastsfEasyAuthUserCredentialsCriteria = $criteria;
-		return $this->collsfEasyAuthUserCredentialss;
+		$this->lastsfEasyAuthUserCredentialCriteria = $criteria;
+		return $this->collsfEasyAuthUserCredentials;
 	}
 
 	/**
-	 * Returns the number of related sfEasyAuthUserCredentials objects.
+	 * Returns the number of related sfEasyAuthUserCredential objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related sfEasyAuthUserCredentials objects.
+	 * @return     int Count of related sfEasyAuthUserCredential objects.
 	 * @throws     PropelException
 	 */
-	public function countsfEasyAuthUserCredentialss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countsfEasyAuthUserCredentials(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
@@ -2149,14 +2149,14 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 
 		$count = null;
 
-		if ($this->collsfEasyAuthUserCredentialss === null) {
+		if ($this->collsfEasyAuthUserCredentials === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->id);
+				$criteria->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->id);
 
-				$count = sfEasyAuthUserCredentialsPeer::doCount($criteria, $con);
+				$count = sfEasyAuthUserCredentialPeer::doCount($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -2166,35 +2166,35 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 				// one, just return count of the collection.
 
 
-				$criteria->add(sfEasyAuthUserCredentialsPeer::USER_ID, $this->id);
+				$criteria->add(sfEasyAuthUserCredentialPeer::USER_ID, $this->id);
 
-				if (!isset($this->lastsfEasyAuthUserCredentialsCriteria) || !$this->lastsfEasyAuthUserCredentialsCriteria->equals($criteria)) {
-					$count = sfEasyAuthUserCredentialsPeer::doCount($criteria, $con);
+				if (!isset($this->lastsfEasyAuthUserCredentialCriteria) || !$this->lastsfEasyAuthUserCredentialCriteria->equals($criteria)) {
+					$count = sfEasyAuthUserCredentialPeer::doCount($criteria, $con);
 				} else {
-					$count = count($this->collsfEasyAuthUserCredentialss);
+					$count = count($this->collsfEasyAuthUserCredentials);
 				}
 			} else {
-				$count = count($this->collsfEasyAuthUserCredentialss);
+				$count = count($this->collsfEasyAuthUserCredentials);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a sfEasyAuthUserCredentials object to this object
-	 * through the sfEasyAuthUserCredentials foreign key attribute.
+	 * Method called to associate a sfEasyAuthUserCredential object to this object
+	 * through the sfEasyAuthUserCredential foreign key attribute.
 	 *
-	 * @param      sfEasyAuthUserCredentials $l sfEasyAuthUserCredentials
+	 * @param      sfEasyAuthUserCredential $l sfEasyAuthUserCredential
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addsfEasyAuthUserCredentials(sfEasyAuthUserCredentials $l)
+	public function addsfEasyAuthUserCredential(sfEasyAuthUserCredential $l)
 	{
-		if ($this->collsfEasyAuthUserCredentialss === null) {
-			$this->initsfEasyAuthUserCredentialss();
+		if ($this->collsfEasyAuthUserCredentials === null) {
+			$this->initsfEasyAuthUserCredentials();
 		}
-		if (!in_array($l, $this->collsfEasyAuthUserCredentialss, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collsfEasyAuthUserCredentialss, $l);
+		if (!in_array($l, $this->collsfEasyAuthUserCredentials, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collsfEasyAuthUserCredentials, $l);
 			$l->setsfEasyAuthUserBase($this);
 		}
 	}
@@ -2613,8 +2613,8 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collsfEasyAuthUserCredentialss) {
-				foreach ((array) $this->collsfEasyAuthUserCredentialss as $o) {
+			if ($this->collsfEasyAuthUserCredentials) {
+				foreach ((array) $this->collsfEasyAuthUserCredentials as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
@@ -2630,7 +2630,7 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			}
 		} // if ($deep)
 
-		$this->collsfEasyAuthUserCredentialss = null;
+		$this->collsfEasyAuthUserCredentials = null;
 		$this->collSbUserMailingLists = null;
 		$this->collSbUserMarketingQuestions = null;
 	}

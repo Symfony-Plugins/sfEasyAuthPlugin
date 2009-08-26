@@ -3,14 +3,14 @@
 require_once(sfConfig::get('sf_lib_dir').'/filter/base/BaseFormFilterPropel.class.php');
 
 /**
- * sfEasyAuthUserCredentials filter form base class.
+ * sfEasyAuthUserCredential filter form base class.
  *
  * @package    ##PROJECT_NAME##
  * @subpackage filter
  * @author     ##AUTHOR_NAME##
  * @version    SVN: $Id: sfPropelFormFilterGeneratedTemplate.php 16976 2009-04-04 12:47:44Z fabien $
  */
-class BasesfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
+class BasesfEasyAuthUserCredentialFormFilter extends BaseFormFilterPropel
 {
   public function setup()
   {
@@ -26,7 +26,7 @@ class BasesfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
       'profile_id' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
-    $this->widgetSchema->setNameFormat('sf_easy_auth_user_credentials_filters[%s]');
+    $this->widgetSchema->setNameFormat('sf_easy_auth_user_credential_filters[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
@@ -35,7 +35,7 @@ class BasesfEasyAuthUserCredentialsFormFilter extends BaseFormFilterPropel
 
   public function getModelName()
   {
-    return 'sfEasyAuthUserCredentials';
+    return 'sfEasyAuthUserCredential';
   }
 
   public function getFields()

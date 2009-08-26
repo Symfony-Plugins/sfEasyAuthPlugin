@@ -2,7 +2,7 @@
 
 
 /**
- * This class adds structure of 'sf_easy_auth_user_credentials' table to 'propel' DatabaseMap object.
+ * This class adds structure of 'sf_easy_auth_user_credential' table to 'propel' DatabaseMap object.
  *
  *
  *
@@ -13,12 +13,12 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model.map
  */
-class sfEasyAuthUserCredentialsMapBuilder implements MapBuilder {
+class sfEasyAuthUserCredentialMapBuilder implements MapBuilder {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'plugins.sfEasyAuthPlugin.lib.model.map.sfEasyAuthUserCredentialsMapBuilder';
+	const CLASS_NAME = 'plugins.sfEasyAuthPlugin.lib.model.map.sfEasyAuthUserCredentialMapBuilder';
 
 	/**
 	 * The database map.
@@ -54,11 +54,11 @@ class sfEasyAuthUserCredentialsMapBuilder implements MapBuilder {
 	 */
 	public function doBuild()
 	{
-		$this->dbMap = Propel::getDatabaseMap(sfEasyAuthUserCredentialsPeer::DATABASE_NAME);
+		$this->dbMap = Propel::getDatabaseMap(sfEasyAuthUserCredentialPeer::DATABASE_NAME);
 
-		$tMap = $this->dbMap->addTable(sfEasyAuthUserCredentialsPeer::TABLE_NAME);
-		$tMap->setPhpName('sfEasyAuthUserCredentials');
-		$tMap->setClassname('sfEasyAuthUserCredentials');
+		$tMap = $this->dbMap->addTable(sfEasyAuthUserCredentialPeer::TABLE_NAME);
+		$tMap->setPhpName('sfEasyAuthUserCredential');
+		$tMap->setClassname('sfEasyAuthUserCredential');
 
 		$tMap->setUseIdGenerator(true);
 
@@ -72,4 +72,4 @@ class sfEasyAuthUserCredentialsMapBuilder implements MapBuilder {
 
 	} // doBuild()
 
-} // sfEasyAuthUserCredentialsMapBuilder
+} // sfEasyAuthUserCredentialMapBuilder

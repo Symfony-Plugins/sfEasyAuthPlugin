@@ -1,6 +1,6 @@
 <?php
 
-class sfEasyAuthUserCredentialsPeer extends BasesfEasyAuthUserCredentialsPeer
+class sfEasyAuthUserCredentialPeer extends BasesfEasyAuthUserCredentialPeer
 {
   /**
    * Queries the user_credentials and user table to find all types and credentials that 

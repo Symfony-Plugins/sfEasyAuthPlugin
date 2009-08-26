@@ -34,8 +34,8 @@ propel:
           } ?>
     profile_id:  { type: integer, default: 0 }
         
-  sf_easy_auth_user_credentials:
-    _attributes:    { phpName: sfEasyAuthUserCredentials }
+  sf_easy_auth_user_credential:
+    _attributes:    { phpName: sfEasyAuthUserCredential }
     id: ~
     user_id:
       type: integer

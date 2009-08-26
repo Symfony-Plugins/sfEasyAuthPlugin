@@ -20,7 +20,7 @@ class sfEasyAuthUserCredentialsPeer extends BasesfEasyAuthUserCredentialsPeer
     
     while ($credential = $query->fetch())
     {
-      $credentials[] = $credential['credential'];
+      $credentials[$credential['credential']] = $credential['credential'];
     }
     
     return $credentials;    

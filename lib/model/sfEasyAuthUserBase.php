@@ -407,6 +407,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    * 
    * @return array
    */
+  /*
   public function getCredentialsForForm()
   {
     $credentials = array();
@@ -418,12 +419,16 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
       // if the user has the credential we're examining, set the value so the checkbox will be checked
       if (in_array($credential, $userCredentials))
       {
-        
+        $credentials[$credential] = $credential;
       }
       else
       {
         // otherwise just add the string to the array.
+        $credentials[$credential] = $credential;
       }
     }
+    
+    return $credentials;
   }
+  */
 }

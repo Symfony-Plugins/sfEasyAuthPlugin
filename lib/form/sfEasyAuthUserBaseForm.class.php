@@ -27,17 +27,42 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
     $this->widgetSchema['password'] = new sfWidgetFormInputConfigurable(array(
       'value' => ($this->isNew()) ? '' : sfEasyAuthUser::PASSWORD_MASK
     ));
-//print_r(sfEasyAuthUserPeer::getTypes());exit;
+
     $this->widgetSchema['type'] = new sfWidgetFormChoice(array(
       'choices' => sfEasyAuthUserPeer::getTypes(),
       'expanded' => true
     ));
-
+    
     $this->widgetSchema['extra_credentials'] = new sfWidgetFormChoice(array(
-      'choices' => $this->getObject()->getCredentialsForForm(),
+      'choices' => sfEasyAuthUserCredentialsPeer::retrieveAllCredentials(),
       'expanded' => true,
       'multiple' => true
     ));
     
+    // select the options that should be selected
+    $this->widgetSchema['extra_credentials']->setDefault(sfContext::getInstance()->getUser()->getAuthUser()->getCredentials());
+    
+    // set up the validator
+    $this->setValidator('extra_credentials', 
+      new sfValidatorChoice(
+        array(
+          'choices' => sfEasyAuthUserCredentialsPeer::retrieveAllCredentials(),
+          'multiple' => true
+        )
+      )
+    );
+  }
+  
+  /**
+   * Overrides the save method to correctly handle extra credentials
+   * 
+   * @param $con Database connection
+   */
+  public function save($con=null)
+  {
+    if ($return = parent::save($con))
+    {
+      $credentials = $this->values['extra_credentials'];
+    }
   }
 }

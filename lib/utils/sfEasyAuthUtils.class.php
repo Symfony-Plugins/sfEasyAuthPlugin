@@ -72,4 +72,17 @@ class sfEasyAuthUtils
     
     return $fullUrl;
   }
+  
+  /**
+   * Logs a debug message if logging is enabled 
+   * 
+   * @param string $message
+   */
+  public static function logDebug($message)
+  {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      sfContext::getInstance()->getLogger()->debug($message);
+    }
+  }
 }

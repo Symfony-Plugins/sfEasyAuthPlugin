@@ -116,13 +116,21 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function authenticate($username, $password, $remember=0)
   {
+    sfEasyAuthUtils::logDebug("Authenticating... Username: $username, password: $password");
+        
     if ($eaUser = sfEasyAuthUserPeer::retrieveByUsername($username))
     {
+      sfEasyAuthUtils::logDebug('User retrieved. Checking password...');
+      
       if ($eaUser->checkPassword($password))
       {
+        sfEasyAuthUtils::logDebug('Password valid.');
+        
         // check whether admins have locked the account
         if ($eaUser->accountLockedByAdmins() == 1)
         {
+          sfEasyAuthUtils::logDebug("The account for user $username has been locked by admins.");
+          
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_locked_by_admins'));
           return false;
         }
@@ -133,6 +141,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         {
           if (!$eaUser->getEmailConfirmed())
           {
+            sfEasyAuthUtils::logDebug('User must confirm their email before being allowed to log in.');
+            
             $this->setMessage(sfConfig::get('app_sf_easy_auth_must_confirm_email'));
             return false;
           }
@@ -141,15 +151,21 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
         // make sure the threshold for login attempts hasn't been exceeded
         if ($eaUser->accountTemporarilyLocked())
         {
+          sfEasyAuthUtils::logDebug('User\'s account is temporarily disabled.');
+          
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
           return false;
         }
 
+        sfEasyAuthUtils::logDebug('User successfully authenticated.');
+        
         $this->eaUser = $eaUser;
         return true;
       }
       else
       {
+        sfEasyAuthUtils::logDebug('Invalid password supplied.');
+        
         // user name matched, but password failed. Record the attempt to prevent 
         // brute forcing
 
@@ -182,6 +198,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
             ));
           }
           
+          sfEasyAuthUtils::logDebug('User\'s account has been temporarily locked.');
+          
           $this->setMessage(sfConfig::get('app_sf_easy_auth_account_temporarily_locked'));
         }
         return false;
@@ -189,10 +207,13 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     }
     else
     {
+      sfEasyAuthUtils::logDebug("Unable to locate user with username $username");
+      
       return false;
     }
     
-    return true;
+    // we should never reach here
+    return false;
   }
 
   /**
@@ -236,6 +257,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       throw new RuntimeException("Error, user is not an instanceof sfEasyAuthUser");
     }
     
+    sfEasyAuthUtils::logDebug('Logging user in and adding credentials.');
+    
     $eaUser->unblockAccount();
     $eaUser->setLastLogin(time());
     $eaUser->save();
@@ -275,6 +298,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function validateRememberMe($remember)
   {
+    sfEasyAuthUtils::logDebug('Validating remember me hash...');
+    
     // make sure the key contains the separator
     if (strpos($remember, '_') === false)
     {
@@ -292,6 +317,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
       
       if (!$eaUser->accountTemporarilyLocked())
       {
+        sfEasyAuthUtils::logDebug('Remember me hash successfully validated.');
+        
         $this->eaUser = $eaUser;
         return true;
       }
@@ -322,6 +349,8 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
    */
   public function logOut()
   {
+    sfEasyAuthUtils::logDebug('Logging user out...');
+    
     sfContext::getInstance()->getResponse()->setCookie('remember', '', -1);
     
     $this->getAttributeHolder()->remove('security_user_id');

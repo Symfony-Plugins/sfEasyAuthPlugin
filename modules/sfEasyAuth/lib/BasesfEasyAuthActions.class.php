@@ -22,6 +22,7 @@ class BasesfEasyAuthActions extends sfActions
     // user is already authenticated, so send them to the success url
     if ($sfUser->isAuthenticated())
     {
+      $this->logMessage('User is already authenticated. Redirecting.', 'debug');
       return $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
     }
     
@@ -46,6 +47,8 @@ class BasesfEasyAuthActions extends sfActions
         )
       ), $url)->getReturnValue();
       
+      $this->logMessage("Redirecting user to $url", 'debug');
+      
       return $this->redirect($url);
     }
   }
@@ -66,9 +69,12 @@ class BasesfEasyAuthActions extends sfActions
     // see if the user has a 'remember me' cookie set
     if ($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name')))
     {
+      $this->logMessage('User has a remember me cookie set. Testing its validity...', 'debug');
+      
       // try to retrieve the user
       if ($sfUser->validateRememberMe($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'))))
       {
+        $this->logMessage('User has a valid remember me cookie. Logging them in...', 'debug');
         return $sfUser->logIn();
       }
     }
@@ -79,6 +85,8 @@ class BasesfEasyAuthActions extends sfActions
       
       if ($this->loginForm->isValid())
       {
+        $this->logMessage('Valid form data submitted.', 'debug');
+        
         $authenticateMethod = sfConfig::get('app_sf_easy_auth_authenticate_callable', '');
         
         $username = $this->loginForm->getValue('username');
@@ -96,10 +104,14 @@ class BasesfEasyAuthActions extends sfActions
         
         if (is_array($authenticateMethod) && count($authenticateMethod) == 2)
         {
+          $this->logMessage('Authenticating user with custom authentication method ' . implode('::', $authenticateMethod), 'debug');
+          
           $result = call_user_func($authenticateMethod, $username, $password);
         }
         else
         {
+          $this->logMessage('Authenticating user with default authenticate method.', 'debug');
+          
           $result = $sfUser->authenticate($username, $password);
         }
         
@@ -114,9 +126,13 @@ class BasesfEasyAuthActions extends sfActions
         
         if ($result === true)
         {
+          $this->logMessage('User was successfully authenticated.', 'debug');
+          
           // set the remember me cookie if they want it
           if ($this->loginForm->getValue('remember'))
           {
+            $this->logMessage('Setting remember me cookie.', 'debug');
+            
             $sfUser->setRememberCookie();
           }
           
@@ -124,12 +140,16 @@ class BasesfEasyAuthActions extends sfActions
         }
         else
         {
+          $this->logMessage('Authentication failed.', 'debug');
+          
           // log in failed.
           $this->setFlash(sfConfig::get('app_sf_easy_auth_invalid_credentials'));
         }
       }
       else
       {
+        $this->logMessage('Invalid form data submitted', 'debug');
+        
         return false;
       }
     }

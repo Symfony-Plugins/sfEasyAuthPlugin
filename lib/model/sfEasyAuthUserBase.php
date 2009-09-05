@@ -9,6 +9,11 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    */
   protected $profile;
   
+  public function __toString()
+  {
+    return $this->getUsername();
+  }
+  
   /**
    * Returns default credentials for this user by examining the inheritance
    * hierarchy

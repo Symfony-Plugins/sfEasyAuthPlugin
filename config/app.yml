@@ -84,3 +84,6 @@ all:
     
     email_confirmation_subject:  Activate your account # the subject for email confirmation emails
     email_confirmation_from_name:    The team          # the from name for email confirmation emails
+    
+    login_form_username_label: Username   # The label that will be shown next to the username field
+                                          # on the log in form.

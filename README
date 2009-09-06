@@ -31,6 +31,8 @@ Installation
     // create as many of the following classes as you have different user types.
     class sfEasyAuthAdminLocal extends sfEasyAuthUser
     {}
+    class sfEasyAuthBasicUserLocal extends sfEasyAuthUser
+    {}
     
   * Rebuild your model
 
@@ -63,6 +65,14 @@ Installation
             [yml]
             sf_easy_auth_auto_login:
               class: sfEasyAuthAutoLogin
+    
+  * Edit each of the generated class files in plugins/sfEasyAuthPlugin/lib/model that
+    represent your user types (e.g. sfEasyAuthAdmin.php and sfEasyAuthBasicUser.php) and
+    make them extend your manually created 'local' classes, e.g.
+    
+            [php]
+            class sfEasyAuthAdmin extends sfEasyAuthAdminLocal
+            class sfEasyAuthBasicUser extends sfEasyAuthBasicUserLocal
     
   * Clear your cache
 

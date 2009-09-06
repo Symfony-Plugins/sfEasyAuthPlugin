@@ -12,7 +12,7 @@
  *
  * @package    plugins.sfEasyAuthPlugin.lib.model
  */
-class sfEasyAuthBasicUser extends sfEasyAuthUserBase {
+class sfEasyAuthBasicUser extends sfEasyAuthBasicUserLocal {
 
 	/**
 	 * Constructs a new sfEasyAuthBasicUser class, setting the type column to sfEasyAuthUserPeer::CLASSKEY_USER.

@@ -22,7 +22,7 @@ Installation
 
         $ symfony plugin:install sfEasyAuthPlugin
 
-  * Create some new classes in your lib/model directory:
+  * Create some new classes in your project's lib/model directory:
   
     class sfEasyAuthUser extends sfEasyAuthUserBase
     {}
@@ -64,7 +64,7 @@ Installation
   
             [yml]
             sf_easy_auth_auto_login:
-              class: sfEasyAuthAutoLogin
+              class: sfEasyAuthAutoLoginFilter
     
   * Edit each of the generated class files in plugins/sfEasyAuthPlugin/lib/model that
     represent your user types (e.g. sfEasyAuthAdmin.php and sfEasyAuthBasicUser.php) and

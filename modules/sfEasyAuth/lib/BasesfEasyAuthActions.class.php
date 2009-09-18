@@ -215,12 +215,10 @@ class BasesfEasyAuthActions extends sfActions
       'sf_easy_auth.pre_logout',
       array('sfUser' => $this->getUser())
     ));
-    
+
     $this->getUser()->logOut();
 
-    $url = sfConfig::get('app_sf_easy_auth_logout_success_url', $request->getReferer());
-    
-    $url = ($url) ? $url : '@homepage';
+    $url = sfConfig::get('app_sf_easy_auth_logout_success_url', '@homepage');
     
     // call an event after logging the user out and before redirecting them
     $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(

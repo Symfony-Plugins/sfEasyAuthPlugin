@@ -110,7 +110,7 @@ class BasesfEasyAuthActions extends sfActions
         }
         else
         {
-          $this->logMessage('Authenticating user with default authenticate method.', 'debug');
+          $this->logMessage('Authenticating user with default authentication method.', 'debug');
           
           $result = $sfUser->authenticate($username, $password);
         }
@@ -164,7 +164,10 @@ class BasesfEasyAuthActions extends sfActions
       else
       {
         // otherwise clear the attribute in case the user is navigating around the site.
-        $this->getUser()->getAttributeHolder()->remove('sf_easy_auth.restricted_url');
+        
+        // actually, the following line prevents this - i.e. redirecting users back to what
+        // they were looking at before being told they need to log in.        
+        // $this->getUser()->getAttributeHolder()->remove('sf_easy_auth.restricted_url');
       }
     }
   }

@@ -469,6 +469,28 @@ All error messages in templates can use the i18n framework. To enable translatio
 error messages in actions, make sure you enable the I18n module in your `settings.yml` file.
 Then change the value of sf_easy_auth_use_i18n to true in your `app.yml` file.
 
+Redirecting users to other pages automatically after they log in
+----------------------------------------------------------------
+
+Imagine you have a site with secure content, but you want to display previews of that content. You want 
+it so that if a user who is not logged in clicks on that content, they are prompted to register or log in.
+After they log in, you want the user to be redirected to the original content they were looking at.
+
+sfEasyAuth supports this behaviour as follows:
+
+  [php]
+  // if the user is not logged in or doesn't have the right credential
+  if (!($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential('basicUser')))
+  {
+    // save the url of the page the user was trying to visit
+    $this->getUser()->setAttribute('sf_easy_auth.restricted_url', $request->getUri());
+    // prompt them to register
+    $this->redirect($this->generateUrl('user_register'));
+  }
+  
+sfEasyAuth will redirect to the page contained in the attribute sf_easy_auth.restricted_url after logging the
+user in.
+
 Acknowledgements
 ----------------
 

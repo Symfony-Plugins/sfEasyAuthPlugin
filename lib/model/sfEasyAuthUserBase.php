@@ -206,14 +206,15 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    * Sets the user's password, hashing it beforehand if it hasn't already been hashed.
    * 
    * @param string $password
+   * @param bool $skipPasswordHash Whether to force not hashing the password
    */
-  public function setPassword($password)
+  public function setPassword($password, $skipPasswordHash=false)
   {
     // don't set the password if we've got the default text from the admin editor
     if (strcmp(self::PASSWORD_MASK, $password) !== 0)
     {
       // only hash the password if it hasn't been hashed already
-      $hashedPassword  = ($this->getPassword() != $password) ? 
+      $hashedPassword  = (!$skipPasswordHash && ($this->getPassword() != $password)) ? 
         $this->hashPassword($password, true) : $password; 
     
       // set the password

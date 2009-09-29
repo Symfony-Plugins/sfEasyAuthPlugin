@@ -195,7 +195,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
     {
       if ($eaUser->getId() !== $this->getId())
       {
-        throw new RuntimeException("Username already taken");
+        throw new RuntimeException("Username $username already taken");
       }
     }
     

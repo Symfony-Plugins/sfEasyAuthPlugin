@@ -363,7 +363,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   {
     $callable = sfConfig::get('app_sf_easy_auth_password_reset_mailer_callable');
     
-    if (is_array($callable) && count($callable) == 2)
+    if (strpos($callable, '::') !== false)
     {
       $subject = ($subject) ? $subject :  
         sfConfig::get('app_sf_easy_auth_reset_email_subject');
@@ -383,8 +383,8 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   public function sendEmailConfirmationMessage($message, $subject='')
   {
     $callable = sfConfig::get('app_sf_easy_auth_email_confirmation_mailer_callable');
-    
-    if (is_array($callable) && count($callable) == 2)
+
+    if (strpos($callable, '::') !== false)
     {
       $subject = ($subject) ? $subject :  
         sfConfig::get('app_sf_easy_auth_email_confirmation_subject');

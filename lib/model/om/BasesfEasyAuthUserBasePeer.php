@@ -793,6 +793,9 @@ abstract class BasesfEasyAuthUserBasePeer {
 			// invalidate objects in SbUserMarketingQuestionPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
 			SbUserMarketingQuestionPeer::clearInstancePool();
 
+			// invalidate objects in SbUserOfferUsePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
+			SbUserOfferUsePeer::clearInstancePool();
+
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -835,6 +838,12 @@ abstract class BasesfEasyAuthUserBasePeer {
 			
 			$c->add(SbUserMarketingQuestionPeer::USER_ID, $obj->getId());
 			$affectedRows += SbUserMarketingQuestionPeer::doDelete($c, $con);
+
+			// delete related SbUserOfferUse objects
+			$c = new Criteria(SbUserOfferUsePeer::DATABASE_NAME);
+			
+			$c->add(SbUserOfferUsePeer::USER_ID, $obj->getId());
+			$affectedRows += SbUserOfferUsePeer::doDelete($c, $con);
 		}
 		return $affectedRows;
 	}

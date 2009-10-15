@@ -35,6 +35,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'type'                            => new sfWidgetFormFilterInput(),
       'profile_id'                      => new sfWidgetFormFilterInput(),
       'sb_user_marketing_question_list' => new sfWidgetFormPropelChoice(array('model' => 'SbMarketingQuestion', 'add_empty' => true)),
+      'sb_user_offer_use_list'          => new sfWidgetFormPropelChoice(array('model' => 'SbOffer', 'add_empty' => true)),
       'sb_user_mailing_list_list'       => new sfWidgetFormPropelChoice(array('model' => 'SbMailingList', 'add_empty' => true)),
     ));
 
@@ -59,6 +60,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'type'                            => new sfValidatorPass(array('required' => false)),
       'profile_id'                      => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'sb_user_marketing_question_list' => new sfValidatorPropelChoice(array('model' => 'SbMarketingQuestion', 'required' => false)),
+      'sb_user_offer_use_list'          => new sfValidatorPropelChoice(array('model' => 'SbOffer', 'required' => false)),
       'sb_user_mailing_list_list'       => new sfValidatorPropelChoice(array('model' => 'SbMailingList', 'required' => false)),
     ));
 
@@ -89,6 +91,31 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
     foreach ($values as $value)
     {
       $criterion->addOr($criteria->getNewCriterion(SbUserMarketingQuestionPeer::QUESTION_ID, $value));
+    }
+
+    $criteria->add($criterion);
+  }
+
+  public function addSbUserOfferUseListColumnCriteria(Criteria $criteria, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $criteria->addJoin(SbUserOfferUsePeer::USER_ID, sfEasyAuthUserBasePeer::ID);
+
+    $value = array_pop($values);
+    $criterion = $criteria->getNewCriterion(SbUserOfferUsePeer::OFFER_ID, $value);
+
+    foreach ($values as $value)
+    {
+      $criterion->addOr($criteria->getNewCriterion(SbUserOfferUsePeer::OFFER_ID, $value));
     }
 
     $criteria->add($criterion);
@@ -148,6 +175,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'type'                            => 'Text',
       'profile_id'                      => 'Number',
       'sb_user_marketing_question_list' => 'ManyKey',
+      'sb_user_offer_use_list'          => 'ManyKey',
       'sb_user_mailing_list_list'       => 'ManyKey',
     );
   }

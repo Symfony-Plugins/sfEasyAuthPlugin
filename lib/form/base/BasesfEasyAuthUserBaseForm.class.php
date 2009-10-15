@@ -34,6 +34,7 @@ class BasesfEasyAuthUserBaseForm extends BaseFormPropel
       'type'                            => new sfWidgetFormInput(),
       'profile_id'                      => new sfWidgetFormInput(),
       'sb_user_marketing_question_list' => new sfWidgetFormPropelChoiceMany(array('model' => 'SbMarketingQuestion')),
+      'sb_user_offer_use_list'          => new sfWidgetFormPropelChoiceMany(array('model' => 'SbOffer')),
       'sb_user_mailing_list_list'       => new sfWidgetFormPropelChoiceMany(array('model' => 'SbMailingList')),
     ));
 
@@ -59,6 +60,7 @@ class BasesfEasyAuthUserBaseForm extends BaseFormPropel
       'type'                            => new sfValidatorString(array('max_length' => 10, 'required' => false)),
       'profile_id'                      => new sfValidatorInteger(array('required' => false)),
       'sb_user_marketing_question_list' => new sfValidatorPropelChoiceMany(array('model' => 'SbMarketingQuestion', 'required' => false)),
+      'sb_user_offer_use_list'          => new sfValidatorPropelChoiceMany(array('model' => 'SbOffer', 'required' => false)),
       'sb_user_mailing_list_list'       => new sfValidatorPropelChoiceMany(array('model' => 'SbMailingList', 'required' => false)),
     ));
 
@@ -98,6 +100,17 @@ class BasesfEasyAuthUserBaseForm extends BaseFormPropel
       $this->setDefault('sb_user_marketing_question_list', $values);
     }
 
+    if (isset($this->widgetSchema['sb_user_offer_use_list']))
+    {
+      $values = array();
+      foreach ($this->object->getSbUserOfferUses() as $obj)
+      {
+        $values[] = $obj->getOfferId();
+      }
+
+      $this->setDefault('sb_user_offer_use_list', $values);
+    }
+
     if (isset($this->widgetSchema['sb_user_mailing_list_list']))
     {
       $values = array();
@@ -116,6 +129,7 @@ class BasesfEasyAuthUserBaseForm extends BaseFormPropel
     parent::doSave($con);
 
     $this->saveSbUserMarketingQuestionList($con);
+    $this->saveSbUserOfferUseList($con);
     $this->saveSbUserMailingListList($con);
   }
 
@@ -149,6 +163,41 @@ class BasesfEasyAuthUserBaseForm extends BaseFormPropel
         $obj = new SbUserMarketingQuestion();
         $obj->setUserId($this->object->getPrimaryKey());
         $obj->setQuestionId($value);
+        $obj->save();
+      }
+    }
+  }
+
+  public function saveSbUserOfferUseList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['sb_user_offer_use_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (is_null($con))
+    {
+      $con = $this->getConnection();
+    }
+
+    $c = new Criteria();
+    $c->add(SbUserOfferUsePeer::USER_ID, $this->object->getPrimaryKey());
+    SbUserOfferUsePeer::doDelete($c, $con);
+
+    $values = $this->getValue('sb_user_offer_use_list');
+    if (is_array($values))
+    {
+      foreach ($values as $value)
+      {
+        $obj = new SbUserOfferUse();
+        $obj->setUserId($this->object->getPrimaryKey());
+        $obj->setOfferId($value);
         $obj->save();
       }
     }

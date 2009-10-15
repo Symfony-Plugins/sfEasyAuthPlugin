@@ -26,6 +26,10 @@ class BasesfEasyAuthUserCredentialForm extends BaseFormPropel
       'profile_id' => new sfValidatorInteger(array('required' => false)),
     ));
 
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorPropelUnique(array('model' => 'sfEasyAuthUserCredential', 'column' => array('profile_id')))
+    );
+
     $this->widgetSchema->setNameFormat('sf_easy_auth_user_credential[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

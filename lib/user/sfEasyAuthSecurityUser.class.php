@@ -121,7 +121,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     if ($eaUser = sfEasyAuthUserPeer::retrieveByUsername($username))
     {
       sfEasyAuthUtils::logDebug('User retrieved. Checking password...');
-      
+
       if ($eaUser->checkPassword($password))
       {
         sfEasyAuthUtils::logDebug('Password valid.');
@@ -251,12 +251,12 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   public function logIn(sfEasyAuthUser $eaUser=null)
   {
     $eaUser = (is_object($eaUser)) ? $eaUser : $this->eaUser;
-     
+
     if (!$eaUser instanceof sfEasyAuthUser)
     {
       throw new RuntimeException("Error, user is not an instanceof sfEasyAuthUser");
     }
-    
+
     sfEasyAuthUtils::logDebug('Logging user in and adding credentials.');
     
     $eaUser->unblockAccount();

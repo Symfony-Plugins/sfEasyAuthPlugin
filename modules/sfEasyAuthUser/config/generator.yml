@@ -23,11 +23,10 @@ generator:
         title:   User list
         display: [=username, credentials_as_string, created_at, last_login, locked_by_admins, account_temporarily_locked ]
       filter:  
-        display: [ username, locked_by_admins, type ]
+        display: [ username, email, locked_by_admins, type ]
       form: ~
       edit:
         title: Editing User "%%username%%"
-
       new:
         title: New User
         display: [ username, password, enabled, type ]

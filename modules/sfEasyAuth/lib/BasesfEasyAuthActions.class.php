@@ -274,7 +274,8 @@ class BasesfEasyAuthActions extends sfActions
   }
   
   /**
-   * Action that lets users set a new password
+   * Action that lets users set a new password. Note, this requires that the auto-login
+   * filter is enabled.
    * 
    * @param sfRequest $request A request object
    */
@@ -282,64 +283,45 @@ class BasesfEasyAuthActions extends sfActions
   {
     $sfUser = $this->getUser();
     
-    // if the user clicked on an auto-log-in link for example, and the link
-    // failed to log them in, get them to log in.
+    // if the user clicked on an auto-log-in link, and the link
+    // failed to log them in, send them a message that they need to
+    // request a new password reset email - we can't identify them ourselves
     if (!$sfUser->isAuthenticated() || !$sfUser->getAuthUser())
     {
-      // redirect them if they aren't already authenticated
-      $this->redirect('@sf_easy_auth_login');
+      // tell them that link has expired, but to check their email because we've sent
+      // them a new link.
+      $this->setTemplate('passwordResetFailed');
+      
+      return;      
     }
 
-    $this->form = new sfEasyAuthPasswordResetSetPasswordForm(
-      array(), 
-      array('token' => $request->getParameter('token'))
-    );
+    $this->form = new sfEasyAuthPasswordResetSetPasswordForm();
     
-    if ($request->isMethod('post') && $sfUser->validatePasswordResetToken($request->getParameter('token')))
+    // the form will be posted back to this action when the user resets their password
+    if ($request->isMethod('post'))
     {
       $this->form->bind($request->getParameter($this->form->getName()));
       
       if ($this->form->isValid())
       {
-        // make sure the url 'token' parameter matches the one stored in the 
-        // user table and is valid
-        if ($sfUser->validatePasswordResetToken($this->form->getValue('token')))
-        {
-          // set and save the new password
-          $sfUser->updatePassword($this->form->getValue('password'));
-                    
-          // call an event before updating the user's password
-          $this->getContext()->getEventDispatcher()->notify(new sfEvent(
-            $this,
-            'sf_easy_auth.post_password_reset',
-            array(
-              'sfUser' => $sfUser,
-              'password' => $this->form->getValue('password'))
-          ));
-          
-          // clear the password reset token so the link can't be used again
-          $sfUser->invalidatePasswordResetToken();
-          
-          // send them a success message
-          $this->setTemplate('passwordResetPasswordUpdated');
-        }
+        // set and save the new password
+        $sfUser->updatePassword($this->form->getValue('password'));
+                  
+        // call an event before updating the user's password
+        $this->getContext()->getEventDispatcher()->notify(new sfEvent(
+          $this,
+          'sf_easy_auth.post_password_reset',
+          array(
+            'sfUser' => $sfUser,
+            'password' => $this->form->getValue('password'))
+        ));
+        
+        // clear the password reset token so the link can't be used again
+        $sfUser->invalidatePasswordResetToken();
+        
+        // send them a success message
+        $this->setTemplate('passwordResetPasswordUpdated');
       }
-    }
-    else if (!$sfUser->validatePasswordResetToken($request->getParameter('token')))
-    {
-      // call an event before sending the reset message
-      $this->getContext()->getEventDispatcher()->notify(new sfEvent(
-        $this,
-        'sf_easy_auth.pre_password_reset_resend_message',
-        array('eaUser' => $sfUser->getAuthUser())
-      ));
-      
-      // send them a new link
-      $this->sendPasswordResetMessage($sfUser->getAuthUser());
-      
-      // tell them that link has expired, but to check their email because we've sent
-      // them a new link.
-      $this->setTemplate('passwordResetExpiredToken');
     }
   }
   

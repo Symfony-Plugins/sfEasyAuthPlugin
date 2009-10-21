@@ -10,10 +10,10 @@ and reset your password:
         array(
           'uid' => $eaUser->getId(), 
           'alh' => $eaUser->getAutoLoginHash(),
-           // generate a password reset hash
-          'pw_reset[token]' => $eaUser->getNewPasswordResetToken()
         )
       ); ?>
+    
+Your user name is <?php echo $eaUser->getUsername() ?>.
     
 Thanks,
 <?php echo sfConfig::get('app_sf_easy_auth_reset_from_name')?>

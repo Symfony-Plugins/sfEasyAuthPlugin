@@ -3,10 +3,6 @@
 /**
  * sfEasyAuth password reset form allows users to set a new password.
  * 
- * This form must be instantiated passing the following options:
- * 
- *   * token - the value of a password reset token
- *
  * @package    .
  * @subpackage form
  * @author     Your name here
@@ -16,15 +12,7 @@ class sfEasyAuthPasswordResetSetPasswordForm extends sfForm
 {
   public function configure()
   {
-    // make sure the reset token was set as an option so we can embed it in a hidden
-    // field in case the form is invalid
-    if (strlen($this->getOption('token')) === 0)
-    {
-      throw new RuntimeException("Error, no token set.");
-    }
-    
     $this->setWidgets(array(
-      'token' => new sfWidgetFormInputHidden(array('default' => $this->getOption('token'))),
       'password'  => new sfWidgetFormInputPassword(),
       'confirm_password' => new sfWidgetFormInputPassword(),
     ));
@@ -38,9 +26,6 @@ class sfEasyAuthPasswordResetSetPasswordForm extends sfForm
 
     $this->setValidators(
       array(
-        'token' => new sfValidatorString(
-          array('min_length' => 12, 'max_length' => 12)
-        ),
         'password' => new sfValidatorString(
           array('min_length' => sfConfig::get('app_sf_easy_auth_password_min_length'), 'max_length' => 50), 
           array('required' => 'Please enter a password',

@@ -292,10 +292,10 @@ class BasesfEasyAuthActions extends sfActions
 
     $this->form = new sfEasyAuthPasswordResetSetPasswordForm(
       array(), 
-      array('token' => $request->getParameter('pw_reset[token]'))
+      array('token' => $request->getParameter('token'))
     );
     
-    if ($request->isMethod('post') && $sfUser->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
+    if ($request->isMethod('post') && $sfUser->validatePasswordResetToken($request->getParameter('token')))
     {
       $this->form->bind($request->getParameter($this->form->getName()));
       
@@ -325,7 +325,7 @@ class BasesfEasyAuthActions extends sfActions
         }
       }
     }
-    else if (!$sfUser->validatePasswordResetToken($request->getParameter('pw_reset[token]')))
+    else if (!$sfUser->validatePasswordResetToken($request->getParameter('token')))
     {
       // call an event before sending the reset message
       $this->getContext()->getEventDispatcher()->notify(new sfEvent(

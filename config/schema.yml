@@ -15,7 +15,7 @@ propel:
     last_login_attempt:   { type: timestamp }
     failed_logins:  { type: integer, default: 0 }
     locked_by_admins:        { type: boolean, default: 0 }
-    remember_key:   { type: varchar(42), index: unique }
+    remember_key:   { type: varchar(42), index: true }
     remember_key_lifetime:  { type: timestamp }
     auto_login_hash: { type: varchar(32) }
     password_reset_token: { type: varchar(12) }

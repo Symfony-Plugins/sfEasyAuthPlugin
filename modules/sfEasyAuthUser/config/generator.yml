@@ -24,7 +24,8 @@ generator:
         display: [=username, credentials_as_string, created_at, last_login, locked_by_admins, account_temporarily_locked ]
       filter:  
         display: [ username, email, locked_by_admins, type ]
-      form: ~
+      form: 
+        display: [ username, password, email, email_confirmed, last_login, last_login_attempt, failed_logins, locked_by_admins, type, extra_credentials ]
       edit:
         title: Editing User "%%username%%"
       new:

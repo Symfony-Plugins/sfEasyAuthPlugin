@@ -51,7 +51,7 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
               array('uid', 'alh')
             ); 
             
-            return $this->getContext()->getController()->redirect($url);
+            $this->getContext()->getController()->redirect($url);
           }
         }
       }

@@ -528,7 +528,7 @@ abstract class BasesfEasyAuthUserBasePeer {
 
   static public function getUniqueColumnNames()
   {
-    return array(array('username'), array('email'), array('remember_key'));
+    return array(array('username'), array('email'));
   }
 	/**
 	 * Returns the TableMap related to this peer.
@@ -787,6 +787,9 @@ abstract class BasesfEasyAuthUserBasePeer {
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
 
+			// invalidate objects in SbUserCompetitionAnswerPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
+			SbUserCompetitionAnswerPeer::clearInstancePool();
+
 			// invalidate objects in SbUserMailingListPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
 			SbUserMailingListPeer::clearInstancePool();
 
@@ -826,6 +829,12 @@ abstract class BasesfEasyAuthUserBasePeer {
 		$objects = sfEasyAuthUserBasePeer::doSelect($criteria, $con);
 		foreach ($objects as $obj) {
 
+
+			// delete related SbUserCompetitionAnswer objects
+			$c = new Criteria(SbUserCompetitionAnswerPeer::DATABASE_NAME);
+			
+			$c->add(SbUserCompetitionAnswerPeer::USER_ID, $obj->getId());
+			$affectedRows += SbUserCompetitionAnswerPeer::doDelete($c, $con);
 
 			// delete related SbUserMailingList objects
 			$c = new Criteria(SbUserMailingListPeer::DATABASE_NAME);

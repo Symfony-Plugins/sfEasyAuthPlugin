@@ -156,6 +156,16 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 	private $lastsfEasyAuthUserCredentialCriteria = null;
 
 	/**
+	 * @var        array SbUserCompetitionAnswer[] Collection to store aggregation of SbUserCompetitionAnswer objects.
+	 */
+	protected $collSbUserCompetitionAnswers;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collSbUserCompetitionAnswers.
+	 */
+	private $lastSbUserCompetitionAnswerCriteria = null;
+
+	/**
 	 * @var        array SbUserMailingList[] Collection to store aggregation of SbUserMailingList objects.
 	 */
 	protected $collSbUserMailingLists;
@@ -1317,6 +1327,9 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			$this->collsfEasyAuthUserCredentials = null;
 			$this->lastsfEasyAuthUserCredentialCriteria = null;
 
+			$this->collSbUserCompetitionAnswers = null;
+			$this->lastSbUserCompetitionAnswerCriteria = null;
+
 			$this->collSbUserMailingLists = null;
 			$this->lastSbUserMailingListCriteria = null;
 
@@ -1484,6 +1497,14 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 				}
 			}
 
+			if ($this->collSbUserCompetitionAnswers !== null) {
+				foreach ($this->collSbUserCompetitionAnswers as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collSbUserMailingLists !== null) {
 				foreach ($this->collSbUserMailingLists as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -1581,6 +1602,14 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 
 				if ($this->collsfEasyAuthUserCredentials !== null) {
 					foreach ($this->collsfEasyAuthUserCredentials as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collSbUserCompetitionAnswers !== null) {
+					foreach ($this->collSbUserCompetitionAnswers as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -2015,6 +2044,12 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 				}
 			}
 
+			foreach ($this->getSbUserCompetitionAnswers() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addSbUserCompetitionAnswer($relObj->copy($deepCopy));
+				}
+			}
+
 			foreach ($this->getSbUserMailingLists() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addSbUserMailingList($relObj->copy($deepCopy));
@@ -2232,6 +2267,254 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 			array_push($this->collsfEasyAuthUserCredentials, $l);
 			$l->setsfEasyAuthUserBase($this);
 		}
+	}
+
+	/**
+	 * Clears out the collSbUserCompetitionAnswers collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addSbUserCompetitionAnswers()
+	 */
+	public function clearSbUserCompetitionAnswers()
+	{
+		$this->collSbUserCompetitionAnswers = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collSbUserCompetitionAnswers collection (array).
+	 *
+	 * By default this just sets the collSbUserCompetitionAnswers collection to an empty array (like clearcollSbUserCompetitionAnswers());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initSbUserCompetitionAnswers()
+	{
+		$this->collSbUserCompetitionAnswers = array();
+	}
+
+	/**
+	 * Gets an array of SbUserCompetitionAnswer objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUserBase has previously been saved, it will retrieve
+	 * related SbUserCompetitionAnswers from storage. If this sfEasyAuthUserBase is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array SbUserCompetitionAnswer[]
+	 * @throws     PropelException
+	 */
+	public function getSbUserCompetitionAnswers($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserCompetitionAnswers === null) {
+			if ($this->isNew()) {
+			   $this->collSbUserCompetitionAnswers = array();
+			} else {
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				SbUserCompetitionAnswerPeer::addSelectColumns($criteria);
+				$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				SbUserCompetitionAnswerPeer::addSelectColumns($criteria);
+				if (!isset($this->lastSbUserCompetitionAnswerCriteria) || !$this->lastSbUserCompetitionAnswerCriteria->equals($criteria)) {
+					$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastSbUserCompetitionAnswerCriteria = $criteria;
+		return $this->collSbUserCompetitionAnswers;
+	}
+
+	/**
+	 * Returns the number of related SbUserCompetitionAnswer objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related SbUserCompetitionAnswer objects.
+	 * @throws     PropelException
+	 */
+	public function countSbUserCompetitionAnswers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collSbUserCompetitionAnswers === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				$count = SbUserCompetitionAnswerPeer::doCount($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				if (!isset($this->lastSbUserCompetitionAnswerCriteria) || !$this->lastSbUserCompetitionAnswerCriteria->equals($criteria)) {
+					$count = SbUserCompetitionAnswerPeer::doCount($criteria, $con);
+				} else {
+					$count = count($this->collSbUserCompetitionAnswers);
+				}
+			} else {
+				$count = count($this->collSbUserCompetitionAnswers);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a SbUserCompetitionAnswer object to this object
+	 * through the SbUserCompetitionAnswer foreign key attribute.
+	 *
+	 * @param      SbUserCompetitionAnswer $l SbUserCompetitionAnswer
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addSbUserCompetitionAnswer(SbUserCompetitionAnswer $l)
+	{
+		if ($this->collSbUserCompetitionAnswers === null) {
+			$this->initSbUserCompetitionAnswers();
+		}
+		if (!in_array($l, $this->collSbUserCompetitionAnswers, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collSbUserCompetitionAnswers, $l);
+			$l->setsfEasyAuthUserBase($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUserBase is new, it will return
+	 * an empty collection; or if this sfEasyAuthUserBase has previously
+	 * been saved, it will retrieve related SbUserCompetitionAnswers from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfEasyAuthUserBase.
+	 */
+	public function getSbUserCompetitionAnswersJoinSbCompetition($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserCompetitionAnswers === null) {
+			if ($this->isNew()) {
+				$this->collSbUserCompetitionAnswers = array();
+			} else {
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelectJoinSbCompetition($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+			if (!isset($this->lastSbUserCompetitionAnswerCriteria) || !$this->lastSbUserCompetitionAnswerCriteria->equals($criteria)) {
+				$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelectJoinSbCompetition($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastSbUserCompetitionAnswerCriteria = $criteria;
+
+		return $this->collSbUserCompetitionAnswers;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfEasyAuthUserBase is new, it will return
+	 * an empty collection; or if this sfEasyAuthUserBase has previously
+	 * been saved, it will retrieve related SbUserCompetitionAnswers from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfEasyAuthUserBase.
+	 */
+	public function getSbUserCompetitionAnswersJoinSbCompetitionAnswer($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(sfEasyAuthUserBasePeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collSbUserCompetitionAnswers === null) {
+			if ($this->isNew()) {
+				$this->collSbUserCompetitionAnswers = array();
+			} else {
+
+				$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+				$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelectJoinSbCompetitionAnswer($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(SbUserCompetitionAnswerPeer::USER_ID, $this->id);
+
+			if (!isset($this->lastSbUserCompetitionAnswerCriteria) || !$this->lastSbUserCompetitionAnswerCriteria->equals($criteria)) {
+				$this->collSbUserCompetitionAnswers = SbUserCompetitionAnswerPeer::doSelectJoinSbCompetitionAnswer($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastSbUserCompetitionAnswerCriteria = $criteria;
+
+		return $this->collSbUserCompetitionAnswers;
 	}
 
 	/**
@@ -2901,6 +3184,11 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collSbUserCompetitionAnswers) {
+				foreach ((array) $this->collSbUserCompetitionAnswers as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collSbUserMailingLists) {
 				foreach ((array) $this->collSbUserMailingLists as $o) {
 					$o->clearAllReferences($deep);
@@ -2919,6 +3207,7 @@ abstract class BasesfEasyAuthUserBase extends BaseObject  implements Persistent 
 		} // if ($deep)
 
 		$this->collsfEasyAuthUserCredentials = null;
+		$this->collSbUserCompetitionAnswers = null;
 		$this->collSbUserMailingLists = null;
 		$this->collSbUserMarketingQuestions = null;
 		$this->collSbUserOfferUses = null;

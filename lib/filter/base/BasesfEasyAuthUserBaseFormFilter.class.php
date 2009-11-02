@@ -37,6 +37,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'sb_user_marketing_question_list' => new sfWidgetFormPropelChoice(array('model' => 'SbMarketingQuestion', 'add_empty' => true)),
       'sb_user_offer_use_list'          => new sfWidgetFormPropelChoice(array('model' => 'SbOffer', 'add_empty' => true)),
       'sb_user_mailing_list_list'       => new sfWidgetFormPropelChoice(array('model' => 'SbMailingList', 'add_empty' => true)),
+      'sb_user_competition_answer_list' => new sfWidgetFormPropelChoice(array('model' => 'SbCompetition', 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
@@ -62,6 +63,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'sb_user_marketing_question_list' => new sfValidatorPropelChoice(array('model' => 'SbMarketingQuestion', 'required' => false)),
       'sb_user_offer_use_list'          => new sfValidatorPropelChoice(array('model' => 'SbOffer', 'required' => false)),
       'sb_user_mailing_list_list'       => new sfValidatorPropelChoice(array('model' => 'SbMailingList', 'required' => false)),
+      'sb_user_competition_answer_list' => new sfValidatorPropelChoice(array('model' => 'SbCompetition', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('sf_easy_auth_user_base_filters[%s]');
@@ -146,6 +148,31 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
     $criteria->add($criterion);
   }
 
+  public function addSbUserCompetitionAnswerListColumnCriteria(Criteria $criteria, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $criteria->addJoin(SbUserCompetitionAnswerPeer::USER_ID, sfEasyAuthUserBasePeer::ID);
+
+    $value = array_pop($values);
+    $criterion = $criteria->getNewCriterion(SbUserCompetitionAnswerPeer::COMPETITION_ID, $value);
+
+    foreach ($values as $value)
+    {
+      $criterion->addOr($criteria->getNewCriterion(SbUserCompetitionAnswerPeer::COMPETITION_ID, $value));
+    }
+
+    $criteria->add($criterion);
+  }
+
   public function getModelName()
   {
     return 'sfEasyAuthUserBase';
@@ -177,6 +204,7 @@ class BasesfEasyAuthUserBaseFormFilter extends BaseFormFilterPropel
       'sb_user_marketing_question_list' => 'ManyKey',
       'sb_user_offer_use_list'          => 'ManyKey',
       'sb_user_mailing_list_list'       => 'ManyKey',
+      'sb_user_competition_answer_list' => 'ManyKey',
     );
   }
 }

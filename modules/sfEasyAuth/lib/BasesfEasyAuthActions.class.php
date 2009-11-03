@@ -358,6 +358,7 @@ class BasesfEasyAuthActions extends sfActions
   protected function sendPasswordResetMessage(sfEasyAuthUser $eaUser)
   {
     $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('eaUser' => $eaUser));
-    return $eaUser->sendPasswordResetMessage($message);
+    $htmlMessage = $this->getPartial('sfEasyAuth/passwordResetEmailHtml', array('eaUser' => $eaUser));
+    return $eaUser->sendPasswordResetMessage($message, $htmlMessage);
   }
 }

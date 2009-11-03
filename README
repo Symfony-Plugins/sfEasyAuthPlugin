@@ -244,6 +244,15 @@ For example, to get the current username:
     // or via the proxy method
     $this->getUser()->getUsername()
 
+Allow users to log in with either a user name or email address
+--------------------------------------------------------------
+
+By default users can only log in with a correct user name and password combination.
+If you'd like to allow users to be able to log in with either a user name or email
+address as well as a password, change the setting `allow_emails_as_usernames_for_login`
+to true in the `app.yml` file. This setting will not take effect if you supply your
+own authentication callable (see below).
+
 Check the user password with an external method
 -----------------------------------------------
 

@@ -117,8 +117,15 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   public function authenticate($username, $password, $remember=0)
   {
     sfEasyAuthUtils::logDebug("Authenticating... Username: $username, password: $password");
-        
-    if ($eaUser = sfEasyAuthUserPeer::retrieveByUsername($username))
+
+    $eaUser = sfEasyAuthUserPeer::retrieveByUsername($username);
+    
+    if (!$eaUser && sfConfig::get('app_sf_easy_auth_allow_emails_as_usernames_for_login'))
+    {
+      $eaUser = sfEasyAuthUserPeer::retrieveByEmail($username);
+    }
+    
+    if (is_object($eaUser))
     {
       sfEasyAuthUtils::logDebug('User retrieved. Checking password...');
 

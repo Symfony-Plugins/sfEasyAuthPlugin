@@ -377,10 +377,11 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    * their account
    * 
    * @param string $message The message to send to this user
+   * @param string $htmlMessage The HTML message to send to the user (optional)
    * @param string $subject A subject that will override the default one configured
    * in the app.yml file
    */
-  public function sendEmailConfirmationMessage($message, $subject='')
+  public function sendEmailConfirmationMessage($message, $htmlMessage='', $subject='')
   {
     $callable = sfConfig::get('app_sf_easy_auth_email_confirmation_mailer_callable');
 
@@ -389,7 +390,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
       $subject = ($subject) ? $subject :  
         sfConfig::get('app_sf_easy_auth_email_confirmation_subject');
       
-      return call_user_func($callable, $this, $subject, $message);
+      return call_user_func($callable, $this, $subject, $message, $htmlMessage);
     }
   }
   

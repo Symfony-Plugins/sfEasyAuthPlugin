@@ -12,13 +12,15 @@ all:
   
     password_reset_mailer_callable: sfEasyAuthSimpleMailer::mail    
       # callable to send password reset emails. It must be a static method.  It 
-      # will be invoked with 2 parameters: 
+      # will be invoked with the following parameters: 
       #  * the (sfEasyAuthUser) user object of the recipient 
       #  * the (string) subject
-      #  * and the (string) message to send
+      #  * the (string) text message to send
+      #  * the (string) html message to send
   
     email_confirmation_mailer_callable: sfEasyAuthSimpleMailer::mail
-      # callable to send email confirmation links. Parameters are as above.
+      # callable to send email confirmation links. Parameters are as for password_reset_mailer_callable.
+      # Note: the sfEasyAuthSimpleMailer::mail doesn't currently support sending html emails
   
     base_url:  http://www.example.com     # base url for authentication stuff. This will be 
                                           # used as part of the password reset link. You should

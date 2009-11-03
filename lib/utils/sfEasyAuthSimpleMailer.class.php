@@ -13,8 +13,11 @@ class sfEasyAuthSimpleMailer
    * @param sfEasyAuthUser $eaUser The recipient user
    * @param string $subject The message subject
    * @param string $message The message to send
+   * @param string $htmlMessage The HTML message to send
+   * 
+   * @todo Implement sending html messages
    */
-  public static function mail(sfEasyAuthUser $eaUser, $subject, $message)
+  public static function mail(sfEasyAuthUser $eaUser, $subject, $message, $htmlMessage='')
   {
     // i18n if necessary
     if (sfConfig::get('app_sf_easy_auth_use_i18n'))

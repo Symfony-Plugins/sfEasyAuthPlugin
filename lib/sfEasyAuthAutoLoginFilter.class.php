@@ -46,12 +46,18 @@ class sfEasyAuthAutoLoginFilter extends sfFilter
             // to do this otherwise users won't end up where they wanted to go, and
             // browsers will be confused if a resource redirects to itself, GET params
             // and all
+            
+            // the following was commented by al at 11:40, 2009-11-04 because there is
+            // no need to redirect the users and it may be causing empty sessions to be 
+            // created/no sessions to be created at all.
+            /*
             $url = sfEasyAuthUtils::removeGetParametersFromUrl(
               $request->getUri(), 
               array('uid', 'alh')
             ); 
             
             $this->getContext()->getController()->redirect($url);
+            */
           }
         }
       }

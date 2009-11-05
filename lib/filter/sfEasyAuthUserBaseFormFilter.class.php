@@ -17,4 +17,30 @@ class sfEasyAuthUserBaseFormFilter extends BasesfEasyAuthUserBaseFormFilter
       'expanded' => false
     ));
   }
+  
+  /**
+   * Trims whitespace from the email address
+   */
+  public function convertEmailValue($value)
+  {
+    foreach ($value as $k => $v)
+    {
+      $value[$k] = trim($v);
+    }
+    
+    return $value;
+  }
+  
+  /**
+   * Trims whitespace from the user name
+   */
+  public function convertUsernameValue($value)
+  {
+    foreach ($value as $k => $v)
+    {
+      $value[$k] = trim($v);
+    }
+    
+    return $value;
+  }
 }

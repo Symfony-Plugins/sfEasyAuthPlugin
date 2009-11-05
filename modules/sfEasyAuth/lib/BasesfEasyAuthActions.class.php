@@ -288,8 +288,7 @@ class BasesfEasyAuthActions extends sfActions
     // request a new password reset email - we can't identify them ourselves
     if (!$sfUser->isAuthenticated() || !$sfUser->getAuthUser())
     {
-      // tell them that link has expired, but to check their email because we've sent
-      // them a new link.
+      // tell them that link has expired or is invalid
       $this->setTemplate('passwordResetFailed');
       
       return;      

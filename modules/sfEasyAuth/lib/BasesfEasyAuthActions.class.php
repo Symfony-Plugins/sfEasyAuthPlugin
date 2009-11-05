@@ -23,7 +23,7 @@ class BasesfEasyAuthActions extends sfActions
     if ($sfUser->isAuthenticated())
     {
       $this->logMessage('User is already authenticated. Redirecting.', 'debug');
-      return $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
+      $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
     }
     
     if ($this->handleLogIn($request))
@@ -49,7 +49,7 @@ class BasesfEasyAuthActions extends sfActions
       
       $this->logMessage("Redirecting user to $url", 'debug');
       
-      return $this->redirect($url);
+      $this->redirect($url);
     }
   }
   
@@ -190,7 +190,7 @@ class BasesfEasyAuthActions extends sfActions
       // or to the homepage
       $url = sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage');
 
-      return $this->redirect($url);
+      $this->redirect($url);
     }
     else if ($loginResult !== false && $sfUser->hasAttribute('sf.easy.auth.not.first.secure.attempt'))
     {

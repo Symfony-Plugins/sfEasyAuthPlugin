@@ -23,17 +23,12 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     {
       $this->eaUser = sfEasyAuthUserPeer::retrieveByPk($id);
 
-      // if the user is returned but they aren't authenticated. log them out
-      if (!$this->eaUser || !$this->isAuthenticated())
+      if (!$this->eaUser)
       {
         // the user does not exist anymore in the database
         $this->logOut();
 
-        // commented the following exception out because we don't need to throw it
-        //throw new sfException('The user does not exist in the database.');
-        
-        // don't know if this is right...
-        return false;
+        throw new sfException('The user does not exist in the database.');
       }  
     }
     

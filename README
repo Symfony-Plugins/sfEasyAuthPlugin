@@ -300,10 +300,10 @@ as follows:
     [yml]
     password_reset_mailer_callable: YourMailClass::sendMethod
 
-The method that is set up as a callable will be invoked with 3 parameters - 
-the sfEasyAuthUser object of the recipient, the subject, and the the message to send. You can 
-then deliver the message however you want. Just create YourMailClass somewhere else in your 
-project.
+The method that is set up as a callable will be invoked with 4 parameters - 
+the sfEasyAuthUser object of the recipient, the subject, the text message and the 
+html message to send. You can then deliver the message however you want. Just 
+create YourMailClass somewhere else in your project.
 
 Email confirmation
 ------------------

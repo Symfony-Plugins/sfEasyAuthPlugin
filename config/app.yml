@@ -4,6 +4,7 @@ all:
       - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
       - basicUser: sfEasyAuthBasicUser    # Keys are credential names, values are authentication 
       - student: sfEasyAuthStudent        # classes.
+                                          # DO NOT CREATE A CLASS CALLED 'sfEasyAuthUser'
    
     profile_prefix: Sb                    # Prefix for profile classes. Tables used for profile
                                           # data will be formed by prepending this prefix to 

@@ -500,6 +500,27 @@ sfEasyAuth supports this behaviour as follows:
 sfEasyAuth will redirect to the page contained in the attribute sf_easy_auth.restricted_url after logging the
 user in.
 
+Troubleshooting
+---------------
+
+Symfony regenerates session IDs when users gain or lose credentials. This can result in
+multiple versions of the same cookie with different values being sent to the browser.
+Internet Explorer may have trouble with this, and fail to retain the last cookie sent.
+Additionally, Symfony also clears old sessions prior to regenerating IDs.
+
+The consequence of this implementation, and IEs mishandling of duplicate cookies, is 
+that you or users may experience problems remaining logged in to your web site. You
+may log in, the page immediately following your log in may successfully recognise the
+fact that you have logged in, but any subsequent pages will require reauthentication.
+
+To resolve this, extend whichever session storage class you are using, and override
+the 'regenerate' method so it just contains 'return true;'. Update your `factories.yml`
+file to use your new storage class.
+
+This change may make your site more vulnerable to session replay attacks since 
+sessions won't be regenerated as they would have been before. You'll have to 
+determine for yourself whether this represents an acceptable risk.
+
 Acknowledgements
 ----------------
 

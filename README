@@ -59,7 +59,10 @@ Installation
                 enabled_modules:      [default, sfEasyAuth]
 
   * Add the following to your `config/filters.yml` file between `security` and `cache`
-    if you want to enable the 'remember me' feature.
+    if you want to enable the 'remember me' feature. Make sure to set your own salt in
+    the app.yml file to something random, or you'll introduce a HUGE security hole into your
+    application. The setting you MUST edit is called `remember_salt`, or `sf_easy_auth_remember_me`
+    in full (put this in your project's own app.yml file).
   
             [yml]
             sf_easy_auth_remember_me:

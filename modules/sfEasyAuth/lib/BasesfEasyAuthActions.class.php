@@ -66,19 +66,6 @@ class BasesfEasyAuthActions extends sfActions
     $this->loginForm = new sfEasyAuthLoginForm();
     $this->resetForm = new sfEasyAuthPasswordResetForm();
 
-    // see if the user has a 'remember me' cookie set
-    if ($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name')))
-    {
-      $this->logMessage('User has a remember me cookie set. Testing its validity...', 'debug');
-      
-      // try to retrieve the user
-      if ($sfUser->validateRememberMe($request->getCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'))))
-      {
-        $this->logMessage('User has a valid remember me cookie. Logging them in...', 'debug');
-        return $sfUser->logIn();
-      }
-    }
-    
     if ($request->isMethod('post'))
     {
       $this->loginForm->bind($request->getParameter($this->loginForm->getName()));

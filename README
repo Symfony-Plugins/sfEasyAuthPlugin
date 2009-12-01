@@ -59,6 +59,13 @@ Installation
                 enabled_modules:      [default, sfEasyAuth]
 
   * Add the following to your `config/filters.yml` file between `security` and `cache`
+    if you want to enable the 'remember me' feature.
+  
+            [yml]
+            sf_easy_auth_remember_me:
+              class: sfEasyAuthRememberMeFilter
+
+  * Add the following to your `config/filters.yml` file between `security` and `cache`
     if you want to allow auto-login links, want to allow users to reset their passwords
     or want to require users to confirm their email addresses before being able to log in.
   

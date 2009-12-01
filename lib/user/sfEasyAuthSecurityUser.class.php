@@ -225,6 +225,9 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
 
   /**
    * Sets a cookie that can be used to automatically log a user in to the site
+   * 
+   * The cookie has 3 parts, a user id, time stamp and checksum, all separated
+   * by hyphens. There is no need to save anything to the database.
    */
   public function setRememberCookie()
   {
@@ -232,20 +235,28 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     {
       throw new RuntimeException("Can't set a remember cookie for a non-existent user");
     }
-    
-    // get a unique key
-    do
-    {
-      $rememberKey = $this->generateRememberKey($this->eaUser);
-    } while (sfEasyAuthUserPeer::retrieveByRememberKey($rememberKey));
 
-    $duration = time()+sfConfig::get('app_sf_easy_auth_remember_me_duration', 30*24*60*60);
+    $userId = $this->eaUser->getId();
+    $now = time();
+
+    $checksum = $this->createRememberMeChecksum($userId, $now, sfConfig::get('app_sf_easy_auth_remember_me_salt'));
+    $cookieValue = $userId . '-' .  $now . '-' . $checksum;
+    $expiry = $now + sfConfig::get('app_sf_easy_auth_remember_me_duration', 30 * 24 * 60 * 60);
     
-    $this->eaUser->setRememberKey($rememberKey);
-    $this->eaUser->setRememberKeyLifetime($duration);
-    $this->eaUser->save();
-    
-    sfContext::getInstance()->getResponse()->setCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'), $rememberKey, $duration);
+    sfContext::getInstance()->getResponse()->setCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'), $cookieValue, $expiry);
+  }
+  
+  /**
+   * Creates a checksum for the remember me cookie
+   * 
+   * @param int $userId The user's id
+   * @param int $time A unix timestamp
+   * @param string $salt A salt
+   * @return string An md5 string combining all the above parameters
+   */
+  protected function createRememberMeChecksum($userId, $time, $salt)
+  {
+    return md5($userId  . $time . $salt);
   }
   
   /**
@@ -284,51 +295,55 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   }
   
   /**
-   * Generates a key to be used for a remember me cookie value
+   * Returns a boolean to indicate whether a 'remember me' cookie is valid or not
    * 
-   * @param sfUser $eaUser The user to generate it for
-   * @return string
+   * @param string $rememberCookie A remember me cookie
+   * @return boolean
    */
-  protected function generateRememberKey(sfEasyAuthUser $eaUser)
+  public function validateRememberMe($rememberCookie)
   {
-    // the key is in two parts, first is a random string, the second is a string generated
-    // from the user's id and a salt
-    $userString = substr(md5(sfConfig::get('app_sf_easy_auth_remember_salt') . $eaUser->getId()), 0, 9);
-    return md5(sfEasyAuthUtils::randomString(20)) . '_' . $userString;
-  }
-  
-  /**
-   * Logs a user in via a 'remember me' cookie value
-   * 
-   * @param string $remember A hash stored in a table for a remember me cookie
-   * @return mixed
-   */
-  public function validateRememberMe($remember)
-  {
-    sfEasyAuthUtils::logDebug('Validating remember me hash...');
+    sfEasyAuthUtils::logDebug('Validating remember me checksum...');
     
-    // make sure the key contains the separator
-    if (strpos($remember, '_') === false)
-    {
-      return false;
-    }
+    list($userId, $creationTime, $md5Sum) = explode('-', $rememberCookie);
     
-    // try to retrieve the user
-    if ($eaUser = sfEasyAuthUserPeer::retrieveByRememberKey($remember))
+    // check the checksum is valid
+    if ($md5Sum == $this->createRememberMeChecksum($userId, $creationTime, sfConfig::get('app_sf_easy_auth_remember_me_salt')))
     {
-      // make sure it's in date
-      if (time() > $eaUser->getRememberKeyLifetime())
-      {
-        return false;
-      }
+      sfEasyAuthUtils::logDebug('Remember me cookie successfully validated. Checking expiry...');
       
-      if (!$eaUser->accountTemporarilyLocked())
+      // make sure that the cookie shouldn't have expired
+      if ($creationTime + sfConfig::get('app_sf_easy_auth_remember_me_duration', 30 * 24 * 60 * 60) > time())
       {
-        sfEasyAuthUtils::logDebug('Remember me hash successfully validated.');
+        sfEasyAuthUtils::logDebug("Remember me cookie shouldn't have expired, so that's ok. Checking user account.");
         
-        $this->eaUser = $eaUser;
-        return true;
+        // retrieve the user
+        if (!$eaUser = sfEasyAuthUserPeer::retrieveByPk($userId))
+        {
+          sfEasyAuthUtils::logDebug('Unable to retrieve user with id ' . $userId);
+          return false;
+        }
+        
+        // finally, make sure that the user's account hasn't been temporarily locked
+        if (!$eaUser->accountTemporarilyLocked())
+        {
+          sfEasyAuthUtils::logDebug('Remember me cookie successfully validated.');
+
+          $this->eaUser = $eaUser;
+          return true;
+        }
+        else
+        {
+          sfEasyAuthUtils::logDebug("User's account has been temporarily locked. Not logging in.");
+        }
       }
+      else
+      {
+        sfEasyAuthUtils::logDebug("Cookie should have expired. Not logging in.");
+      }
+    }
+    else
+    {
+      sfEasyAuthUtils::logDebug("Cookie checksum failed.");
     }
     
     return false;
@@ -358,7 +373,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   {
     sfEasyAuthUtils::logDebug('Logging user out...');
     
-    sfContext::getInstance()->getResponse()->setCookie('remember', '', -1);
+    sfContext::getInstance()->getResponse()->setCookie(sfConfig::get('app_sf_easy_auth_remember_cookie_name'), '', -1);
     
     $this->getAttributeHolder()->remove('security_user_id');
     $this->getAttributeHolder()->remove('sf_easy_auth.restricted_url');

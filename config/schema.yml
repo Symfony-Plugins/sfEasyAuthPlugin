@@ -25,7 +25,8 @@ propel:
       type: varchar(10)
       index: true
       inheritance:
-        admin: sfEasyAuthAdmin  
+        admin: sfEasyAuthAdmin
+        superAdmin: sfEasyAuthSuperAdmin
         student: sfEasyAuthStudent
     profile_id:  { type: integer, default: 0, index: true }
         

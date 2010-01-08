@@ -28,6 +28,7 @@ propel:
         admin: sfEasyAuthAdmin
         superAdmin: sfEasyAuthSuperAdmin
         student: sfEasyAuthStudent
+        company: sfEasyAuthCompany
     profile_id:  { type: integer, default: 0, index: true }
         
   sf_easy_auth_user_credential:

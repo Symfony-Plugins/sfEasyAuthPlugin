@@ -29,6 +29,20 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
     
     return self::doSelectOne($c);
   }
+
+  /**
+   * Retrieve all users of a given type
+   *
+   * @param string $type
+   * @return array
+   */
+  public static function retrieveByType($type)
+  {
+    $c = new Criteria();
+    $c->add(self::TYPE, $type);
+
+    return self::doSelect($c);
+  }
   
   /**
    * Retrieve a user by their email address

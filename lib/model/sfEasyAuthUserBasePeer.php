@@ -34,7 +34,7 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
    * Retrieve all users of a given type
    *
    * @param string $type
-   * @return array
+   * @return mixed
    */
   public static function retrieveByType($type)
   {
@@ -43,7 +43,33 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
 
     return self::doSelect($c);
   }
-  
+
+  /**
+   * Retrieve a user by a profile id, or null if no user exists
+   * with that profile id
+   *
+   * @param int $profileId
+   * @return mixed
+   */
+  public static function retrieveByProfileId($profileId)
+  {
+    // first, try to retrieve a user whose default profile id is $profileId
+    $c = new Criteria();
+    $c->add(self::PROFILE_ID, $profileId);
+
+    if ($user = self::doSelect($c))
+    {
+      return $user;
+    }
+
+    // if no user was returned, search the extra credentials table
+    $c = new Criteria();
+    $c->addJoin(self::PROFILE_ID, sfEasyAuthUserCredentialPeer::ID);
+    $c->add(sfEasyAuthUserCredentialPeer::PROFILE_ID, $profileId);
+
+    return self::doSelect($c);
+  }
+
   /**
    * Retrieve a user by their email address
    * 

@@ -45,19 +45,20 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
   }
 
   /**
-   * Retrieve a user by a profile id, or null if no user exists
-   * with that profile id
+   * Retrieves a user by a credential and profile id
    *
-   * @param int $profileId
-   * @return mixed
+   * @param string $credential The name of a credential
+   * @param int $profileId A profile ID
+   * @return object|null
    */
-  public static function retrieveByProfileId($profileId)
+  public static function retrieveByProfileId($credential, $profileId)
   {
     // first, try to retrieve a user whose default profile id is $profileId
     $c = new Criteria();
+    $c->add(self::TYPE, $credential);
     $c->add(self::PROFILE_ID, $profileId);
 
-    if ($user = self::doSelect($c))
+    if ($user = self::doSelectOne($c))
     {
       return $user;
     }
@@ -65,9 +66,10 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
     // if no user was returned, search the extra credentials table
     $c = new Criteria();
     $c->addJoin(self::PROFILE_ID, sfEasyAuthUserCredentialPeer::ID);
+    $c->add(self::TYPE, $credential);
     $c->add(sfEasyAuthUserCredentialPeer::PROFILE_ID, $profileId);
 
-    return self::doSelect($c);
+    return self::doSelectOne($c);
   }
 
   /**

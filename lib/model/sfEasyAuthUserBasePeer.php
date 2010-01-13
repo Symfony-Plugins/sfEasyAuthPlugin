@@ -51,7 +51,7 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
    * @param int $profileId A profile ID
    * @return object|null
    */
-  public static function retrieveByProfileId($credential, $profileId)
+  public static function retrieveByCredentialAndProfileId($credential, $profileId)
   {
     // first, try to retrieve a user whose default profile id is $profileId
     $c = new Criteria();

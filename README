@@ -15,10 +15,17 @@ of execution speed and database storage savings.
 This plugin supports users having multiple credentials, brute force protection (with
 configurable attempt and lock-out thresholds), user profiles and a remember me feature. 
 
-Versions
+Doctrine
 --------
 
 This plugin is currently being ported to Doctrine and Symfony 1.4. It is called sfEasyAuthDoctrinePlugin.
+
+Versions
+--------
+
+This plugin has been in production use on a web site with > 300,000 registered users since September 2009.
+It has yet to be integrated into other web sites in a production environment, so is a release candidate
+until it has been integrated into other production web sites.
 
 Installation
 ------------

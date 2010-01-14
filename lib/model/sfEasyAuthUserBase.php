@@ -50,9 +50,58 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
   }
 
   /**
+   * Adds an extra credential for this user
+   * 
+   * @param string $credential The name of a credential to add, e.g. 'superAdmin'
+   * @param int $profileId An ID of a profile to associate with this credential (optional)
+   */
+  public function addExtraCredential($credential, $profileId=null)
+  {
+    // if the user doesn't already have the credential, add a new one
+    if (!in_array($credential, $this->getExtraCredentials()))
+    {
+      $extraCredential = new sfEasyAuthUserCredential();
+      $extraCredential->setCredential($credential);
+
+      if ($profileId !== null)
+      {
+        $extraCredential->setProfileId($profileId);
+      }
+
+      $extraCredential->setUserId($this->getId());
+      
+      // if we can save the new object, set a flag so we know the user has extra credentials
+      if ($extraCredential->save())
+      {
+        $this->setHasExtraCredentials(true);
+        $this->save();
+      }
+    }
+  }
+
+  /**
+   * Removes an extra credential from a user account
+   *
+   * @param string $credential The name of a credential to remove
+   */
+  public function removeExtraCredential($credential)
+  {
+    if ($extraCredential = sfEasyAuthUserCredentialPeer::retrieveByUserIdAndName($this->getId(), $credential))
+    {
+      $extraCredential->delete();
+
+      if (count($this->getExtraCredentials()) === 0)
+      {
+        $this->setHasExtraCredentials(false);
+        $this->save();
+      }
+    }
+  }
+
+  /**
    * Gets extra credentials for a user
    * 
-   * @return array
+   * @return array An array of string credential names
    */
   protected function getExtraCredentials()
   {

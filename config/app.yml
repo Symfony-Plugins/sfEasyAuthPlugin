@@ -1,14 +1,10 @@
 all:
   sf_easy_auth:
-    schema_inheritance:                   # Credential inheritance definition for the plugin. 
-      - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
-      - basicUser: sfEasyAuthBasicUser    # Keys are credential names, values are authentication classes.
-                                          # DO NOT CREATE A CLASS CALLED 'sfEasyAuthUser'
-   
-    profile_prefix: Sb                    # Prefix for profile classes. Tables used for profile
+    profile_prefix: ''                    # Optional prefix for profile classes. Tables used for profile
                                           # data will be formed by prepending this prefix to 
                                           # schema_inheritance keys, with the first character
-                                          # converted to uppercase, e.g. SbBasicUser
+                                          # converted to uppercase, e.g. MyMember. This prefix allows
+                                          # for a kind of poor-man's namespace to be defined.
   
     password_reset_mailer_callable: sfEasyAuthSimpleMailer::mail    
       # callable to send password reset emails. It must be a static method.  It 

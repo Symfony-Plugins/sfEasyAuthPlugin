@@ -15,6 +15,11 @@ of execution speed and database storage savings.
 This plugin supports users having multiple credentials, brute force protection (with
 configurable attempt and lock-out thresholds), user profiles and a remember me feature. 
 
+Versions
+--------
+
+This plugin is currently being ported to Doctrine and Symfony 1.4. It is called sfEasyAuthDoctrinePlugin.
+
 Installation
 ------------
 
@@ -22,8 +27,30 @@ Installation
 
         $ symfony plugin:install sfEasyAuthPlugin
 
+  * Edit the config/schema.yml file and add extra key/value pairs under sfEasyAuthUser's 'type' 'inheritance'
+    field to define the types of user/role to create:
+
+        [yml]
+        sf_easy_auth_user:
+          type:
+            inheritance:
+              admin: sfEasyAuthAdmin
+              member: sfEasyAuthMember
+
+    For more information on this, see the `Adding more user types` section.
+
+  * Edit the `sf_easy_auth_remember_salt` setting in the app.yml file - or better, override it
+    your project's app.yml file.
+
+  * Rebuild your model
+
+        $ symfony propel:build-model
+        $ symfony propel:build-sql
+        $ symfony propel:build-forms
+        $ symfony propel:build-filters
+
   * Create some new classes in your project's lib/model directory:
-  
+
     class sfEasyAuthUser extends sfEasyAuthUserBase
     {}
     class sfEasyAuthUserPeer extends sfEasyAuthUserBasePeer
@@ -31,15 +58,8 @@ Installation
     // create as many of the following classes as you have different user types.
     class sfEasyAuthAdminLocal extends sfEasyAuthUser
     {}
-    class sfEasyAuthBasicUserLocal extends sfEasyAuthUser
+    class sfEasyAuthMemberLocal extends sfEasyAuthUser
     {}
-    
-  * Rebuild your model
-
-        $ symfony propel:build-model
-        $ symfony propel:build-sql
-        $ symfony propel:build-forms
-        $ symfony propel:build-filters
 
   * Update your database tables by starting from scratch (it will delete all
     the existing tables, then re-create them):
@@ -77,12 +97,12 @@ Installation
               class: sfEasyAuthAutoLoginFilter
     
   * Edit each of the generated class files in plugins/sfEasyAuthPlugin/lib/model that
-    represent your user types (e.g. sfEasyAuthAdmin.php and sfEasyAuthBasicUser.php) and
+    represent your user types (e.g. sfEasyAuthAdmin.php and sfEasyAuthMember.php) and
     make them extend your manually created 'local' classes, e.g.
     
             [php]
             class sfEasyAuthAdmin extends sfEasyAuthAdminLocal
-            class sfEasyAuthBasicUser extends sfEasyAuthBasicUserLocal
+            class sfEasyAuthMember extends sfEasyAuthMemberLocal
     
   * Clear your cache
 
@@ -90,7 +110,7 @@ Installation
 
   * Optionally create a default user (the user type is case sensitive):
 
-        $ symfony easyAuth:create-user al 5ecret1 al@example.com basicUser
+        $ symfony easyAuth:create-user al 5ecret1 al@example.com member
 
   * Optionally create a default admin user:
 
@@ -298,6 +318,9 @@ or false. Here is a template for such a function:
 Send password reset and account activation emails with your own mailer class
 ----------------------------------------------------------------------------
 
+NOTE: This behaviour of this feature will change when the plugin is released for
+      symfony 1.3/1.4.
+
 sfEasyAuth gives you the flexibility to send emails to users however you want.
 By default it uses the sfEasyAuthSimpleMailer class which uses the PHP `mail` method for
 sending emails. This function is simple, but doesn't support more advanced features like
@@ -382,7 +405,7 @@ To add more user types, simply edit the app.yml file, adding more entries under
     [yml]
     schema_inheritance:                   # Credential inheritance definition for the plugin. 
       - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
-      - basicUser: sfEasyAuthBasicUser    # Keys are credential names, values are authentication 
+      - member: sfEasyAuthMember       # Keys are credential names, values are authentication
       - editor: sfEasyAuthEditor          # classes.
             
 Any users that are created as editors will automatically acquire the `editor` credential
@@ -396,12 +419,12 @@ e.g.:
     [plain]
     super class: sfEasyAuthUser
     class sfEasyAuthAdmin extends sfEasyAuthUser              # has credential `admin`
-    class sfEasyAuthBasicUser extends sfEasyAuthUser          # has credential `basicUser`
-    class sfEasyAuthTrustedUser extends sfEasyAuthBasicUser   # has credentials `trustedUser`
-                                                              # and `basicUser`
+    class sfEasyAuthMember extends sfEasyAuthUser             # has credential `member`
+    class sfEasyAuthTrustedUser extends sfEasyAuthMember      # has credentials `trustedUser`
+                                                              # and `member`
                                                               
 This approach allows you to define the action associated with a credential in the model
-instead of with groups and permissions in the database. For example `basicUsers` may be 
+instead of with groups and permissions in the database. For example `members` may be
 able to post blog comments, and `trustedUsers` may be able to edit them. Simply setting
 the credentials required in your `security.yml` file on the appropriate actions would then
 apply the restrictions, saving potentially costly database queries.
@@ -458,9 +481,9 @@ for the classes created by this plugin. It looks something like this:
                                         sfEasyAuthUser
                                               |
                                     --------------------------------------------- ...
-                        sfEasyAuthAdminLocal     sfEasyAuthBasicUserLocal
+                        sfEasyAuthAdminLocal     sfEasyAuthMemberLocal
                                     |                    |
-                            sfEasyAuthAdmin*       sfEasyAuthBasicUser*
+                            sfEasyAuthAdmin*       sfEasyAuthMember*
                                       
 In the above diagram, classes with an asterisk (*) next to their names are in the plugin/sfEasyAuth/lib
 directory. You need to create the other classes manually as mentioned in the `Installation` section.
@@ -499,7 +522,7 @@ sfEasyAuth supports this behaviour as follows:
 
   [php]
   // if the user is not logged in or doesn't have the right credential
-  if (!($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential('basicUser')))
+  if (!($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential('member')))
   {
     // save the url of the page the user was trying to visit
     $this->getUser()->setAttribute('sf_easy_auth.restricted_url', $request->getUri());

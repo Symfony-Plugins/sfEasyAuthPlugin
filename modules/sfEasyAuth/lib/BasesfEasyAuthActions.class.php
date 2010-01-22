@@ -254,7 +254,20 @@ class BasesfEasyAuthActions extends sfActions
       else
       {
         $this->setFlash(sfConfig::get('app_sf_easy_auth_reset_user_not_found'));
-        $this->redirect(sprintf('%s?%s=true', $this->generateUrl('sf_easy_auth_login'), 
+
+        $url = $this->generateUrl('sf_easy_auth_login');
+
+        // call an event before redirecting users if a password reset form is not valid
+        $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
+          $this,
+          'sf_easy_auth.filter_password_reset_error_url',
+          array(
+            'sfUser'  => $this->getUser(),
+            'request' => $request
+          )
+        ), $url)->getReturnValue();
+
+        $this->redirect(sprintf('%s?%s=true', $url,
           sfConfig::get('app_sf_easy_auth_reset_user_not_found_url_token')));
       }
     }
@@ -343,8 +356,21 @@ class BasesfEasyAuthActions extends sfActions
    */
   protected function sendPasswordResetMessage(sfEasyAuthUser $eaUser)
   {
-    $message = $this->getPartial('sfEasyAuth/passwordResetEmail', array('eaUser' => $eaUser));
-    $htmlMessage = $this->getPartial('sfEasyAuth/passwordResetEmailHtml', array('eaUser' => $eaUser));
+    $message = 'sfEasyAuth/passwordResetEmail';
+    $htmlMessage = 'sfEasyAuth/passwordResetEmailHtml';
+
+    // call an event before sending a password reset message to allow the messages to be changed
+    list($message, $htmlMessage) = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
+      $this,
+      'sf_easy_auth.filter_password_reset_messages',
+      array(
+        'eaUser' => $eaUser,
+      )
+    ), array($message, $htmlMessage))->getReturnValue();
+
+    $message = $this->getPartial($message, array('eaUser' => $eaUser));
+    $htmlMessage = $this->getPartial($htmlMessage, array('eaUser' => $eaUser));
+
     return $eaUser->sendPasswordResetMessage($message, $htmlMessage);
   }
 }

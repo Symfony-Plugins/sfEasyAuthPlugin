@@ -22,8 +22,19 @@ class BasesfEasyAuthActions extends sfActions
     // user is already authenticated, so send them to the success url
     if ($sfUser->isAuthenticated())
     {
-      $this->logMessage('User is already authenticated. Redirecting.', 'debug');
-      $this->redirect(sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage'));
+      $url = sfConfig::get('app_sf_easy_auth_login_success_url', '@homepage');
+
+      // call an event after logging the user out and before redirecting them
+      $url = $this->getContext()->getEventDispatcher()->filter(new sfEvent(
+        $this,
+        'sf_easy_auth.filter_login_already_authenticated_redirect_url',
+        array(
+          'sfUser' => $sfUser,
+        )
+      ), $url)->getReturnValue();
+
+      $this->logMessage('User is already authenticated. Redirecting to ' . $url, 'debug');
+      $this->redirect($url);
     }
     
     if ($this->handleLogIn($request))

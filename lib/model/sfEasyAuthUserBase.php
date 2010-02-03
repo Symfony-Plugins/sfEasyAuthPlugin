@@ -22,36 +22,56 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
    */
   public function getCredentials()
   {
-    $credentials = array();
-    
-    $superClass = 'sfEasyAuthUser';
-    $className = get_class($this);
+    $credentials = $this->getInheritedCredentials(get_class($this));
 
-    // get default credentials for each parent class
-    do
-    {
-      // ignore credentials that end 'Local'
-      if (!preg_match('/Local$/', $className))
-      {
-        $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
-      }
-      
-      $userReflection = new ReflectionClass($className);
-      $className = $userReflection->getParentClass()->getName(); 
-    } while ($className !== $superClass);
-    
     // add extra credentials if they have them
     if ($this->getHasExtraCredentials())
     {
-      $credentials = array_merge($credentials, $this->getExtraCredentials());
+      foreach ($this->getExtraCredentials() as $extraCredential)
+      {
+        $credentials = array_merge($credentials, $this->getInheritedCredentials($extraCredential));
+      }
     }
 
     return $credentials;
   }
 
   /**
-   * Adds an extra credential for this user
+   * Ascends the class hierarchy retrieving inherited credentials
    * 
+   * @param string $className The name of the class to ascend the hierarchy from
+   * @return array An array of inherited credentials
+   */
+  protected function getInheritedCredentials($className)
+  {
+    $credentials = array();
+
+    $superClass = 'sfEasyAuthUser';
+
+    // get default credentials for each parent class
+    do
+    {
+      if (strpos($className, 'sfEasyAuth') === false)
+      {
+        $className = 'sfEasyAuth' . ucfirst($className);
+      }
+
+      // ignore credentials that end 'Local'
+      if (!preg_match('/Local$/', $className))
+      {
+        $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
+      }
+
+      $userReflection = new ReflectionClass($className);
+      $className = $userReflection->getParentClass()->getName();
+    } while ($className !== $superClass);
+
+    return $credentials;
+  }
+
+  /**
+   * Adds an extra credential for this user
+   *
    * @param string $credential The name of a credential to add, e.g. 'superAdmin'
    * @param int $profileId An ID of a profile to associate with this credential (optional)
    */
@@ -69,7 +89,7 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
       }
 
       $extraCredential->setUserId($this->getId());
-      
+
       // if we can save the new object, set a flag so we know the user has extra credentials
       if ($extraCredential->save())
       {

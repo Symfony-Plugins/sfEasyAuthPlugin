@@ -56,10 +56,16 @@ class sfEasyAuthUserBase extends BasesfEasyAuthUserBase
         $className = 'sfEasyAuth' . ucfirst($className);
       }
 
-      // ignore credentials that end 'Local'
+      // add credentials to an array that don't end 'Local'
       if (!preg_match('/Local$/', $className))
       {
         $credentials[] = preg_replace('/^(.)/e', 'strtolower("$1")', str_replace('sfEasyAuth', '', $className));
+      }
+
+      // if there is no class for the given credential, just return the array
+      if (!class_exists($className))
+      {
+        return $credentials;
       }
 
       $userReflection = new ReflectionClass($className);

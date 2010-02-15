@@ -33,7 +33,7 @@ class BasesfEasyAuthActions extends sfActions
         )
       ), $url)->getReturnValue();
 
-      $this->logMessage('User is already authenticated. Redirecting to ' . $url, 'debug');
+      $this->logMessage('User is already authenticated. Redirecting.', 'debug');
       $this->redirect($url);
     }
     
@@ -232,7 +232,7 @@ class BasesfEasyAuthActions extends sfActions
   
   /**
    * Action that sends users an email to let them reset their password
-   * 
+   *
    * @param sfRequest $request A request object
    */
   public function executePasswordResetSendEmail(sfWebRequest $request)
@@ -240,9 +240,9 @@ class BasesfEasyAuthActions extends sfActions
     if ($request->isMethod('post'))
     {
       $this->form = new sfEasyAuthPasswordResetForm();
-      
+
       $this->form->bind($request->getParameter($this->form->getName()));
-      
+
       if ($this->form->isValid())
       {
         $email = $this->form->getValue('email');
@@ -256,7 +256,7 @@ class BasesfEasyAuthActions extends sfActions
             'sf_easy_auth.pre_password_reset_message',
             array('eaUser' => $eaUser)
           ));
-          
+
           // send the user an email with an auto log in link with a parameter directing
           // them to a page to pick a new password
           $this->sendPasswordResetMessage($eaUser);
@@ -362,7 +362,7 @@ class BasesfEasyAuthActions extends sfActions
   
   /**
    * Sends a password reset message
-   * 
+   *
    * @param sfEasyAuthUser $eaUser The user to send a message to
    */
   protected function sendPasswordResetMessage(sfEasyAuthUser $eaUser)

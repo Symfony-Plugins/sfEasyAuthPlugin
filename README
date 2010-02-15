@@ -1,31 +1,18 @@
 sfEasyAuth plugin
 =================
 
-The `sfEasyAuthPlugin` is a symfony plugin that provides simple authentication
+The `sfEasyAuthPlugin` is a symfony plugin that provides authentication
 and authorisation. Built for high-performance environments, it only creates two 
-database tables, and supports multiple types of users through inheritance. This 
-significantly reduces the database overhead compared to sfGuardPlugin by allowing 
-default credentials to be assigned, e.g. 
-  
-  an `admin` type user will automatically acquire the `admin` credential upon logging in.
-   
-On a site with thousands of users this could represent a big efficiency, both in terms
-of execution speed and database storage savings.
+database tables - one for basic user information, and one for credentials. Profiles
+can be associated with each credential, allowing one user to have multiple roles
+within a web site.
+
+Additionally, credentials can be defined in an inheritance hierarchy, so a user with
+a credential lower down in a credential chain will automatically acquire that credential,
+plus any above it in the hierarchy when they log in.
 
 This plugin supports users having multiple credentials, brute force protection (with
 configurable attempt and lock-out thresholds), user profiles and a remember me feature. 
-
-Doctrine
---------
-
-This plugin is currently being ported to Doctrine and Symfony 1.4. It is called sfEasyAuthDoctrinePlugin.
-
-Versions
---------
-
-This plugin has been in production use on a web site with > 300,000 registered users since September 2009.
-It has yet to be integrated into other web sites in a production environment, so is a release candidate
-until it has been integrated into other production web sites.
 
 Installation
 ------------
@@ -34,39 +21,12 @@ Installation
 
         $ symfony plugin:install sfEasyAuthPlugin
 
-  * Edit the config/schema.yml file and add extra key/value pairs under sfEasyAuthUser's 'type' 'inheritance'
-    field to define the types of user/role to create:
-
-        [yml]
-        sf_easy_auth_user:
-          type:
-            inheritance:
-              admin: sfEasyAuthAdmin
-              member: sfEasyAuthMember
-
-    For more information on this, see the `Adding more user types` section.
-
-  * Edit the `sf_easy_auth_remember_salt` setting in the app.yml file - or better, override it
-    your project's app.yml file.
-
   * Rebuild your model
 
         $ symfony propel:build-model
         $ symfony propel:build-sql
         $ symfony propel:build-forms
         $ symfony propel:build-filters
-
-  * Create some new classes in your project's lib/model directory:
-
-    class sfEasyAuthUser extends sfEasyAuthUserBase
-    {}
-    class sfEasyAuthUserPeer extends sfEasyAuthUserBasePeer
-    {}
-    // create as many of the following classes as you have different user types.
-    class sfEasyAuthAdminLocal extends sfEasyAuthUser
-    {}
-    class sfEasyAuthMemberLocal extends sfEasyAuthUser
-    {}
 
   * Update your database tables by starting from scratch (it will delete all
     the existing tables, then re-create them):
@@ -87,7 +47,7 @@ Installation
 
   * Add the following to your `config/filters.yml` file between `security` and `cache`
     if you want to enable the 'remember me' feature. Make sure to set your own salt in
-    the app.yml file to something random, or you'll introduce a HUGE security hole into your
+    the app.yml file to something random, or you won't be working with an optimal level of security in your
     application. The setting you MUST edit is called `remember_salt`, or `sf_easy_auth_remember_me`
     in full (put this in your project's own app.yml file).
   
@@ -103,28 +63,20 @@ Installation
             sf_easy_auth_auto_login:
               class: sfEasyAuthAutoLoginFilter
     
-  * Edit each of the generated class files in plugins/sfEasyAuthPlugin/lib/model that
-    represent your user types (e.g. sfEasyAuthAdmin.php and sfEasyAuthMember.php) and
-    make them extend your manually created 'local' classes, e.g.
-    
-            [php]
-            class sfEasyAuthAdmin extends sfEasyAuthAdminLocal
-            class sfEasyAuthMember extends sfEasyAuthMemberLocal
-    
   * Clear your cache
 
         $ symfony cc
 
   * Optionally create a default user (the user type is case sensitive):
 
-        $ symfony easyAuth:create-user al 5ecret1 al@example.com member
+        $ symfony easyAuth:create-user al 5ecret1 al@example.com basicUser
 
   * Optionally create a default admin user:
 
         $ symfony easyAuth:create-user ally 5ecret2 ally@example.com admin
         
   * Optionally go through the `app.yml` file, configuring the plugin for your needs. 
-    Note: to ease your upgrade path, it may be better to redefine settings in your 
+    Note: to ease your upgrade path, you should redefine settings in your
     application or project's `app.yml` files instead of modifying the one included with
     the plugin. 
 
@@ -216,7 +168,7 @@ This module is auto-generated thanks to the symfony admin generator.
 
         http://www.example.com/backend.php/sfEasyAuthUser
 
-Customize sfEasyAuth module templates
+Customise sfEasyAuth module templates
 --------------------------------------
 
 By default, `sfEasyAuth` module comes with 2 very simple templates:
@@ -226,15 +178,15 @@ By default, `sfEasyAuth` module comes with 2 very simple templates:
 
 If you want to customize one of these templates:
 
-  * Create a `sfEasyAuth` module in your application (don't use the
-    `init-module` task, just create a `sfEasyAuth` directory)
+  * Create an `sfEasyAuth` module in your application (don't use the
+    `init-module` task, just create an `sfEasyAuth` directory)
 
   * Create a template with the name of the template you want to customize in
     the `sfEasyAuth/templates` directory
 
   * symfony now renders your template instead of the default one
 
-Customize `sfEasyAuth` module actions
+Customise `sfEasyAuth` module actions
 --------------------------------------
 
 If you want to customize or add methods to the sfEasyAuth:
@@ -262,8 +214,8 @@ If you want to customize or add methods to the sfEasyAuth:
 ---------------------------
 
 This class inherits from the `sfBasicSecurityUser` class from symfony and is
-used for the `user` object in your symfony application.
-(because you changed the `myUser` base class earlier)
+used for the `user` object in your symfony application (because you changed
+the `myUser` base class earlier).
 
 So, to access it, you can use the standard `$this->getUser()` in your actions
 or `$sf_user` in your templates.
@@ -280,6 +232,58 @@ For example, to get the current username:
 
     // or via the proxy method
     $this->getUser()->getUsername()
+
+Credentials
+-----------
+
+Important: All credentials must be camel-cased if you want them to have profiles associated with them.
+
+A credential hierarchy can be defined in your app.yml file. If a user has any credentials lower down
+in a hierarchy, they will acquire that credential plus any 'parent' credentials upon logging in, e.g.:
+
+    [yml]
+    admin:
+      contributor:
+        author:
+          editor:
+            - owner
+            - shareholder
+      contractor:
+    member:
+      trustedMember
+
+The above defines several credential chains. All of the keys can be used as credentials. If a user
+has the 'editor' credential, they will automatically acquire the 'admin', 'contributor' and 'author'
+credentials upon logging in, as well as the 'editor' credential.
+
+User profiles
+-------------
+
+All credentials can be associated with profiles. If you create a 'member' credential and
+want to support a profile, you must create a class called 'member_profile' (there can
+optionally be a prefix to this table - update the `profile_prefix` setting in the `app.yml`
+file to add one). The naming convention here is: camel-case class names must be converted
+to underscore-separated names, with _profile appended to the end.
+
+Then you can use a magic method 'getMemberProfile' to return the member profile. Call this
+method on the easyAuth object. The naming convention here is 'get' . ucfirst($credential) . 'Profile'
+where $credential is a camel-cased credential.
+
+E.g. from a template, if the profile has a `first_name` field,
+you could write:
+
+    [php]
+    <?php echo $sf_user->getAuthUser()->getMemberProfile()->getFirstName(); ?>
+
+There is also a magic method for 'hasProfile' - e.g.
+
+    [php]
+    <?php
+      if ($sf_user->getAuthUser()->hasMemberProfile())
+      {
+        echo $sf_user->getAuthUser()->getMemberProfile()->getFirstName();
+      }
+    ?>
 
 Allow users to log in with either a user name or email address
 --------------------------------------------------------------
@@ -324,9 +328,6 @@ or false. Here is a template for such a function:
 
 Send password reset and account activation emails with your own mailer class
 ----------------------------------------------------------------------------
-
-NOTE: This behaviour of this feature will change when the plugin is released for
-      symfony 1.3/1.4.
 
 sfEasyAuth gives you the flexibility to send emails to users however you want.
 By default it uses the sfEasyAuthSimpleMailer class which uses the PHP `mail` method for
@@ -397,109 +398,27 @@ sfEasyAuthPlugin comes with the following filter:
       
     The GET parameters 'uid' and 'alh' will be removed from this url, but any others will
     be preserved.
-    
+
+  * sfEasyAuthRememberMeFilter - This filter enables the 'remember me' feature.
+
 For this filter to work, you must enable them it editing your `config/filters.yml` file
 in your application. This is described in the `installation` section.
 
 This filter is required for the password reset feature to work correctly.
 
-Adding more user types
-----------------------
+Extending sfEasyAuth
+--------------------
 
-To add more user types, simply edit the app.yml file, adding more entries under 
-`schema_inheritance`. E.g to add an `editor` user type, simply add an entry as below:
+If you want to add custom code, you have several options:
 
-    [yml]
-    schema_inheritance:                   # Credential inheritance definition for the plugin. 
-      - admin: sfEasyAuthAdmin            # These values will be inserted into the schema. 
-      - member: sfEasyAuthMember       # Keys are credential names, values are authentication
-      - editor: sfEasyAuthEditor          # classes.
-            
-Any users that are created as editors will automatically acquire the `editor` credential
-when they log in.
-        
-All users inherit from a common superclass, but a hierarchy can easily be created by 
-changing which model classes inherit from which others. Any class inheriting from any
-other sfEasyAuthUser class will automatically acquire the credentials of its parent classes,
-e.g.:
-
-    [plain]
-    super class: sfEasyAuthUser
-    class sfEasyAuthAdmin extends sfEasyAuthUser              # has credential `admin`
-    class sfEasyAuthMember extends sfEasyAuthUser             # has credential `member`
-    class sfEasyAuthTrustedUser extends sfEasyAuthMember      # has credentials `trustedUser`
-                                                              # and `member`
-                                                              
-This approach allows you to define the action associated with a credential in the model
-instead of with groups and permissions in the database. For example `members` may be
-able to post blog comments, and `trustedUsers` may be able to edit them. Simply setting
-the credentials required in your `security.yml` file on the appropriate actions would then
-apply the restrictions, saving potentially costly database queries.
-
-User profiles
--------------
-
-Extra data about users can be stored in a profile. As with other parts of Symfony, 
-convention is used instead of configuration. To create a profile for a user type, do
-the following:
-
-  * If your classes are prefixed by a string of characters to act as a namespace,
-    edit the `profile_prefix` plugin app constant. These characters will be used to
-    compute the name of the profile class.
-    
-  * Edit your main schema.yml file, creating an object with the same name as a user
-    type with 'Profile' at the end. 
-      e.g. if we declare an `editor` type as above and have a profile_prefix of 'my', 
-      add something similar to below to your main `schema.yml` file:
-    
-    [plain]
-    my_editor_profile:
-      id: ~
-      name: { type: varchar(200), required: true }
-      articles_edited: { type: int, default: 0 }
-      
-    When you rebuild your model, you'll have a MyEditorProfile class and peer class in 
-    your main model directory. You can retrieve the profile as follows:
-    
-    [php]
-    echo $sf_user->getAuthUser()->getProfile()->getName() . ' has edited ' . 
-      $sf_user->getAuthUser()->getProfile()->getArticlesEdited() . ' articles';
-      
-    or more simply:
-    
-    [php]
-    echo $sf_user->getProfile()->getName() . ' has edited ' . 
-      $sf_user->getProfile()->getArticlesEdited() . ' articles'; 
-      
-If you want to add more methods to the sfEasyAuthUserPeer class, it'd be better to 
-create a sub-class of it, and store your sub-class in your main lib directory somewhere.
-This will ease your upgrade path in future should you choose to. 
-
-Inheritance
------------
-
-To make your upgrade path as simple as possible, there is quite a complicated inheritance hierachy
-for the classes created by this plugin. It looks something like this:
-
-                                    BasesfEasyAuthUserBase*
-                                              |
-                                      sfEasyAuthUserBase*
-                                              |
-                                        sfEasyAuthUser
-                                              |
-                                    --------------------------------------------- ...
-                        sfEasyAuthAdminLocal     sfEasyAuthMemberLocal
-                                    |                    |
-                            sfEasyAuthAdmin*       sfEasyAuthMember*
-                                      
-In the above diagram, classes with an asterisk (*) next to their names are in the plugin/sfEasyAuth/lib
-directory. You need to create the other classes manually as mentioned in the `Installation` section.
-
-This class hierarchy allows you to override methods of the various classes and customise them locally. It
-gives you a way to, for example, add methods to the sfEasyAuthUser class without touching the core
-plugin code. 
-
-Remember to clear your symfony cache after adding any new classes.                                      
+  * Add new methods to profile classes. Since each user can have multiple credentials, it may
+    make sense to add extra logic to the profile classes to support when a user 'acts as' a
+    type of user.
+  * Register event listeners. sfEasyAuth notifies about lots of events (see below). This could
+    be a useful way to, for instance, redirect users with one type of credential to a different
+    home page to those of another after they log in.
+  * Use mix-ins. See http://www.symfony-project.org/book/1_0/17-Extending-Symfony#chapter_17_mixins
+  * Create some local static classes and use those.
 
 Events
 ------
@@ -527,15 +446,15 @@ After they log in, you want the user to be redirected to the original content th
 
 sfEasyAuth supports this behaviour as follows:
 
-  [php]
-  // if the user is not logged in or doesn't have the right credential
-  if (!($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential('member')))
-  {
-    // save the url of the page the user was trying to visit
-    $this->getUser()->setAttribute('sf_easy_auth.restricted_url', $request->getUri());
-    // prompt them to register
-    $this->redirect($this->generateUrl('user_register'));
-  }
+    [php]
+    // if the user is not logged in or doesn't have the right credential
+    if (!($this->getUser()->isAuthenticated() && $this->getUser()->getAuthUser()->hasCredential('basicUser')))
+    {
+      // save the url of the page the user was trying to visit
+      $this->getUser()->setAttribute('sf_easy_auth.restricted_url', $request->getUri());
+      // prompt them to register
+      $this->redirect($this->generateUrl('user_register'));
+    }
   
 sfEasyAuth will redirect to the page contained in the attribute sf_easy_auth.restricted_url after logging the
 user in.
@@ -571,9 +490,6 @@ based on code in that plugin too. Thanks to the developers of that plugin.
 TODO
 ----
 
-  * Think of an easy way for admins to manage extra credentials and edit user profiles
   * Support different password hash algorithms - MD5 or SHA1.
-  * Support user profiles for users with extra credentials that are related to those
-    extra credentials
   * Improve i18n. Nearly there, just need to update strings in templates (submit buttons, etc)
     and the odd error message here and there.

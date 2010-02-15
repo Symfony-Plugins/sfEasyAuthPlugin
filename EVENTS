@@ -1,7 +1,7 @@
 Events
 ------
 
-sfEasyAuth will notify various events during its execution. Below is a list of the events
+sfEasyAuth will notify various events during its execution. Below is an (incomplete) list of the events
 that it will notify, along with the event types and parameters passed.
 
 All events are in the `sf_easy_auth` namespace. Event names should be self explanatory as

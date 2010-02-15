@@ -23,7 +23,7 @@ class sfEasyAuthCreateUserTask extends sfPropelBaseTask
       new sfCommandArgument('username', sfCommandArgument::REQUIRED, 'The user name'),
       new sfCommandArgument('password', sfCommandArgument::REQUIRED, 'The password'),
       new sfCommandArgument('email', sfCommandArgument::REQUIRED, 'The email address'),
-      new sfCommandArgument('type', sfCommandArgument::REQUIRED, 'The type of user'),
+      new sfCommandArgument('credentials', sfCommandArgument::REQUIRED, 'A credentials for the user (comma-separated)'),
     ));
 
     $this->addOptions(array(
@@ -39,7 +39,7 @@ class sfEasyAuthCreateUserTask extends sfPropelBaseTask
     $this->detailedDescription = <<<EOF
 The [easyAuth:create-user|INFO] task creates a user:
 
-  [./symfony easyAuth:create-user al pw\$\$word al@example.com user|INFO]
+  [./symfony easyAuth:create-user al pw\$\$word al@example.com user,admin|INFO]
 EOF;
   }
 
@@ -50,15 +50,27 @@ EOF;
   {
     $databaseManager = new sfDatabaseManager($this->configuration);
 
-    $class = 'sfEasyAuth' . ucfirst(trim($arguments['type'])); 
-    $user = new $class();
+    $credentials = array();
+
+    foreach (explode(',', $arguments['credentials']) as $credential)
+    {
+      $credentials[] = trim($credential);
+    }
+
+    $user = new sfEasyAuthUser();
     $user->setUsername($arguments['username']);
     $user->setPassword($arguments['password']);
     $user->setEmail($arguments['email']);
     $user->setEmailConfirmed(true);
     $user->save();
 
+    // add all the credentials
+    foreach ($credentials as $credential)
+    {
+      $user->addCredential($credential);
+    }
+
     $this->logSection('easyAuth', sprintf('Create %s user "%s" with email "%s"', 
-      $arguments['type'], $arguments['username'], $arguments['email']));
+      $arguments['credentials'], $arguments['username'], $arguments['email']));
   }
 }

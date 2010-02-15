@@ -1,6 +1,6 @@
 <?php
 
-class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
+class sfEasyAuthUserPeer extends BasesfEasyAuthUserPeer
 {
   /**
    * Retrieve a user by their remember me key
@@ -53,20 +53,9 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
    */
   public static function retrieveByCredentialAndProfileId($credential, $profileId)
   {
-    // first, try to retrieve a user whose default profile id is $profileId
     $c = new Criteria();
-    $c->add(self::TYPE, $credential);
-    $c->add(self::PROFILE_ID, $profileId);
-
-    if ($user = self::doSelectOne($c))
-    {
-      return $user;
-    }
-
-    // if no user was returned, search the extra credentials table
-    $c = new Criteria();
-    $c->addJoin(self::PROFILE_ID, sfEasyAuthUserCredentialPeer::ID);
-    $c->add(self::TYPE, $credential);
+    $c->addJoin(self::ID, sfEasyAuthUserCredentialPeer::USER_ID);
+    $c->add(sfEasyAuthUserCredentialPeer::CREDENTIAL, $credential);
     $c->add(sfEasyAuthUserCredentialPeer::PROFILE_ID, $profileId);
 
     return self::doSelectOne($c);
@@ -85,37 +74,7 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
     
     return self::doSelectOne($c);
   }
-  
-  /**
-   * Returns an array of possible user types
-   * 
-   * @return array
-   */
-  public static function getTypes()
-  {
-    $types = array();
-    $authReflector = new ReflectionClass('sfEasyAuthUser');
-    
-    foreach (scandir(dirname(__FILE__)) as $file)
-    {
-      $file = pathinfo($file, PATHINFO_FILENAME);
-      
-      if (strpos($file, 'sfEasyAuth') === 0 && strpos($file, 'Peer') === false)
-      {
-        // make sure the class inherits from sfEasyAuthUser
-        $reflector = new ReflectionClass($file);
-        if ($reflector->isSubClassOf($authReflector))
-        {
-          $type = str_replace('sfEasyAuth', '', $file);
-          $typeName = preg_replace('/^(.)/e', 'strtolower("$1")', $type);
-          $types[$typeName] = $type;
-        }
-      }
-    }
-
-    return $types;
-  }
-  
+   
   /**
    * Retrieves a user by ID and auto-log-in hash
    * @param int $id
@@ -129,5 +88,25 @@ class sfEasyAuthUserBasePeer extends BasesfEasyAuthUserBasePeer
     $c->add(self::AUTO_LOGIN_HASH, $hash);
     
     return self::doSelectOne($c);
+  }
+
+  /**
+   * Returns an array of credentials that are used in the database
+   *
+   * @return array An array of credentials assigned to any user
+   */
+  public static function getDistinctAssignedCredentialsAsArray()
+  {
+    $credentials = array();
+
+    foreach (sfEasyAuthUserCredentialPeer::retrieveAllCredentials() as $credential)
+    {
+      $credentialName = $credential->getCredential();
+      $credentials[$credentialName] = $credentialName;
+    }
+
+    asort($credentials);
+
+    return $credentials;
   }
 }

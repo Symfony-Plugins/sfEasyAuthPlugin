@@ -10,20 +10,10 @@ class sfEasyAuthUserCredentialPeer extends BasesfEasyAuthUserCredentialPeer
    */
   public static function retrieveAllCredentials()
   {
-    $connection = Propel::getConnection();
-    
-    // we need to use a custom query to perform a UNION
-    $query = $connection->query('SELECT `credential` FROM `' . sfEasyAuthUserCredentialPeer::TABLE_NAME . '` ' . 
-      'UNION SELECT `type` FROM `sf_easy_auth_user`');
+    $c = new Criteria();
+    $c->setDistinct();
 
-    $credentials = array();
-    
-    while ($credential = $query->fetch())
-    {
-      $credentials[$credential['credential']] = $credential['credential'];
-    }
-    
-    return $credentials;    
+    return self::doSelect($c);
   }
 
   /**
@@ -38,6 +28,20 @@ class sfEasyAuthUserCredentialPeer extends BasesfEasyAuthUserCredentialPeer
     $c = new Criteria();
     $c->add(self::USER_ID, $userId);
     $c->add(self::CREDENTIAL, $credentialName);
+
+    return self::doSelectOne($c);
+  }
+
+  /**
+   * Retrieve all credentials for a user
+   *
+   * @param int $userId A user id to find credentials for
+   * @return array
+   */
+  public static function retrieveByUserId($userId)
+  {
+    $c = new Criteria();
+    $c->add(self::USER_ID, $userId);
 
     return self::doSelect($c);
   }

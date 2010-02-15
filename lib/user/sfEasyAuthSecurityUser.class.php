@@ -70,13 +70,15 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
           $this->eaUser->save();
           
           // call an event indicating that a user has confirmed their email address
-          sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent(
-            $this,
-            'sf_easy_auth.email_confirmed',
-            array(
-              'eaUser' => $this->eaUser
+          sfContext::getInstance()->getEventDispatcher()->notify(
+            new sfEvent(
+              $this,
+              'sf_easy_auth.email_confirmed',
+              array(
+                'eaUser' => $this->eaUser
+              )
             )
-          ));
+          );
         }
         
         return $this->logIn();
@@ -284,14 +286,22 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     
     $this->setAttribute('security_user_id', $eaUser->getId());
     $this->setAuthenticated(true);
-    $this->clearCredentials();
+    $this->refreshCredentials();
     
+    return true;
+  }
+
+  /**
+   * Refreshes the credentials this sfUser has
+   */
+  public function refreshCredentials()
+  {
+    $this->clearCredentials();
+
     foreach ($eaUser->getCredentials() as $credential)
     {
       $this->addCredential($credential);
     }
-    
-    return true;
   }
   
   /**
@@ -380,26 +390,6 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
     $this->setAuthenticated(false);
     $this->clearCredentials();
     $this->eaUser = null;
-  }
-  
-  /**
-   * Returns the profile for the current user if it exists
-   * 
-   * @return mixed
-   */
-  public function getProfile()
-  {
-    return $this->getAuthUser()->getProfile();
-  }
-  
-  /**
-   * Returns whether the user has a profile
-   * 
-   * @return boolean
-   */
-  public function hasProfile()
-  {
-    return $this->getAuthUser()->hasProfile();
   }
   
   /**

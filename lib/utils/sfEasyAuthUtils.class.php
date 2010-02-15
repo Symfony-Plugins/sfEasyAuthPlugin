@@ -85,4 +85,31 @@ class sfEasyAuthUtils
       sfContext::getInstance()->getLogger()->debug($message);
     }
   }
+
+  /**
+   * Flattens a nested associative array
+   *
+   * @param array $array
+   * @param array $return
+   * @return array
+   */
+  public static function arrayFlatten(array $array, array $return=array())
+  {
+    foreach ($array as $key => $value)
+    {
+      $return[] = $key;
+
+      if (is_array($value))
+      {
+        $return = self::arrayFlatten($value, $return);
+      }
+      else if (!empty($value))
+      {
+        $return[] = $value;
+      }
+    }
+    
+    return $return;
+  }
+
 }

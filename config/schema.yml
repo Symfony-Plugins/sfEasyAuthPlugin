@@ -2,7 +2,7 @@ propel:
   _attributes:      { package: plugins.sfEasyAuthPlugin.lib.model }
   
   sf_easy_auth_user:
-    _attributes:    { phpName: sfEasyAuthUserBase }
+    _attributes:    { phpName: sfEasyAuthUser }
     id:             ~
     username:       { type: varchar(50), required: true, index: unique }
     password:       { type: varchar(32), required: true }
@@ -23,20 +23,17 @@ propel:
     has_extra_credentials:   { type: boolean, default: 0 }
     type:
       type: varchar(10)
-      index: true
-      inheritance:
-        admin: sfEasyAuthAdmin
-        member: sfEasyAuthMember                         # do NOT create a class called 'user'  or sfEasyAuthUser
+      required: false
+      default: null
     profile_id:  { type: integer, required: false, index: true }
         
   sf_easy_auth_user_credential:
     _attributes:    { phpName: sfEasyAuthUserCredential }
-    id: ~
     user_id:
       type: integer
       foreignTable: sf_easy_auth_user
       foreignReference: id
       required: true
-      index: true
-    credential:  { type: varchar(60), required: true }
-    profile_id:  { type: integer, required: false, index: unique }
+      primaryKey: true
+    credential:  { type: varchar(60), required: true, primaryKey: true }
+    profile_id:  { type: integer, required: false, default: null }

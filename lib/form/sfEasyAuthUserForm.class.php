@@ -8,7 +8,7 @@
  * @author     ##AUTHOR_NAME##
  * @version    SVN: $Id: sfPropelFormTemplate.php 10377 2008-07-21 07:10:32Z dwhittle $
  */
-class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
+class sfEasyAuthUserForm extends BasesfEasyAuthUserForm
 {
   /**
    * @var sfEasyAuthUser $eaUser The easy auth user this form represents
@@ -21,12 +21,12 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
           $this['created_at'],
           $this['updated_at'],
           $this['auto_login_hash'],
-          $this['has_extra_credentials'],
+          $this['has_credentials'],
           $this['password_reset_token'],
           $this['password_reset_token_created_at'],
           $this['profile_id']);
           
-    if (!$eaUser = sfEasyAuthUserBasePeer::retrieveByPk($this->getObject()->getId()))
+    if (!$eaUser = sfEasyAuthUserPeer::retrieveByPk($this->getObject()->getId()))
     {
       throw new RuntimeException("No user exists with ID " . $this->getObject()->getId());
     }
@@ -39,44 +39,25 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
       'value' => ($this->isNew()) ? '' : sfEasyAuthUser::PASSWORD_MASK
     ));
 
-    $this->widgetSchema['type'] = new sfWidgetFormChoice(array(
-      'choices' => sfEasyAuthUserPeer::getTypes(),
-      'expanded' => true
-    ));
-    
-    $this->widgetSchema['extra_credentials'] = new sfWidgetFormChoice(array(
-      'choices' => $eaUser->getPossibleExtraCredentials(),
+    $this->widgetSchema['credentials'] = new sfWidgetFormChoice(array(
+      'choices' => $eaUser->getPossibleCredentials(),
       'expanded' => true,
       'multiple' => true
     ));
 
+    $this->widgetSchema->setHelp('credentials', 'Warning: Deleting a credential for which this user has a profile ' .
+      ' will delete the profile too.');
+
     // select the options that should be selected
-    $this->widgetSchema['extra_credentials']->setDefault($eaUser->getCredentials());
-    
-    $this->getWidgetSchema()->setHelps(
-      array('type' => 'Do <u>not</u> edit this')
-    );
+    $this->widgetSchema['credentials']->setDefault($eaUser->getCredentials());
     
     // set up the validator
-    $this->setValidator('extra_credentials', 
+    $this->setValidator('credentials',
       new sfValidatorChoice(
         array(
-          'choices' => $eaUser->getPossibleExtraCredentials(),
+          'choices' => $eaUser->getPossibleCredentials(),
           'multiple' => true,
           'required' => false
-        )
-      )
-    );
-    
-    // don't allow admins to edit the user's type, or it could break foreign key relationships
-    // with profiles
-    $this->setValidator('type',
-      new sfValidatorRegex(
-        array(
-          'pattern' => '/' . $eaUser->getType() . '/' 
-        ),
-        array(
-          'invalid' => 'You cannot change the user type. Please set it back to ' . $eaUser->getType() . '.'
         )
       )
     );
@@ -93,10 +74,10 @@ class sfEasyAuthUserBaseForm extends BasesfEasyAuthUserBaseForm
   {
     if ($return = parent::save($con))
     {
-      // save extra credentials
-      $extraCredentials = (is_array($this->values['extra_credentials'])) ? 
-        $this->values['extra_credentials'] : array();
-      $this->eaUser->saveExtraCredentials($extraCredentials);
+      // set credentials
+      $credentials = (is_array($this->values['credentials'])) ?
+        $this->values['credentials'] : array();
+      $this->eaUser->setCredentials($credentials);
     }
   }
 }

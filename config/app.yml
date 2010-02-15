@@ -1,10 +1,14 @@
 all:
   sf_easy_auth:
-    profile_prefix: ''                    # Optional prefix for profile classes. Tables used for profile
+    credential_inheritance:               # Credential inheritance definition for the plugin.
+    #  admin:                             # If a user has a credential that inherits from another
+    #    superAdmin:                      # credential, the user will gain all those above it automatically
+                                          # It isn't necessary to define credentials here for which there is no inheritance
+   
+    profile_prefix: Sb                    # Prefix for profile classes. Tables used for profile
                                           # data will be formed by prepending this prefix to 
                                           # schema_inheritance keys, with the first character
-                                          # converted to uppercase, e.g. MyMember. This prefix allows
-                                          # for a kind of poor-man's namespace to be defined.
+                                          # converted to uppercase, e.g. SbBasicUser
   
     password_reset_mailer_callable: sfEasyAuthSimpleMailer::mail    
       # callable to send password reset emails. It must be a static method.  It 

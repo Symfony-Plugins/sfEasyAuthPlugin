@@ -6,14 +6,26 @@ class sfEasyAuthUserCredentialPeer extends BasesfEasyAuthUserCredentialPeer
    * Queries the user_credentials and user table to find all types and credentials that 
    * have been set
    * 
-   * @return array
+   * @return array An associative array of credentials as strings
    */
-  public static function retrieveAllCredentials()
+  public static function getAllCredentialsAsArray()
   {
     $c = new Criteria();
+    $c->addSelectColumn(self::CREDENTIAL);
     $c->setDistinct();
 
-    return self::doSelect($c);
+    $credentials = array();
+
+    $stmt = BasePeer::doSelect($c);
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+      $credentials[$row['CREDENTIAL']] = $row['CREDENTIAL'];
+    }
+
+    asort($credentials);
+    
+    return $credentials;
   }
 
   /**

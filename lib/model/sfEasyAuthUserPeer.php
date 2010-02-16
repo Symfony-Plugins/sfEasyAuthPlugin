@@ -89,24 +89,4 @@ class sfEasyAuthUserPeer extends BasesfEasyAuthUserPeer
     
     return self::doSelectOne($c);
   }
-
-  /**
-   * Returns an array of credentials that are used in the database
-   *
-   * @return array An array of credentials assigned to any user
-   */
-  public static function getDistinctAssignedCredentialsAsArray()
-  {
-    $credentials = array();
-
-    foreach (sfEasyAuthUserCredentialPeer::retrieveAllCredentials() as $credential)
-    {
-      $credentialName = $credential->getCredential();
-      $credentials[$credentialName] = $credentialName;
-    }
-
-    asort($credentials);
-
-    return $credentials;
-  }
 }

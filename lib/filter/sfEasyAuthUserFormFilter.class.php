@@ -14,7 +14,7 @@ class sfEasyAuthUserFormFilter extends BasesfEasyAuthUserFormFilter
   {
     $this->useFields(array('username', 'email', 'locked_by_admins'));
 
-    $credentials = array_merge(array('' => 'Any'), sfEasyAuthUserPeer::getDistinctAssignedCredentialsAsArray());
+    $credentials = array_merge(array('' => 'Any'), sfEasyAuthUserCredentialPeer::getAllCredentialsAsArray());
 
     $this->widgetSchema['credential'] = new sfWidgetFormChoice(
       array(

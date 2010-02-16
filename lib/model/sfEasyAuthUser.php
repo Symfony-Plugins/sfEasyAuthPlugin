@@ -196,7 +196,8 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
 
       // reload the credentials on the sfUser object too if the current user
       // has had a new credential added
-      if ($this->getId() === sfContext::getInstance()->getUser()->getAuthUser()->getId())
+      if (is_object(sfContext::getInstance()->getUser()->getAuthUser()) &&
+        $this->getId() === sfContext::getInstance()->getUser()->getAuthUser()->getId())
       {
         sfContext::getInstance()->getUser()->refreshCredentials();
       }
@@ -654,7 +655,7 @@ class sfEasyAuthUser extends BasesfEasyAuthUser
    */
   public function getPossibleCredentials()
   {
-    $credentials = sfEasyAuthUserPeer::getDistinctAssignedCredentialsAsArray();
+    $credentials = sfEasyAuthUserCredentialPeer::getAllCredentialsAsArray();
 
     foreach (sfEasyAuthUtils::arrayFlatten($this->parseCredentialInheritanceDefinition()) as $credential)
     {

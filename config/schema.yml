@@ -34,6 +34,7 @@ propel:
       foreignTable: sf_easy_auth_user
       foreignReference: id
       required: true
+      onDelete: cascade
       primaryKey: true
     credential:  { type: varchar(60), required: true, primaryKey: true }
     profile_id:  { type: integer, required: false, default: null }

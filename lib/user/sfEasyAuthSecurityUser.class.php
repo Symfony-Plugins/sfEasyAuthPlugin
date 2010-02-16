@@ -298,7 +298,7 @@ class sfEasyAuthSecurityUser extends sfBasicSecurityUser
   {
     $this->clearCredentials();
 
-    foreach ($eaUser->getCredentials() as $credential)
+    foreach ($this->getAuthUser()->getCredentials() as $credential)
     {
       $this->addCredential($credential);
     }
